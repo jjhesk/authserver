@@ -1,0 +1,1 @@
+<canvas id="checkpoint_chart" height="400" width="400"></canvas>
