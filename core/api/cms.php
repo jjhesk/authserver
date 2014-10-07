@@ -44,7 +44,8 @@ if (!class_exists('JSON_API_Cms_Controller')) {
         /**
          * @internal param $transaction_vcoin_id
          * @internal param $status
-         * 1: complete* 1: complete
+         * 1: complete*
+         * 1: complete
          * 2: error - incomplete
          * 3: unknown
          */
@@ -71,12 +72,33 @@ if (!class_exists('JSON_API_Cms_Controller')) {
             }
         }
 
+        /**
+         * show me the money in here.
+         */
+        public static function get_coin_by_user()
+        {
+
+            global $current_user;
+            try {
+                $uuid = get_user_meta($current_user->ID, "uuid_key", true);
+                if ($uuid == "") throw new Exception("the current user does not have valid vcoin account, please go back and with the settings", 1079);
+                $coinscount = api_cms_server::vcoin_account("balance", array("accountid" => $uuid));
+                api_handler::outSuccessData(array(
+                    "account_id" => $uuid,
+                    "coin" => intval($coinscount->coinscount),
+                    "account_user_name" => "(" . $current_user->user_firstname . " " . $current_user->user_lastname . ")  " . $current_user->display_name,
+                ));
+            } catch (Exception $e) {
+                api_handler::outFail($e->getCode(), $e->getMessage());
+            }
+        }
+
         public static function available_coins()
         {
             global $current_user;
             try {
                 $c = get_user_meta($current_user->ID, "app_coins", true);
-                return api_handler::outSuccessData($c);
+                api_handler::outSuccessData($c);
             } catch (Exception $e) {
                 api_handler::outFail($e->getCode(), $e->getMessage());
             }
@@ -110,7 +132,7 @@ if (!class_exists('JSON_API_Cms_Controller')) {
                         break;
                     }
                 }
-                return api_handler::outSuccessData($transaction);
+                api_handler::outSuccessData($transaction);
             } catch (Exception $e) {
                 api_handler::outFail($e->getCode(), $e->getMessage());
             }
@@ -128,7 +150,7 @@ if (!class_exists('JSON_API_Cms_Controller')) {
                 $dashboard_meta = new dashboardMeta($current_user);
                 $result_count = $dashboard_meta->get_pending_post_num();
 
-                return api_handler::outSuccessData($result_count);
+                api_handler::outSuccessData($result_count);
             } catch (Exception $e) {
                 api_handler::outFail($e->getCode(), $e->getMessage());
             }
@@ -146,10 +168,38 @@ if (!class_exists('JSON_API_Cms_Controller')) {
                 $dashboard_meta = new dashboardMeta($current_user);
                 $result_count = $dashboard_meta->get_listed_post_num();
 
-                return api_handler::outSuccessData($result_count);
+                api_handler::outSuccessData($result_count);
             } catch (Exception $e) {
                 api_handler::outFail($e->getCode(), $e->getMessage());
             }
+        }
+
+        public static function update_pending_app()
+        {
+            global $wpdb, $json_api;
+
+            try {
+                $table = $wpdb->prefix . "oauth_api_consumers";
+                $query = $wpdb->prepare("UPDATE $table SET status=%s WHERE post_id=%d AND user=%d", 'alive',
+                    $json_api->query->app_id, $json_api->query->developer);
+                $wpdb->query($query);
+            } catch (Exception $e) {
+                api_handler::outFail($e->getCode(), $e->getMessage());
+            }
+
+        }
+
+        public static function testing()
+        {
+            global $json_api;
+
+            $testing = new actionBaseWatcher($json_api->query);
+
+            $chart_data_label = $testing->get_checkpoint_data();
+
+            api_handler::outSuccessData($chart_data_label);
+
+
         }
     }
 }

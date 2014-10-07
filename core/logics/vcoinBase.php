@@ -142,11 +142,10 @@ if (!class_exists('vcoinBase')) {
         {
             $comeback = api_handler::curl_post(VCOIN_SERVER . "/api/account/create",
                 array(
-                    "email" => $email
+                    "email" => $email,
+                    "support" => "insert"
                 ),
-                array(
-                    CURLOPT_TIMEOUT => 30,
-                )
+                array(CURLOPT_TIMEOUT => 30,)
             );
             $comeback = json_decode($comeback);
             if (intval($comeback->result) > 0)

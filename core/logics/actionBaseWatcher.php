@@ -36,7 +36,7 @@ if (!class_exists("actionBaseWatcher")) {
 
         private function get_rules()
         {
-            $this->reward_action_id = $this->reward_action_id;
+            $this->reward_action_id = $this->main_api_query->aid;
             $this->cycle_hours = intval(get_post_meta($this->reward_action_id, "cycle_reward", true));
             $this->cycle_hours_in_seconds = ($this->cycle_hours) * 3600;
             $this->f = intval(get_post_meta($this->reward_action_id, "delta_f", true));
@@ -54,7 +54,6 @@ if (!class_exists("actionBaseWatcher")) {
          */
         private function get_time_range()
         {
-            $start_time = 0;
             $d = new DateTime();
             $present_timestamp = $d->getTimestamp();
 
@@ -226,25 +225,7 @@ if (!class_exists("actionBaseWatcher")) {
             }
         }
 
-        /*public function get_checkpoint_data(WP_User $user) {
-            global $wpdb;
 
-            if (!isset($this->main_api_query->aid)) throw new Exception("missing action id", 1001);
-            $this->reward_action_id = $this->main_api_query->aid;
-            $this->get_rules();
-
-            $query = $wpdb->prepare("SELECT UNIX_TIMESTAMP(triggered) FROM $this->table WHERE user=%d AND action=%d
-            ", $user->ID, $this->reward_action_id);
-
-            $results = $wpdb->get_result($query);
-
-            if ($this->occurrence == "repeat_simple") {
-                list($time_start, $time_end) = $this->get_time_range();
-
-            }
-
-
-        }*/
         /**
          * the main gateway to track and apply rule set for each requested user and sdk
          * @param WP_User $user
@@ -346,41 +327,44 @@ if (!class_exists("actionBaseWatcher")) {
             return $wpdb->get_results($dl);
         }
 
-        public function get_checkpoint_chart_data()
+
+        public function get_checkpoint_data()
         {
             global $wpdb;
-            try {
-                $table = $wpdb->prefix . "action_reward";
 
-                $query = $wpdb->prepare("SELECT UNIX_TIMESTAMP(triggered) FROM $table
-                WHERE action=%d AND rewarded=%d", $this->main_api_query->aid, 1);
+            if (!isset($this->main_api_query->aid)) throw new Exception("missing action id", 1001);
+            $this->get_rules();
 
-                $chart_data = $wpdb->get_results($query);
+            $query = $wpdb->prepare("SELECT UNIX_TIMESTAMP(triggered) FROM $this->table
+            WHERE action=%d AND rewarded=%d ", $this->reward_action_id, 1);
 
+            $chart_data = $wpdb->get_results($query);
+            $chart_data_label = array();
+
+            if ($this->occurrence == "once") {
+                $this->cycle_hours_in_seconds = 86400;
                 list($time_start, $time_end) = $this->get_time_range();
 
-                $interval_start_time = $time_start - $this->cycle_hours_in_seconds;
+                $interval_start_time = $time_start - 86400;
                 $interval_end_time = $time_start;
 
                 if (sizeof($chart_data) > 0) {
-                    foreach ($chart_data as $row) {
-                        foreach ($row as $timestamp) {
-                            if ($timestamp > $interval_start_time && $timestamp <= $interval_end_time) {
-
+                    for ($i = 0, $interval_count_rewarded = 0; $i < 7; $i++, $interval_start_time -= 86400, $interval_end_time -= 86400, $interval_count_rewarded = 0) {
+                        foreach ($chart_data as $row) {
+                            foreach ($row as $timestamp) {
+                                if ($timestamp > $interval_start_time && $timestamp <= $interval_end_time) {
+                                    inno_log_db::log_vcoin_third_party_app_transaction(-1, 55323,
+                                        print_r("start_time:" . $interval_start_time . " ( " . $i . " ) " . " : " . $timestamp . "end_time: " . $interval_end_time, true));
+                                    $interval_count_rewarded++;
+                                }
                             }
-                            $interval_start_time -= $this->cycle_hours_in_seconds;
-                            $interval_end_time -= $this->cycle_hours_in_seconds;
                         }
+                        $timestamp_label = gmdate("Y-m-d", $interval_start_time);
+                        $chart_data_label[$i][$timestamp_label] = $interval_count_rewarded;
                     }
                 }
-
-                inno_log_db::log_vcoin_third_party_app_transaction(-1, 532332532, print_r($chart_data, true));
-
-                return $chart_data;
-
-            } catch (Exception $e) {
-                api_handler::outFail($e->getCode(), $e->getMessage());
             }
+            return $chart_data_label;
         }
     }
 }

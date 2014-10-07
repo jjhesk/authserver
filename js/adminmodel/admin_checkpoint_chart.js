@@ -18,6 +18,19 @@ jQuery(function ($) {
         ChartInit: function () {
             var d = this;
 
+            /*JAXAPIsupport(d.api_domain + "cms/get_coupon_analysis_chart_data/", {
+                claimed: 0, id: d.coupon_id
+            }, d, function (that, json) {
+                that.unused_coupons.setcoupons(
+                    {
+                        value: Number(json),
+                        color: "#F7464A",
+                        highlight: "#FF5A5E",
+                        label: "In Stock Coupons"
+                    }
+                );
+            });*/
+
             var data = {
                 labels: ["January", "February", "March", "April", "May", "June",
                     "July", "August", "September", "October", "November", "December"],

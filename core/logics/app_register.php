@@ -184,7 +184,8 @@ if (!class_exists("app_register")) {
                 "platform" => $platform,
                 "user" => $this->developer_id,
                 "icon" => $icon,
-                "vcoin_account" => $this->uuid_vcoin
+                "vcoin_account" => $this->uuid_vcoin,
+                "status" => "dead",
             );
 
             $wpdb->insert($table, $data_insert);

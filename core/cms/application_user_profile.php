@@ -46,7 +46,7 @@ if (!class_exists('application_user_profile')):
                 array(
                     "title" => "Developer Profile Settings",
                     "role" => "developer",
-                    "editable_field" => array("company_name", "app_token"),
+                    "editable_field" => array("company_name", "app_token", "app_coins"),
                     "display_fields" => array(
                         "company_name" => "Company Name",
                         "app_token" => "App Token",
@@ -72,8 +72,26 @@ if (!class_exists('application_user_profile')):
         {
             $this->creation_profile(new WP_User($user_id));
             foreach ($this->fields as $field_id) {
-                inno_log_db::log_vcoin_third_party_app_transaction($user_id, 10122, "line 333  can edit add field and val");
+                inno_log_db::log_vcoin_third_party_app_transaction($user_id, 10122, "line 333 can edit add field and val");
                 user_profile_editor::withUpdateField($user_id, $field_id);
+                if ($field_id == "account_enable") {
+                    $this->enable_account($field_id);
+                }
+            }
+        }
+
+        private function enable_account($field_id)
+        {
+            global $current_user;
+            if (isset($_POST[$field_id])) {
+                $field_val = $_POST[$field_id];
+                $uuid = get_user_meta($current_user->ID, "uuid_key", true);
+                if ($uuid == "") throw new Exception("the current user does not have valid vcoin account, please go back and with the settings", 1079);
+                api_cms_server::vcoin_account("enable", array(
+                    "accountid" => $uuid,
+                    "enable" => $field_val
+                ));
+               // inno_log_db::log_vcoin_third_party_app_transaction($current_user->ID, 12172, "uuid accountid change enable");
             }
         }
 
@@ -119,7 +137,7 @@ if (!class_exists('application_user_profile')):
                     } catch (Exception $e) {
                         if ($editor->can_view()) return $editor->input_field($var, $key); else return $var;
                     }
-                break;
+                    break;
                 //temporarily using input_field for testing
                 case "app_coins":
                     return $editor->input_field($var, $key);
@@ -145,48 +163,3 @@ if (!class_exists('application_user_profile')):
         }
     }
 endif;
-/*
-function add_profile_options($user_object)
-{
-$user_profile_render = new user_profile_editor();
-if (in_array('cp', $user_object->roles)) {
-    $user_profile_render->init($user_object, "cp box", array('rolecp'), array("price", "company_id"));
-    $user_profile_render->add_box(array(
-        "rate" => "Rating",
-        "price" => "Price Range",
-        "cp_cert" => "Certification No.",
-        "cp_certexp" => "Certification Expiration",
-        "portrait" => "Cert Photo",
-        "gf_cp_attachments" => "CP Documents",
-        "company_id" => "Company",
-        "phone1" => "Contact Number 1St",
-        "phone2" => "Contact Number 2nd",
-        "address" => "Address",
-        "mac_id" => "Recent mac address",
-        "access_token" => "Login Token",
-        "email_activation" => "Email Verified",
-        "status" => "Current Activity",
-        "last_login_lastlogintime" => "Last Login"
-    ), false);
-} else if (in_array('cr', $user_object->roles)) {
-    $user_profile_render->init($user_object, "cp box", array('rolecp'), array("price", "company_id"));
-    $user_profile_render->add_box(array(
-        "price" => "Set Fix Price for Projects",
-        "jobsordered" => "Ordered Jobs",
-        "company_id" => "Company ID",
-        "phone1" => "Contact Number",
-        "email_activation" => "Email Verified",
-        "status" => "Current Activity",
-        "last_login_lastlogintime" => "Last Login"
-    ), false);
-} else {
-    $user_profile_render->add_box(array(
-        "last_login_lastlogintime" => "Last Login"
-    ), false);
-}
-$user_profile_render->render_end();
-}
-
-add_action('show_user_profile', 'add_profile_options');
-add_action('edit_user_profile', 'add_profile_options');
-    */

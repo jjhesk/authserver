@@ -20,8 +20,6 @@ jQuery(function ($) {
                 d.$switch_field.val("1");
             else
                 d.$switch_field.val("0");
-
-
         }
     }
 });

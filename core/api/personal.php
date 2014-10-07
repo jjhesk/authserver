@@ -24,7 +24,7 @@ if (!class_exists('JSON_API_Personal_Controller')) {
                     throw new Exception("module not installed", 1007);
                 }
             } catch (Exception $e) {
-                api_handler::outFail($e->getCode(), $e->getMessage());
+                api_handler::outFailWeSoft($e->getCode(), $e->getMessage());
             }
         }
 
@@ -52,7 +52,7 @@ if (!class_exists('JSON_API_Personal_Controller')) {
                     throw new Exception("module not installed", 1007);
                 }
             } catch (Exception $e) {
-                api_handler::outFail($e->getCode(), $e->getMessage());
+                api_handler::outFailWeSoft($e->getCode(), $e->getMessage());
             }
 
         }
@@ -74,12 +74,11 @@ if (!class_exists('JSON_API_Personal_Controller')) {
                     $change = new changeUserDetail($json_api->query, $current_user);
                     //  return array("status" => "okay", "result" => "done.");
                     api_handler::outSuccessDataWeSoft($change->get_change_field_results());
-
                 } else {
                     throw new Exception("module not installed", 1007);
                 }
             } catch (Exception $e) {
-                api_handler::outFail($e->getCode(), $e->getMessage());
+                api_handler::outFailWeSoft($e->getCode(), $e->getMessage());
             }
         }
 
@@ -108,7 +107,7 @@ if (!class_exists('JSON_API_Personal_Controller')) {
                         throw new Exception("module not installed", 1007);
                     }
                 } catch (Exception $e) {
-                    api_handler::outFail($e->getCode(), $e->getMessage());
+                    api_handler::outFailWeSoft($e->getCode(), $e->getMessage());
                 }
             }
         }
@@ -151,7 +150,7 @@ if (!class_exists('JSON_API_Personal_Controller')) {
                     throw new Exception("module not installed", 1007);
                 }
             } catch (Exception $e) {
-                api_handler::outFail($e->getCode(), $e->getMessage());
+                api_handler::outFailWeSoft($e->getCode(), $e->getMessage());
             }
         }
 
@@ -176,15 +175,20 @@ if (!class_exists('JSON_API_Personal_Controller')) {
 
                     if (!isset($query->appid)) throw new Exception("missing object id", 1001);
                     if (!isset($query->comment)) throw new Exception("missing comment", 1003);
-
-                    api_handler::curl_post(CMS_SERVER . "/api/crosscms/makingcomment",
+                   /* api_handler::curl_post(CMS_SERVER . "/api/crosscms/makingcomment",
                         array(
                             "appid" => $query->appid,
                             "userid" => $user->ID,
                             "comment" => $query->comment,
                             "name" => $user->name,
                         )
-                    );
+                    );*/
+                    api_cms_server::crosscms("makingcomment", array(
+                        "appid" => $query->appid,
+                        "userid" => $user->ID,
+                        "comment" => $query->comment,
+                        "name" => $user->name,
+                    ), true, true);
 
                     api_handler::outSuccessDataWeSoft(array(
                         "change_result" => "done"
@@ -193,12 +197,13 @@ if (!class_exists('JSON_API_Personal_Controller')) {
                     throw new Exception("module not installed", 1007);
                 }
             } catch (Exception $e) {
-                api_handler::outFail($e->getCode(), $e->getMessage());
+                api_handler::outFailWeSoft($e->getCode(), $e->getMessage());
             }
         }
 
         /**
-         * get social urls
+         *
+         * get social urls api for app
          */
         public static function get_social_urls()
         {
@@ -227,10 +232,13 @@ if (!class_exists('JSON_API_Personal_Controller')) {
                 }
                 api_handler::outSuccessDataWeSoft($arr);
             } catch (Exception $e) {
-                api_handler::outFail($e->getCode(), $e->getMessage());
+                api_handler::outFailWeSoft($e->getCode(), $e->getMessage());
             }
         }
 
+        /**
+         * this is the demo sms trigger
+         */
         public static function demosms()
         {
             try {
@@ -240,10 +248,13 @@ if (!class_exists('JSON_API_Personal_Controller')) {
                 ));
                 api_handler::outSuccess();
             } catch (Exception $e) {
-                api_handler::outFail($e->getCode(), $e->getMessage());
+                api_handler::outFailWeSoft($e->getCode(), $e->getMessage());
             }
         }
 
+        /**
+         * this is the testing app sdk for login
+         */
         public static function test_initiate_app_sdk()
         {
             global $json_api, $current_user, $app_merchan;
@@ -264,7 +275,7 @@ if (!class_exists('JSON_API_Personal_Controller')) {
                     api_handler::outSuccess();
                 }
             } catch (Exception $e) {
-                api_handler::outFail($e->getCode(), $e->getMessage());
+                api_handler::outFailWeSoft($e->getCode(), $e->getMessage());
 
             }
         }

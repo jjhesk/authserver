@@ -2,9 +2,6 @@
  * Created by Hesk on 14年8月18日.
  */
 
-var approve = approve || {},
-    reject = reject || {},
-    viewdoc = viewdoc || {};
 var search_api = {};
 jQuery(function ($) {
     (function (d, interaction) {
@@ -24,6 +21,7 @@ jQuery(function ($) {
             init: function () {
                 var d = this;
 
+                //d.display_loading_gif(d);
                 d.init_select_module();
 
                 $(".bigdrop").css({
@@ -109,12 +107,12 @@ jQuery(function ($) {
                 if (d.platform_option == "ios") {
                     d.store_id.val(JSON.stringify(e.choice.trackId));
                     d.icon_url.val(JSON.stringify(e.choice.artworkUrl60).replace(/"/g, ""));
-                    d.textdesc.val(JSON.stringify(e.choice.description).replace(/"/g, ""));
+                    d.textdesc.val(JSON.stringify(e.choice.description).replace(/"/g, "").replace(/\\n/g, " "));
                 }
                 else {
                     d.store_id.val(JSON.stringify(e.choice.appName).replace(/"/g, ""));
                     d.icon_url.val(JSON.stringify(e.choice.logo).replace(/"/g, ""));
-                    d.textdesc.val(JSON.stringify(e.choice.description).replace(/"/g, ""));
+                    d.textdesc.val(JSON.stringify(e.choice.description).replace(/"/g, "").replace(/\\n/g, " "));
                 }
             },
             parseFormat: function (item) {
@@ -161,12 +159,13 @@ jQuery(function ($) {
             searchbar = new search_api("app_name", platform);
         var available_coin = 0, updating_coin = false;
 
-        vcoin_field.on("change", function (e) {
-            if (vcoin_amount.val() > available_coin) {
-                vcoin_msg.html("exceed available amount");
-            } else {
-                vcoin_msg.html("");
-            }
+        update_coin();
+
+        search.on("change", function (e) {
+            console.log(1241);
+        });
+
+        function update_coin() {
             if (!updating_coin) {
                 updating_coin = true;
                 $.post("http://devlogin.vcoinapp.com/api/cms/available_coins/", {
@@ -185,36 +184,51 @@ jQuery(function ($) {
                     updating_coin = false;
                 });
             }
+        }
+
+        vcoin_field.on("change", function (e) {
+            if (vcoin_field.val() > available_coin) {
+                vcoin_msg.html("exceed available amount");
+            } else {
+                vcoin_msg.html("");
+            }
+
         });
+
         button_reg.on("click", function (e) {
-            //  console.log(store_id.val());
-            $.post("http://devlogin.vcoinapp.com/api/cms/register/", {
-                store_id: store_id.val(),
-                platform: $("option:selected", platform).val(),
-                textdesc: textdesc.val(),
-                icon: icon_id.val(),
-                appname: search.val()
-            }).done(function (data) {
-                console.log(data);
-                if (data.result == "failure") {
-                    alert("failure from store ID.")
-                } else {
-                    if (data.result > 0) {
-                        alert(data.msg);
+            if (vcoin_msg.html() == "") {
+                new AJAXloader("#registerthisapp", "normal");
+                $.post("http://devlogin.vcoinapp.com/api/cms/register/", {
+                    store_id: store_id.val(),
+                    platform: $("option:selected", platform).val(),
+                    textdesc: textdesc.val(),
+                    icon: icon_id.val(),
+                    appname: search.val()
+                }).done(function (data) {
+                    console.log(data);
+                    if (data.result == "failure") {
+                        alert("failure from store ID.")
                     } else {
-                        secret.html(data.obtain.secret);
-                        app_id.html(data.obtain.appid);
+                        if (data.result > 0) {
+                            alert(data.msg);
+                        } else {
+                            secret.html(data.obtain.secret);
+                            app_id.html(data.obtain.appid);
 
-                        button_reg.html("success and go back");
-                        button_reg.off("click");
-                        button_reg.on("click", function (e) {
-                            window.location("https://devlogin.vcoinapp.com/wp-admin/admin.php?page=appreg");
-                        });
+                            button_reg.html("success and go back");
+                            button_reg.off("click");
+
+                            button_reg.on("click", function (e) {
+                                window.location = location.protocol + "//devlogin.vcoinapp.com/wp-admin/admin.php?page=appreg";
+                            });
+                        }
                     }
-
-                }
-                // icon_id.val(data.obtain.key);
-            });
+                    // icon_id.val(data.obtain.key);
+                });
+            }
+            else {
+                alert("You have assigned Vcoin exceed your available amount. Please assign again.");
+            }
         });
 
     }(document, "click tap touch"));

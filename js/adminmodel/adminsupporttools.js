@@ -5,9 +5,11 @@ var WPScreenOptionSupport = {};
 var MetaBoxSupport = {};
 var JAXSupport = {};
 var JAXAPIsupport = {};
+var AJAXLoader = {};
 var PostBoxWatch = {};
 var PublishingSupport = {};
 var MapFix = {};
+var URL_Helper = {};
 jQuery(function ($) {
     "use strict";
     (function (c, interaction) {
@@ -406,31 +408,102 @@ jQuery(function ($) {
             });
         }
         //example JAXAPIsupport("http.../api/controller/method/", {id:25}, {that:d}, function(e, ){})
-        JAXAPIsupport = function (api, data, cbobject, callback) {
-            // console.log("ajax starts here");
-            //console.log(data);
-            $.post(api, data, function (response) {
-                // pac.loading(false);
-                console.log(response);
-                if (response.result == 'success') {
-                    if ($.type(response.obtain) === 'object') {
-                        if ($.type(callback) === "function")
-                            callback(cbobject, response.obtain);
-                    }
-                    else if ($.type(response.obtain) === 'string') {
-                        if ($.type(callback) === "function")
-                            callback(cbobject, response.obtain);
-                    }
-                    else if ($.type(response.obtain) === 'number') {
-                        if ($.type(callback) === "function")
-                            callback(cbobject, response.obtain);
-                    }
-                } else {
-                    // alert("not found");
-                    console.log("No data found");
-                }
-            });
+        JAXAPIsupport = function (api, data, cbobject, callback, failurecallback) {
+            this.api = api;
+            this.data = data;
+            this.cbobject = cbobject;
+            this.callback = callback;
+            this.failurecallback = failurecallback;
         }
+        JAXAPIsupport.prototype = {
+            init: function () {
+                var d = this;
+                if (d.loader instanceof AJAXLoader) {
+                    d.loader.onLoad();
+                }
+                $.post(d.api, d.data, function (response) {
+                    // pac.loading(false);
+                    console.log(response);
+                    if (response.result == 'success') {
+                        if ($.type(response.obtain) === 'object') {
+                            if ($.type(d.callback) === "function")
+                                d.callback(d.cbobject, response.obtain);
+                        }
+                        else if ($.type(response.obtain) === 'string') {
+                            if ($.type(d.callback) === "function")
+                                d.callback(d.cbobject, response.obtain);
+                        }
+                        else if ($.type(response.obtain) === 'number') {
+                            if ($.type(d.callback) === "function")
+                                d.callback(d.cbobject, response.obtain);
+                        }
+                    } else {
+                        // alert("not found");
+                        console.log("No data found");
+                        if (d.failurecallback != undefined) {
+                            if ($.type(d.failurecallback) === "function") {
+                                d.failurecallback(d.cbobject, response.msg);
+                            } else {
+                                console.log("the callback function for the failure event is not propery set.");
+                            }
+                        }
+                    }
+
+                    if (d.loader instanceof AJAXLoader) {
+                        d.loader.onLoadDone();
+                    }
+                });
+            },
+            add_loader: function (Loader) {
+                var d = this;
+                if (Loader instanceof AJAXLoader) {
+                    d.loader = Loader;
+                } else {
+                    console.log("instance type of not correct");
+                }
+            }
+        }
+        AJAXLoader = function (widget_id, size, usage) {
+            this.show_loading = true;
+            if (size == undefined) {
+                size = "big";
+            }
+            if (size == "big")
+                this.$loading = $("<img id='loading' src='./images/loading.gif' style='display:none; width:30px;height:30px; margin: 0 50%; margin-bottom: 5px;'>");
+            else if (size == "normal") {
+                this.$loading = $("<img id='loading' src='./images/loading.gif' style='display:none;'>");
+            }
+            if (usage == "dashboard") {
+                this.$widget_container = $("#" + widget_id + " .inside");
+            }
+            else if (usage == "app_reg")
+                this.$widget_container = $("#" + widget_id);
+            if ($("#loading", this.$widget_container).size() == 0)
+                this.$widget_container.after(this.$loading);
+            else {
+                this.$loading = $("#loading", this.$widget_container);
+            }
+        }
+        AJAXLoader.prototype = {
+            onLoad: function () {
+                var d = this;
+                if (d.show_loading) {
+                    console.log("start");
+                    d.$loading.show();
+                    d.show_loading = false;
+                }
+            },
+            onLoadDone: function () {
+                var d = this;
+                if (!d.show_loading) {
+                    d.$loading.hide();
+                    console.log("end");
+                    d.show_loading = true;
+                }
+            }
+        }
+
+
         PostBoxWatch = function () {
             var all_handlers = jQuery('.postbox .hndle, .postbox .handlediv');
             this.allHandlers = all_handlers;
@@ -454,6 +527,34 @@ jQuery(function ($) {
                         $postbox.trigger("tap_bar", [closedTap]);
                     });
                 });
+            }
+        }
+
+        URL_Helper = {
+            getParamVal: function (paramName) {
+                var sURL = window.document.URL.toString();
+                if (sURL.indexOf("?") > 0) {
+                    var arrParams = sURL.split("?");
+                    var arrURLParams = arrParams[1].split("&");
+                    var arrParamNames = new Array(arrURLParams.length);
+                    var arrParamValues = new Array(arrURLParams.length);
+                    var i = 0;
+                    for (i = 0; i < arrURLParams.length; i++) {
+                        var sParam = arrURLParams[i].split("=");
+                        arrParamNames[i] = sParam[0];
+                        if (sParam[1] != "")
+                            arrParamValues[i] = unescape(sParam[1]);
+                        else
+                            arrParamValues[i] = "No Value";
+                    }
+                    for (i = 0; i < arrURLParams.length; i++) {
+                        if (arrParamNames[i] == paramName) {
+                            //alert("Param:"+arrParamValues[i]);
+                            return arrParamValues[i];
+                        }
+                    }
+                    return "No Parameters Found";
+                }
             }
         }
     }(document, "click tap touch"));

@@ -47,6 +47,18 @@ if (!class_exists('api_handler')) {
             if (!$return) self::outputJson($out); else return $out;
         }
 
+        public static function outFailWeSoft($code, $message, $return = false)
+        {
+            $out = array(
+                "msg" => $message,
+                "result" => $code,
+                "timestamp" => -1,
+                "status" => "failure",
+                "data" => ""
+            );
+            if (!$return) self::outputJson($out); else return $out;
+        }
+
         public static function outFail($code, $message, $return = false)
         {
             $out = array(

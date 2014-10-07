@@ -28,7 +28,7 @@ if (!class_exists('JSON_API_Mission_Controller')) {
                     throw new Exception("module not installed", 1007);
                 }
             } catch (Exception $e) {
-                api_handler::outFail($e->getCode(), $e->getMessage());
+                api_handler::outFailWeSoft($e->getCode(), $e->getMessage());
             }
         }
 
@@ -52,7 +52,7 @@ if (!class_exists('JSON_API_Mission_Controller')) {
                     throw new Exception("module not installed", 1007);
                 }
             } catch (Exception $e) {
-                api_handler::outFail($e->getCode(), $e->getMessage());
+                api_handler::outFailWeSoft($e->getCode(), $e->getMessage());
             }
         }
 
@@ -75,7 +75,7 @@ if (!class_exists('JSON_API_Mission_Controller')) {
                     throw new Exception("module not installed", 1007);
                 }
             } catch (Exception $e) {
-                api_handler::outFail($e->getCode(), $e->getMessage());
+                api_handler::outFailWeSoft($e->getCode(), $e->getMessage());
             }
         }
 
@@ -98,7 +98,7 @@ if (!class_exists('JSON_API_Mission_Controller')) {
                     throw new Exception("module not installed", 1007);
                 }
             } catch (Exception $e) {
-                api_handler::outFail($e->getCode(), $e->getMessage());
+                api_handler::outFailWeSoft($e->getCode(), $e->getMessage());
             }
         }
 

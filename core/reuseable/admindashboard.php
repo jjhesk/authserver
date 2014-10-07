@@ -25,15 +25,14 @@ if (!class_exists('admindashboard')):
             $view_key_file_name,
             $js,
             $css,
+            $dataparam,
             $script_localize;
 
-        function __construct($key, $title, $view_key_file_name, $for_role_key, $js = null, $css = array(), $script_localize = array())
+        function __construct($key, $title, $for_role_key, $js = null, $css = array(), $script_localize = array())
         {
             $this->key = $key;
             $this->title = $title;
-            $this->view_key_file_name = $view_key_file_name;
             $this->access_role = $for_role_key;
-
             if (count($script_localize) > 0) {
                 $this->script_localize = $script_localize;
             }
@@ -43,7 +42,20 @@ if (!class_exists('admindashboard')):
             if (count($css) > 0) {
                 $this->css = $css;
             }
-            $this->init();
+        }
+
+        public function setTemplate($view_key_file_name)
+        {
+            $this->view_key_file_name = $view_key_file_name;
+        }
+
+        public function setData(WP_User $user, $param = array())
+        {
+            $arra = array();
+            foreach ($param as $k) {
+                $arra[$k] = userBase::getVal($user->ID, $k);
+            }
+            $this->dataparam = $arra;
         }
 
         public function css_load()
@@ -59,7 +71,7 @@ if (!class_exists('admindashboard')):
             wp_localize_script($this->js, $this->script_localize[0], $this->script_localize[1]);
         }
 
-        private function init()
+        public function init()
         {
             global $current_user;
             //access privilege
@@ -73,7 +85,10 @@ if (!class_exists('admindashboard')):
 
         public function render_dashboard()
         {
-            echo get_oc_template($this->view_key_file_name);
+            if (isset($this->dataparam)) {
+                echo get_oc_template_mustache($this->view_key_file_name, $this->dataparam);
+            } else
+                echo get_oc_template($this->view_key_file_name);
         }
     }
 endif;

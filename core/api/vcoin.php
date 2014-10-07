@@ -42,7 +42,7 @@ if (!class_exists('JSON_API_Vcoin_Controller')) {
                     throw new Exception("module not installed", 1007);
                 }
             } catch (Exception $e) {
-                api_handler::outFail($e->getCode(), $e->getMessage());
+                api_handler::outFailWeSoft($e->getCode(), $e->getMessage());
             }
         }
 
@@ -65,7 +65,7 @@ if (!class_exists('JSON_API_Vcoin_Controller')) {
                     throw new Exception("module not installed", 1007);
                 }
             } catch (Exception $e) {
-                api_handler::outFail($e->getCode(), $e->getMessage());
+                api_handler::outFailWeSoft($e->getCode(), $e->getMessage());
             }
         }
 
@@ -116,7 +116,7 @@ if (!class_exists('JSON_API_Vcoin_Controller')) {
                     throw new Exception("module not installed", 1007);
                 }
             } catch (Exception $e) {
-                api_handler::outFail($e->getCode(), $e->getMessage());
+                api_handler::outFailWeSoft($e->getCode(), $e->getMessage());
             }
         }
 
@@ -131,33 +131,22 @@ if (!class_exists('JSON_API_Vcoin_Controller')) {
                 if (class_exists("json_auth_central")) {
                     json_auth_central::auth_check_token_json();
                     $uuid = userBase::getVal($current_user->ID, "uuid_key");
-                    if ($uuid == "") throw new Exception("the current user does not have valid vcoin account", 1079);
-                    /**
-                     * To retrieve the qr data from the cms server
-                     */
-                    $raw_on_the_fly = api_handler::curl_get(VCOIN_SERVER . "/api/account/balance",
-                        array(
-                            "accountid" => $uuid
-                        )
-                    );
-                    $res = json_decode($raw_on_the_fly);
-                    unset($raw_on_the_fly);
-                    /**
-                     * the end of vcoin server request now
-                     */
-                    if (intval($res->result) > 0) {
-                        throw new Exception($res->msg, intval($res->result));
-                    } else {
-                        $coinscount = $res->data->coinscount;
-                        api_handler::outSuccessDataWeSoft($coinscount);
-                    }
+                    if ($uuid == "") throw new Exception("the current user does not have valid vcoin account, please go back and with the settings", 1079);
+                    $coinscount = api_cms_server::vcoin_account("balance", array("accountid" => $uuid));
+                    api_handler::outSuccessDataWeSoft(array(
+                        "account_id" => $uuid,
+                        "coin" => intval($coinscount->coinscount),
+                        "account_user_name" => "(" . $current_user->user_firstname . " " . $current_user->user_lastname . ")  " . $current_user->display_name,
+                    ));
                 }
             } catch (Exception $e) {
-                api_handler::outFail($e->getCode(), $e->getMessage());
+                api_handler::outFailWeSoft($e->getCode(), $e->getMessage());
             }
         }
 
-
+        /**
+         * display vcoin history and listing
+         */
         public static function vcoin_history()
         {
             global $json_api, $current_user, $app_merchan;
@@ -199,12 +188,12 @@ if (!class_exists('JSON_API_Vcoin_Controller')) {
                     throw new Exception("module not installed", 1007);
                 }
             } catch (Exception $e) {
-                api_handler::outFail($e->getCode(), $e->getMessage());
+                api_handler::outFailWeSoft($e->getCode(), $e->getMessage());
             }
         }
 
         /**
-         *
+         * testing CP
          */
         public static function testcp()
         {
@@ -223,7 +212,7 @@ if (!class_exists('JSON_API_Vcoin_Controller')) {
                     "change_result" => "done"
                 ));
             } catch (Exception $e) {
-                api_handler::outFail($e->getCode(), $e->getMessage());
+                api_handler::outFailWeSoft($e->getCode(), $e->getMessage());
             }
         }
 

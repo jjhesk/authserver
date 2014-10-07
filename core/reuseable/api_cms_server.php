@@ -39,5 +39,24 @@ if (!class_exists('api_cms_server')) {
                 return $object->data;
             }
         }
+
+        /**
+         * vcoin server account display API
+         * @param $method
+         * @param array $param
+         * @return mixed
+         * @throws Exception
+         */
+        public static function vcoin_account($method, $param = array())
+        {
+            $d_row = api_handler::curl_get(VCOIN_SERVER . "/api/account/" . $method, $param);
+            $res = json_decode($d_row);
+            unset($d_row);
+            if (intval($res->result) > 0) {
+                throw new Exception($res->msg, intval($res->result));
+            } else {
+                return $res->data;
+            }
+        }
     }
 }

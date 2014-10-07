@@ -6,10 +6,8 @@ var approve = approve || {},
 var setting_ob = setting_ob || {};
 jQuery(function ($) {
     (function (d, interaction, table) {
-
-        var $table = $(table), domain = "http://devlogin.vcoinapp.com/";
-
-
+        var $table = $(table),
+            domain = "http://devlogin.vcoinapp.com/";
         $table.dataTable({
             processing: true,
             ajax: domain + "api/systemlog/app_reg_log/",

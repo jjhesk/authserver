@@ -273,15 +273,11 @@ if (!class_exists('user_profile_editor')):
                     break;
                 case "stock_manager_report":
                     $link = admin_url("admin.php?page=innomanager-stock&staff=" . $this->user_object->ID);
-                    $field_val = '<a
-                    class="button button-primary"
-                    href="' . $link . '">Review Report</a>';
+                    $field_val = '<a class="button button-primary" href="' . $link . '">Review Report</a>';
                     break;
                 case "stock_manager_review_account":
                     $link = admin_url("admin.php?page=store-mge&staff=" . $this->user_object->ID);
-                    $field_val = '<a
-                    class="button button-primary"
-                    href="' . $link . '">Review Account Report</a>';
+                    $field_val = '<a class="button button-primary" href="' . $link . '">Review Account Report</a>';
                     break;
                 case "rate":
                     if ($this->can_view)
@@ -410,7 +406,6 @@ if (!class_exists('user_profile_editor')):
                     add_user_meta($user_id, $name_field, $field_val);
                 }
             }
-
         }
     }
 endif;
