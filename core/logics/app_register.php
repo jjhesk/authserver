@@ -44,6 +44,8 @@ if (!class_exists("app_register")) {
          */
         private function api_registration_actions($json_apiq)
         {
+
+
             $return = api_cms_server::crosscms("addnewapp", array(
                 "_icon" => $json_apiq->icon,
                 "_storeid" => $json_apiq->store_id,
@@ -72,18 +74,18 @@ if (!class_exists("app_register")) {
          */
         public function approve_app($json_apiq)
         {
-            if (!isset($json_apiq->post_id)) throw new Exception("post_id is not exist", 7099);
+            if (!isset($json_apiq->app_id)) throw new Exception("post_id is not exist", 7099);
             if (!isset($json_apiq->developer)) throw new Exception("developer is not exist", 7098);
             if (!isset($json_apiq->action)) throw new Exception("action is not exist", 7097);
             if (!isset($json_apiq->app_name)) throw new Exception("app_name is not exist", 7095);
 
             global $wpdb;
-            if ($json_apiq->action == "approve") {
+            $Table = $wpdb->prefix . "oauth_api_consumers";
+            $post_id = $json_apiq->app_id;
+            $developer_id = $json_apiq->developer;
+            $app_name = $json_apiq->app_name;
 
-                $Table = $wpdb->prefix . "oauth_api_consumers";
-                $post_id = $json_apiq->post_id;
-                $developer_id = $json_apiq->developer;
-                $app_name = $json_apiq->app_name;
+            if ($json_apiq->action == "approve") {
                 /**
                  * need to look up the row of the data that is store previously on this table
                  */
@@ -222,6 +224,7 @@ if (!class_exists("app_register")) {
                 // add consumer
                 $uuid = new UUID();
                 $this->uuid_gen = $uuid->v4();
+
                 //inno_log_db::log_vcoin_error(-1, 3232, "consumer");
                 if ($this->check_app_exist($id)) throw new Exception("exist application store ID", 4022);
                 userBase::deductDeveloperReservedCoins($json_apiq->total_vcoin);
@@ -327,7 +330,5 @@ if (!class_exists("app_register")) {
 
 
         }
-
-
     }
 }

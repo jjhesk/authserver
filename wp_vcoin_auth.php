@@ -143,6 +143,9 @@ function child_create_objects()
     new PaymentMembershipSupport();
     userRegister::user_reg();
     //add_filter("email_activation_label", "email_activation_custom_label", 10, 1);
+    $install_check = new install_db();
+    $install_check->registration_plugin_hooks(__FILE__);
+    unset($install_check);
 }
 
 add_action('wp_loaded', 'child_create_objects', 11);
