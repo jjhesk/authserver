@@ -91,6 +91,7 @@ if (!class_exists('application_user_profile')):
                     "accountid" => $uuid,
                     "enable" => $field_val
                 ));
+
                // inno_log_db::log_vcoin_third_party_app_transaction($current_user->ID, 12172, "uuid accountid change enable");
             }
         }

@@ -219,6 +219,30 @@ if (!class_exists('TitanFramework')) {
         'desc' => 'Upload your image for the logo for login'
     ));
 
+
+    $tab->createOption(array(
+        'name' => 'coins for new developer account',
+        //control_panel_{{role name}}_{{option key to be applied}}
+        'id' => 'app_coin_new_dev',
+        'type' => 'number',
+        'max' => 10000,
+        'min' => 1000,
+        'step' => 100,
+        'desc' => 'When first the developer account is created from the membershippro module',
+        'default' => false,
+    ));
+    $tab->createOption(array(
+        'name' => 'refill developer account',
+        //control_panel_{{role name}}_{{option key to be applied}}
+        'id' => 'app_coin_refill',
+        'type' => 'number',
+        'max' => 10000,
+        'min' => 1000,
+        'step' => 100,
+        'desc' => 'When the payment is made the existing developer account with membershippro module',
+        'default' => false,
+    ));
+
     $tab->createOption(array(
         'type' => 'save'
     ));

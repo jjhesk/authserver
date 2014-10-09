@@ -133,19 +133,14 @@ if (!class_exists('JSON_API_Personal_Controller')) {
                     if (!isset($query->comment_id)) throw new Exception("missing comment id", 1001);
                     if (!isset($query->flag)) throw new Exception("missing flag", 1003);
 
-
-                    api_handler::curl_post(CMS_SERVER . "/api/crosscms/flagcomment",
-                        array(
-                            "comment_id" => $query->comment_id,
-                            "flag" => $query->flag,
-                        )
-                    );
-
-
-                    api_handler::outSuccessDataWeSoft(array(
-                        "change_result" => "done"
+                    api_cms_server::crosscms("flagcomment", array(
+                        "comment_id" => $query->comment_id,
+                        "flag" => $query->flag,
                     ));
 
+
+
+                    api_handler::outSuccess();
                 } else {
                     throw new Exception("module not installed", 1007);
                 }
@@ -154,6 +149,32 @@ if (!class_exists('JSON_API_Personal_Controller')) {
             }
         }
 
+        /**
+         *
+         */
+        public static function removecomment()
+        {
+            global $json_api, $current_user;
+            try {
+                // do_action('auth_api_token_check');
+                if (class_exists("json_auth_central")) {
+                    json_auth_central::auth_check_token_json();
+                    $query_ls = $json_api->query;
+                    TokenAuthentication::init($query_ls->token);
+                    if (!isset($query_ls->comment_id)) throw new Exception("missing comment id", 1051);
+                    if (!isset($query_ls->reference_id)) throw new Exception("missing reference id", 1052);
+                    $user = $current_user->ID;
+                    api_cms_server::crosscms("remove_comment", array(
+                        "comment_id" => $query_ls->comment_id,
+                        "reference_id" => $query_ls->reference_id,
+                        "user" => $user,
+                    ));
+                    api_handler::outSuccess();
+                }
+            } catch (Exception $e) {
+                api_handler::outFailWeSoft($e->getCode(), $e->getMessage());
+            }
+        }
 
         /**
          * add comments for applications or review
@@ -173,26 +194,27 @@ if (!class_exists('JSON_API_Personal_Controller')) {
                     //  return array("status" => "okay", "result" => "done.");
                     $query = $json_api->query;
 
-                    if (!isset($query->appid)) throw new Exception("missing object id", 1001);
+                    if (!isset($query->objectid)) throw new Exception("missing object id", 1001);
                     if (!isset($query->comment)) throw new Exception("missing comment", 1003);
-                   /* api_handler::curl_post(CMS_SERVER . "/api/crosscms/makingcomment",
-                        array(
-                            "appid" => $query->appid,
-                            "userid" => $user->ID,
-                            "comment" => $query->comment,
-                            "name" => $user->name,
-                        )
-                    );*/
+                    /* api_handler::curl_post(CMS_SERVER . "/api/crosscms/makingcomment",
+                         array(
+                             "appid" => $query->appid,
+                             "userid" => $user->ID,
+                             "comment" => $query->comment,
+                             "name" => $user->name,
+                         )
+                     );*/
                     api_cms_server::crosscms("makingcomment", array(
-                        "appid" => $query->appid,
+                        "object_id" => $query->objectid,
                         "userid" => $user->ID,
                         "comment" => $query->comment,
                         "name" => $user->name,
                     ), true, true);
-
-                    api_handler::outSuccessDataWeSoft(array(
-                        "change_result" => "done"
-                    ));
+                    /*
+                                        api_handler::outSuccessDataWeSoft(array(
+                                            "change_result" => "done"
+                                        ));*/
+                    api_handler::outSuccess();
                 } else {
                     throw new Exception("module not installed", 1007);
                 }

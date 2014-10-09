@@ -43,7 +43,7 @@ if (!class_exists('api_handler')) {
         public static function outSuccess($return = false)
         {
             $d = new DateTime();
-            $out = array("result" => 1, "timestamp" => $d->getTimestamp(), "data" => "");
+            $out = array("status" => "success", "result" => 1, "timestamp" => $d->getTimestamp(), "data" => "");
             if (!$return) self::outputJson($out); else return $out;
         }
 

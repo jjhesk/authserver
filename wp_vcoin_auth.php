@@ -95,6 +95,7 @@ if ($_SERVER['SERVER_NAME'] == 'awswp.innoactor.com') {
     //settings
     define("SERVER_TYPE_INNO", "production");
 }*/
+
 //if ($_SERVER["SERVER_NAME"] == "localhost") {
 // Facebook::$CURL_OPTS[CURLOPT_SSL_VERIFYPEER] = false;
 // Facebook::$CURL_OPTS[CURLOPT_SSL_VERIFYHOST] = 2;
@@ -139,6 +140,7 @@ function child_create_objects()
     new app_check_point();
     new app_registration();
     new dashboard();
+    new PaymentMembershipSupport();
     userRegister::user_reg();
     //add_filter("email_activation_label", "email_activation_custom_label", 10, 1);
 }

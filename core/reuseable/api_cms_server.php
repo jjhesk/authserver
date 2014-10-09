@@ -42,6 +42,7 @@ if (!class_exists('api_cms_server')) {
 
         /**
          * vcoin server account display API
+         * according to vcoin server API 1.4
          * @param $method
          * @param array $param
          * @return mixed
@@ -56,6 +57,54 @@ if (!class_exists('api_cms_server')) {
                 throw new Exception($res->msg, intval($res->result));
             } else {
                 return $res->data;
+            }
+        }
+
+        /**
+         * vcoin server account display API
+         * according to vcoin server API 1.4
+         * @param $method
+         * @param array $param
+         * @return mixed
+         * @throws Exception
+         */
+        public static function vcoin_accountp($method, $param = array())
+        {
+            $d_row = api_handler::curl_post(
+                VCOIN_SERVER . "/api/account/" . $method,
+                $param,
+                array(
+                    CURLOPT_TIMEOUT => 30,
+                ));
+            $res = json_decode($d_row);
+            unset($d_row);
+            if (intval($res->result) > 0) {
+                throw new Exception($res->msg, intval($res->result));
+            } else {
+                return $res->data;
+            }
+        }
+
+        /**
+         * adding vcoin to the account ID UUID
+         * according to vcoin server API 1.6
+         * @param $uuid_account
+         * @param $amount
+         * @return bool
+         * @throws Exception
+         */
+        public static function add_vcoin($uuid_account, $amount)
+        {
+            $d_row = api_handler::curl_get(VCOIN_SERVER . "/api/account/addcoin", array(
+                "accountid" => $uuid_account,
+                "count" => $amount,
+            ));
+            $res = json_decode($d_row);
+            unset($d_row);
+            if (intval($res->result) > 0) {
+                throw new Exception($res->msg, intval($res->result));
+            } else {
+                return true;
             }
         }
     }

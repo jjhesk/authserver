@@ -73,24 +73,24 @@ if (!class_exists('userRegister')) {
          * @param $pwd
          * @throws Exception
          */
-        public function newUser($login_name, $user_email, $role, $extrafields = array(), $pwd)
+        public function newUser($login_name, $user_email, $role, $extra_fields = array(), $pwd)
         {
             try {
                 if ($role == "appuser") {
-                    $extrafields["birthday"] = "";
-                    $extrafields["country"] = "";
-                    $extrafields["countrycode"] = "";
-                    $extrafields["setting_push_sms"] = "0";
-                    $extrafields["sms_number"] = "";
-                    $extrafields["gender"] = "M";
-                    $extrafields["uuid_key"] = "";
-                    $extrafields["app_token"] = "";
-                    $extrafields["password"] = $pwd;
+                    $extra_fields["birthday"] = "";
+                    $extra_fields["country"] = "";
+                    $extra_fields["countrycode"] = "";
+                    $extra_fields["setting_push_sms"] = "0";
+                    $extra_fields["sms_number"] = "";
+                    $extra_fields["gender"] = "M";
+                    $extra_fields["uuid_key"] = "";
+                    $extra_fields["app_token"] = "";
+                    $extra_fields["password"] = $pwd;
                 } else if ($role == "developer") {
-                    $extrafields["service_plan"] = "100";
-                    $extrafields["app_coins"] = "0";
+                    $extra_fields["service_plan"] = "100";
+                    $extra_fields["app_coins"] = "0";
                 }
-                $this->reg_user = $this->create_user_account($login_name, $user_email, $role, $extrafields, $pwd);
+                $this->reg_user = $this->create_user_account($login_name, $user_email, $role, $extra_fields, $pwd);
                 if ($role == "appuser") {
                     inno_log_db::log_vcoin_login(-1, 101222, "new user and add uuid to the vcoin server.");
                     $this->create_vcoin_key_for_user();
@@ -104,13 +104,13 @@ if (!class_exists('userRegister')) {
          * @param $login_name
          * @param $user_email
          * @param $role
-         * @param array $extrafields
+         * @param array $extra_fields
          * @throws Exception
          */
-        public function newUserRandomPass($login_name, $user_email, $role, $extrafields = array())
+        public function newUserRandomPass($login_name, $user_email, $role, $extra_fields = array())
         {
             try {
-                $this->reg_user = $this->create_user_account($login_name, $user_email, $role, $extrafields, wp_generate_password($length = 12, $include_standard_special_chars = TRUE));
+                $this->reg_user = $this->create_user_account($login_name, $user_email, $role, $extra_fields, wp_generate_password($length = 12, $include_standard_special_chars = TRUE));
                 if ($role == "appuser") {
                     $this->create_vcoin_key_for_user();
                 }
@@ -158,13 +158,13 @@ if (!class_exists('userRegister')) {
          * @param $login_name
          * @param $user_email
          * @param $role
-         * @param array $extrafields
+         * @param array $extra_fields
          * @param $pwd
          * @throws Exception
          * @return WP_User
          */
 
-        protected static function create_user_account($login_name, $user_email, $role, $extrafields = array(), $pwd)
+        protected static function create_user_account($login_name, $user_email, $role, $extra_fields = array(), $pwd)
         {
             try {
                 // $pwd = !$generate_password? wp_generate_password($length = 12, $include_standard_special_chars = TRUE);
@@ -179,7 +179,7 @@ if (!class_exists('userRegister')) {
                 add_action("user_register", array(__CLASS__, "new_user_reg"));
                 //   remove_action("user_register", array(__CLASS__, "user_reg_action_cb"));
                 $user = new WP_User($user_id);
-                foreach ($extrafields as $key => $val) {
+                foreach ($extra_fields as $key => $val) {
                     update_user_meta($user_id, $key, $val, false);
                 }
                 //  debugoc::upload_bmap_log(print_r($args, true), 29291);

@@ -10,6 +10,23 @@ defined('ABSPATH') || exit;
 class userBase
 {
     /**
+     * @param $amount
+     */
+    public static function deductDeveloperReservedCoins($total_amount)
+    {
+        global $current_user;
+        $total_amount = intval($total_amount);
+        $coin = intval(get_user_meta($current_user->ID, "app_coins", true));
+        if ($coin > 0 && $coin >= $total_amount)
+            update_user_meta($current_user->ID, "app_coins", $coin - $total_amount, $coin);
+        else
+            throw new Exception("unable to deduct reserved coins for the developer", 6011);
+
+        unset($total_amount);
+        unset($coin);
+    }
+
+    /**
      * update the user meta data
      * @param $user_id
      * @param $data
@@ -21,6 +38,7 @@ class userBase
                 update_user_meta($user_id, $key, $value);
             }
         }
+
     }
 
     public static function update_single($user_id, $name_field, $field_val)

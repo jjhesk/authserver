@@ -9,17 +9,47 @@ if (!class_exists('JSON_API_Cms_Controller')) {
         /**
          * API Name: api get sliders
          */
-        public static function apiAppListing()
+        public static function android_playstore_api()
         {
             global $json_api;
-            $op = "https://dashboard.tapjoy.com/dashboard/apps/search/";
-            echo api_handler::curl_get($op, array(
-                "term" => $json_api->query->term,
-                "platform" => $json_api->query->platform
-            ));
+            /*  $op = "https://dashboard.tapjoy.com/dashboard/apps/search/";
+              echo api_handler::curl_get($op, array(
+                  "term" => $json_api->query->term,
+                  "platform" => $json_api->query->platform
+              ));*/
+            try {
+                if (!class_exists("WPPlayStoreAPI")) throw new Exception("WPPlayStoreAPI is not activated", 9080);
+
+                $result = WPPlayStoreAPI::search_item(array(
+                        "search_query" => $json_api->query->keyword,
+                    )
+                );
+                api_handler::outSuccessData($result);
+            } catch (Exception $e) {
+                api_handler::outFail($e->getCode(), $e->getMessage());
+            }
+        }
+
+        public static function android_playstore_getinfo()
+        {
+            global $json_api;
+            /*  $op = "https://dashboard.tapjoy.com/dashboard/apps/search/";
+              echo api_handler::curl_get($op, array(
+                  "term" => $json_api->query->term,
+                  "platform" => $json_api->query->platform
+              ));*/
+            try {
+                if (!class_exists("WPPlayStoreAPI")) throw new Exception("WPPlayStoreAPI is not activated", 9080);
+
+                $result = WPPlayStoreAPI::get_info($json_api->query->packageid);
+                api_handler::outSuccessData($result);
+            } catch (Exception $e) {
+                api_handler::outFail($e->getCode(), $e->getMessage());
+            }
         }
 
         /**
+         *  application registration panel
          *  use on the CMS only
          */
         public static function register()
@@ -28,18 +58,67 @@ if (!class_exists('JSON_API_Cms_Controller')) {
             $reg = new app_register();
             try {
                 $d = $reg->reg($json_api->query);
-                return api_handler::outSuccessData($d);
+                api_handler::outSuccessData($d);
             } catch (Exception $e) {
                 api_handler::outFail($e->getCode(), $e->getMessage());
             }
         }
 
+        /**
+         * application listing and change status
+         *
+         */
+        public static function change_app_status()
+        {
+
+        }
 
         /**
-         * CMS
-         * not in use for now.
+         * application remove the pending submission on the app
          */
+        public static function remove_dead_app()
+        {
+            global $json_api;
 
+            try {
+                $rg = new app_register();
+                $rg->remove_app_list($json_api->query, "dead");
+                api_handler::outSuccess();
+            } catch (Exception $e) {
+                api_handler::outFail($e->getCode(), $e->getMessage());
+            }
+        }
+
+        /**
+         * application remove the pending submission on the app
+         */
+        public static function remove_pending_app()
+        {
+            global $json_api;
+            try {
+                $rg = new app_register();
+                $rg->remove_app_list($json_api->query, "pending");
+                api_handler::outSuccess();
+            } catch (Exception $e) {
+                api_handler::outFail($e->getCode(), $e->getMessage());
+            }
+        }
+
+        /**
+         * this is the request from the cms server
+         * approve or reject
+         */
+        public static function update_pending_app()
+        {
+            global $json_api;
+            try {
+                $rg = new app_register();
+                $rg->approve_app($json_api->query);
+                api_handler::outSuccess();
+            } catch (Exception $e) {
+                api_handler::outFail($e->getCode(), $e->getMessage());
+            }
+        }
 
         /**
          * @internal param $transaction_vcoin_id
@@ -93,6 +172,9 @@ if (!class_exists('JSON_API_Cms_Controller')) {
             }
         }
 
+        /**
+         * the available coin in the server
+         */
         public static function available_coins()
         {
             global $current_user;
@@ -174,20 +256,6 @@ if (!class_exists('JSON_API_Cms_Controller')) {
             }
         }
 
-        public static function update_pending_app()
-        {
-            global $wpdb, $json_api;
-
-            try {
-                $table = $wpdb->prefix . "oauth_api_consumers";
-                $query = $wpdb->prepare("UPDATE $table SET status=%s WHERE post_id=%d AND user=%d", 'alive',
-                    $json_api->query->app_id, $json_api->query->developer);
-                $wpdb->query($query);
-            } catch (Exception $e) {
-                api_handler::outFail($e->getCode(), $e->getMessage());
-            }
-
-        }
 
         public static function testing()
         {
