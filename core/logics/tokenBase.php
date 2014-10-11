@@ -31,8 +31,8 @@ if (!class_exists('tokenBase')):
         public static function display_auth_data($output, $user_id, $login_method)
         {
             global $wpdb;
-            $output["age"] = 0;
-            $output["gender"] = "M";
+
+
             $output["profile_picture"] = isset($output['avatar']) ? $output['avatar'] : "";
             unset($output['url']);
             unset($output['role']);
@@ -51,24 +51,31 @@ if (!class_exists('tokenBase')):
                 );
                 $rs = $wpdb->insert($table, $insert);
                 $output['token'] = $newtoken;
+
+                unset($expiration);
+                unset($table);
+                unset($newtoken);
+
                 return array("data" => $output);
             } elseif ($login_method == "generate_auth_token_third_party") {
                 $output['country'] = array(
-                    "ID" => "hk",
-                    "name" => "hong kong"
+                    "ID" => get_user_meta($user_id, "countrycode", true),
+                    "name" => get_user_meta($user_id, "country", true),
                 );
-                $output['birthday'] = "";
-
-
+                $output["birthday"] = get_user_meta($user_id, "birthday", true);
                 return $output;
             } else {
-
                 $output['country'] = array(
-                    "ID" => "hk",
-                    "name" => "hong kong"
+                    "ID" => get_user_meta($user_id, "countrycode", true),
+                    "name" => get_user_meta($user_id, "country", true),
                 );
+                $output["setting_push_sms"] = intval(get_user_meta($user_id, "setting_push_sms", true));
+                $output["sms_number"] = get_user_meta($user_id, "sms_number", true);
 
-                $output['birthday'] = "2/3/98";
+                $output["gender"] = get_user_meta($user_id, "gender", true);
+                $birthday = get_user_meta($user_id, "birthday", true);
+                $output["birthday"] = $birthday;
+                $output["age"] = Date_Difference::findAge($birthday);
                 return $output;
             }
         }
@@ -92,10 +99,19 @@ if (!class_exists('tokenBase')):
                 return -1;
             } else {
                 if ($result_r->status == 'dead') {
+                    unset($verbose);
+                    unset($table);
                     return -3;
                 } else if (self::hashMatch($hash, $key, $result_r->secret)) {
+                    unset($verbose);
+                    unset($table);
                     return self::success_auth_sdk($result_r, $user);
                 } else {
+                    unset($verbose);
+                    unset($table);
+                    unset($result_r);
+                    unset($key);
+                    unset($hash);
                     return -2;
                 }
             }

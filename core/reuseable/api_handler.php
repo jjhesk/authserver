@@ -72,6 +72,15 @@ if (!class_exists('api_handler')) {
 
         public static function curl_posts($url, array $post = NULL, array $options = array())
         {
+            if (class_exists("TitanFramework")) {
+                $vcoin_panel_setting = TitanFramework::getInstance("vcoinset");
+                $var = $vcoin_panel_setting->getOption("cert_path");
+                if (isset($var)) {
+                    define("CERT_PATH", $vcoin_panel_setting->getOption("cert_path"));
+                }
+                unset($var);
+                unset($vcoin_panel_setting);
+            }
             $options = wp_parse_args(array(
                 CURLOPT_TIMEOUT => 10,
                 CURLOPT_SSL_VERIFYPEER => true,

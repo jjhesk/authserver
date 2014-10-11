@@ -3,7 +3,7 @@
   Plugin Name: Vcoin Server Authentication 2014
   Plugin URI: https://github.com/jjhesk/authserver
   Description: In order to run this module the server will need to activate the mentioned modules as list below: Titan Framework, WordPress Importer, Meta Box, JSON API, JSON API Auth, Email Login, Gravity Forms
-  Version: 1.0
+  Version: 1.01
   Author: Heskeyo Kam, Ryo
   Author URI:
   License: GPLv3

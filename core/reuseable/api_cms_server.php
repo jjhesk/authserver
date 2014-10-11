@@ -95,7 +95,7 @@ if (!class_exists('api_cms_server')) {
          */
         public static function add_vcoin($uuid_account, $amount)
         {
-            $d_row = api_handler::curl_get(VCOIN_SERVER . "/api/account/addcoin", array(
+            $d_row = api_handler::curl_posts(VCOIN_SERVER . "/api/account/addcoin", array(
                 "accountid" => $uuid_account,
                 "count" => $amount,
             ));

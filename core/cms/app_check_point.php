@@ -89,6 +89,7 @@ if (!class_exists("app_check_point")) {
             if ($lang == 'ja') {
                 $text = __("Japanese", HKM_LANGUAGE_PACK);
             }
+            unset($lang);
             return sprintf($description, $text);
         }
 

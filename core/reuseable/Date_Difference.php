@@ -61,11 +61,6 @@ if (!class_exists('Date_Difference')) {
         }
 
 
-
-
-
-
-
         /*=======================================================================
        * multipleExplode HKM HESKEMO MOD. DEVELOPMENT
        *=======================================================================*/
@@ -199,5 +194,20 @@ if (!class_exists('Date_Difference')) {
             return FALSE;
         }
 
+        /**
+         * find the age from the birthday!
+         * @param $birthday
+         * @return bool|string
+         */
+        public static function findAge($birthday)
+        {
+            $birthDate = explode("/", $birthday);
+            $age = (date("md", date("U", mktime(0, 0, 0, $birthDate[0], $birthDate[1], $birthDate[2]))) > date("md")
+                ? ((date("Y") - $birthDate[2]) - 1)
+                : (date("Y") - $birthDate[2]));
+            unset($birthDate);
+            unset($birthday);
+            return $age;
+        }
     }
 }

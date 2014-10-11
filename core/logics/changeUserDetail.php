@@ -11,58 +11,16 @@ class changeUserDetail
 {
     protected $user, $name_field, $f_container;
 
+    /**
+     * @param $query
+     * @param WP_User $user
+     * @throws Exception
+     */
     public function __construct($query, WP_User $user)
     {
         $this->f_container = array();
         $this->user = $user;
-        if (isset($query->firstname)) {
-            $this->name_field = "first_name";
 
-            $this->f_container[] = array(
-                "field" => $this->name_field,
-                "value" => $query->value,
-            );
-        }
-        if (isset($query->lastname)) {
-            $this->name_field = "last_name";
-
-            $this->f_container[] = array(
-                "field" => $this->name_field,
-                "value" => $query->value,
-            );
-        }
-        if (isset($query->nickname)) {
-            $this->name_field = "nickname";
-
-            $this->f_container[] = array(
-                "field" => $this->name_field,
-                "value" => $query->value,
-            );
-        }
-        if (isset($query->description)) {
-            $this->name_field = "description";
-
-            $this->f_container[] = array(
-                "field" => $this->name_field,
-                "value" => $query->value,
-            );
-        }
-        if (isset($query->user_url)) {
-            $this->name_field = "user_url";
-
-            $this->f_container[] = array(
-                "field" => $this->name_field,
-                "value" => $query->value,
-            );
-        }
-        if (isset($query->email)) {
-            $this->name_field = "email";
-
-            $this->f_container[] = array(
-                "field" => $this->name_field,
-                "value" => $query->value,
-            );
-        }
         if (isset($query->password)) {
             if (!isset($query->old_password)) {
                 throw new Exception("the old password is not presented", 1031);
@@ -71,7 +29,7 @@ class changeUserDetail
                 $this->name_field = "password";
                 $this->f_container[] = array(
                     "field" => $this->name_field,
-                    "value" => $query->value,
+                    "value" => $query->password,
                 );
             } else {
                 throw new Exception("the password does not match to set the new password", 1032);
@@ -79,69 +37,109 @@ class changeUserDetail
 
         }
 
-        if (isset($query->gender)) {
-            $this->name_field = "gender";
-
+        if (isset($query->firstname)) {
+            $this->name_field = "first_name";
             $this->f_container[] = array(
                 "field" => $this->name_field,
-                "value" => $query->value,
+                "value" => $query->firstname,
+            );
+        }
+        if (isset($query->lastname)) {
+            $this->name_field = "last_name";
+            $this->f_container[] = array(
+                "field" => $this->name_field,
+                "value" => $query->lastname,
+            );
+        }
+        if (isset($query->nickname)) {
+            $this->name_field = "nickname";
+            $this->f_container[] = array(
+                "field" => $this->name_field,
+                "value" => $query->nickname,
+            );
+        }
+        if (isset($query->description)) {
+            $this->name_field = "description";
+            $this->f_container[] = array(
+                "field" => $this->name_field,
+                "value" => $query->description,
+            );
+        }
+        if (isset($query->user_url)) {
+            $this->name_field = "user_url";
+            $this->f_container[] = array(
+                "field" => $this->name_field,
+                "value" => $query->user_url,
+            );
+        }
+        if (isset($query->email)) {
+            $this->name_field = "email";
+            $this->f_container[] = array(
+                "field" => $this->name_field,
+                "value" => $query->email,
+            );
+        }
+
+
+        if (isset($query->gender)) {
+            $this->name_field = "gender";
+            $this->f_container[] = array(
+                "field" => $this->name_field,
+                "value" => $query->gender,
             );
         }
 
         if (isset($query->birthday)) {
             $this->name_field = "birthday";
-
             $this->f_container[] = array(
                 "field" => $this->name_field,
-                "value" => $query->value,
+                "value" => $query->birthday,
             );
         }
 
         if (isset($query->country)) {
             $this->name_field = "country";
-
             $this->f_container[] = array(
                 "field" => $this->name_field,
-                "value" => $query->value,
+                "value" => $query->country,
             );
         }
 
         if (isset($query->countrycode)) {
             $this->name_field = "countrycode";
-
             $this->f_container[] = array(
                 "field" => $this->name_field,
-                "value" => $query->value,
+                "value" => $query->countrycode,
             );
         }
 
         if (isset($query->setting_push_sms)) {
             $this->name_field = "setting_push_sms";
-
             $this->f_container[] = array(
                 "field" => $this->name_field,
-                "value" => $query->value,
+                "value" => $query->setting_push_sms,
             );
         }
         if (isset($query->sms_number)) {
             $this->name_field = "sms_number";
-
             $this->f_container[] = array(
                 "field" => $this->name_field,
-                "value" => $query->value,
+                "value" => $query->sms_number,
             );
         }
         if (isset($query->language)) {
             $this->name_field = "language";
-
             $this->f_container[] = array(
                 "field" => $this->name_field,
-                "value" => $query->value,
+                "value" => $query->language,
             );
         }
         $this->commit_changes();
     }
 
+    /**
+     * committing the changes
+     */
     private function commit_changes()
     {
         $f = array(
@@ -154,18 +152,29 @@ class changeUserDetail
                 $this->change($ob["field"], $ob["value"]);
             }
         }
+        unset($f);
     }
 
+    /**
+     * @return array
+     */
     public function get_change_field_results()
     {
         return $this->f_container;
     }
 
+    /**
+     * @return string
+     */
     public function get_field()
     {
         return $this->name_field;
     }
 
+    /**
+     * @param $name_field
+     * @param $input
+     */
     private function change_wp($name_field, $input)
     {
         if ($name_field == "password") {
@@ -180,9 +189,19 @@ class changeUserDetail
         }
     }
 
+    /**
+     * @param $name_field
+     * @param $input
+     */
     private function change($name_field, $input)
     {
-        if (get_user_meta($this->user->ID, $name_field, true) == "") add_user_meta($this->user->ID, $name_field, $input, false);
-        else  update_user_meta($this->user->ID, $name_field, $input, get_user_meta($this->user->ID, $name_field, true));
+       // update_user_meta($this->user->ID, $name_field, $input);
+        if (get_user_meta($this->user->ID, $name_field, true) == "") {
+            add_user_meta($this->user->ID, $name_field, $input, false);
+           // inno_log_db::log_vcoin_third_party_app_transaction(-1, 10101, "change field on add user meta: " . $input);
+        } else {
+           // inno_log_db::log_vcoin_third_party_app_transaction(-1, 10101, "change field on update user meta: " . $input);
+            update_user_meta($this->user->ID, $name_field, $input);
+        }
     }
 } 

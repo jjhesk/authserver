@@ -77,9 +77,9 @@ if (!class_exists('userRegister')) {
         {
             try {
                 if ($role == "appuser") {
-                    $extra_fields["birthday"] = "";
-                    $extra_fields["country"] = "";
-                    $extra_fields["countrycode"] = "";
+                    $extra_fields["birthday"] = "1/1/2000";
+                    $extra_fields["country"] = "Hong Kong";
+                    $extra_fields["countrycode"] = "HKG";
                     $extra_fields["setting_push_sms"] = "0";
                     $extra_fields["sms_number"] = "";
                     $extra_fields["gender"] = "M";
@@ -180,7 +180,8 @@ if (!class_exists('userRegister')) {
                 //   remove_action("user_register", array(__CLASS__, "user_reg_action_cb"));
                 $user = new WP_User($user_id);
                 foreach ($extra_fields as $key => $val) {
-                    update_user_meta($user_id, $key, $val, false);
+                   // update_user_meta($user_id, $key, $val, false);
+                    add_user_meta($user_id, $key, $val, false);
                 }
                 //  debugoc::upload_bmap_log(print_r($args, true), 29291);
                 //wp_insert_user($args);

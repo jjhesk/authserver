@@ -42,6 +42,7 @@ if (!class_exists('adminapp')):
             );
             $args = wp_parse_args($args, $defaults);
             extract($args);
+
             $this->type = $type;
 
             if (isset($parent_id))
@@ -77,11 +78,28 @@ if (!class_exists('adminapp')):
                 $this->setup_auto_screen_id();
             $this->set_script_enqueue($script, $this->support_script_id);
             $this->set_script_enqueue($style, $this->support_style_id);
+
+            unset($args);
+            unset($defaults);
+            unset($cap);
+            unset($title);
+            unset($name);
+            unset($script);
+            unset($style);
+            unset($script_localize);
+            unset($sub_id);
+            unset($icon);
+            unset($position);
+            unset($parent_id);
+
+
             if (!isset($cb)) {
                 return;
             } else {
                 $this->rendering_cb = $cb;
             }
+
+
             // do not need it add_action('admin_enqueue_scripts', array('ocscript', 'register'));
             add_action('admin_menu', array(&$this, "register"));
         }
@@ -120,6 +138,8 @@ if (!class_exists('adminapp')):
             );
             $args = wp_parse_args($args, $defaults);
             $Instance = new self($args);
+            unset($args);
+            unset($defaults);
         }
 
         public function register()

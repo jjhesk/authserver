@@ -40,6 +40,10 @@ if (!class_exists('application_user_profile')):
                         "setting_push_sms" => "Switch Notification SMS",
                         "app_token" => "App Token",
                         "uuid_key" => "vcoin UUID",
+                        "birthday" => "BOD",
+                        "gender" => "SEX Gender",
+                        "countrycode" => "Country",
+                        "language" => "Language",
                         "last_login_lastlogintime" => "Last Login",
                     )
                 ),
@@ -92,7 +96,7 @@ if (!class_exists('application_user_profile')):
                     "enable" => $field_val
                 ));
 
-               // inno_log_db::log_vcoin_third_party_app_transaction($current_user->ID, 12172, "uuid accountid change enable");
+                // inno_log_db::log_vcoin_third_party_app_transaction($current_user->ID, 12172, "uuid accountid change enable");
             }
         }
 
@@ -157,6 +161,18 @@ if (!class_exists('application_user_profile')):
                     break;
                 case "setting_push_sms":
                     return $editor->input_switch($var, $key, "profile_button", "admin_profile");
+                    break;
+                case "countrycode":
+                    return $editor->input_field($var, $key);
+                    break;
+                case "birthday":
+                    return $editor->input_field($var, $key);
+                    break;
+                case "gender":
+                    return $editor->input_field($var, $key);
+                    break;
+                case "language":
+                    return $editor->input_field($var, $key);
                     break;
                 default:
                     return "";

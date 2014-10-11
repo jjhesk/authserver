@@ -9,7 +9,9 @@ defined('ABSPATH') || exit;
 if (!class_exists('inno_log_db')):
     class inno_log_db
     {
-        /*public static function action_log_claim_reward($claim, $hash, $ID)
+        /*
+
+        public static function action_log_claim_reward($claim, $hash, $ID)
         {
             //imusicworld_reward_mgm_log
             $current_user = wp_get_current_user();
@@ -29,8 +31,12 @@ if (!class_exists('inno_log_db')):
         {
             self::db_access_extend(-1, $message, 404, $line_code);
             return true;
-        }*/
-        /*public static function log_redemption_error($user_id = -1, $hash_code_event_error = 0, $message = "")
+        }
+
+        */
+        /*
+
+        public static function log_redemption_error($user_id = -1, $hash_code_event_error = 0, $message = "")
         {
             self::db_access($user_id, $message, 509, intval($hash_code_event_error));
             return true;
@@ -46,14 +52,16 @@ if (!class_exists('inno_log_db')):
         {
             self::db_access($user_id, "Fail to upload video to WP, v-coin server fail: " . VCOIN_SERVER . ". <br>" . $msg, 100, $error_code_event_error);
             return true;
-        }*/
-/**
- *  For Vcoin errors
- *  inno_log_db::log_vcoin_login($user_id, $hash_code_event_error, $msg = "")
- */
- /*
- * --------------------------------------------------------------------------------------------------------------------------
- */
+        }
+
+        */
+        /**
+         *  For Vcoin errors
+         *  inno_log_db::log_vcoin_login($user_id, $hash_code_event_error, $msg = "")
+         */
+        /*
+        * --------------------------------------------------------------------------------------------------------------------------
+        */
         public static function log_vcoin_login($user_id, $hash_code_event_error, $msg = "")
         {
             self::db_access($user_id, $msg, 521, $hash_code_event_error);
@@ -95,9 +103,9 @@ if (!class_exists('inno_log_db')):
             self::db_access($user_id, $msg, 527, $hash_code_event_error);
             return true;
         }
-/*
- * --------------------------------------------------------------------------------------------------------------------------
- */
+        /*
+         * --------------------------------------------------------------------------------------------------------------------------
+         */
         /*public static function log_activity_api($user_id, $message)
         {
             self::db_access($user_id, $message, 558, 10);
@@ -142,7 +150,7 @@ if (!class_exists('inno_log_db')):
         {
 
             global $wpdb;
-            $log_table = $wpdb->prefix."app_log";
+            $log_table = $wpdb->prefix . "app_log";
             $interval_1 = get_option('db_log_interval', 5);
             $interval_2 = get_option('db_email_alert_interval', 5);
             $email = false;
@@ -169,7 +177,7 @@ if (!class_exists('inno_log_db')):
                     'event_code' => $event,
                     'error_code' => $error
                 );
-                $log_table = $wpdb->prefix."app_log";
+                $log_table = $wpdb->prefix . "app_log";
                 $wpdb->insert($log_table, $_k);
             }
             return true;
@@ -184,7 +192,7 @@ if (!class_exists('inno_log_db')):
                 'error_code' => $error
             );
             global $wpdb;
-            $log_table = $wpdb->prefix."app_log";
+            $log_table = $wpdb->prefix . "app_log";
             $wpdb->insert($log_table, $_k);
             return true;
         }
@@ -192,7 +200,7 @@ if (!class_exists('inno_log_db')):
         private static function remove_log_data($event_code, $date_before)
         {
             global $wpdb;
-            $log_table = $wpdb->prefix."app_log";
+            $log_table = $wpdb->prefix . "app_log";
             $wpdb->query(
                 $wpdb->prepare("
                 DELETE FROM $log_table

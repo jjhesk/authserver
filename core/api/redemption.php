@@ -109,6 +109,8 @@ if (!class_exists('JSON_API_Redemption_Controller')) {
                 if (class_exists("json_auth_central")) {
                     json_auth_central::auth_check_token_json();
                     $obj = api_cms_server::crosscms("user_redempted_e_coupon_list", array("user" => $current_user->ID));
+                    $obj->status = intval($obj->status);
+                    $obj->vcoin_expense = intval($obj->vcoin_expense);
                     api_handler::outSuccessDataWeSoft($obj);
                 } else {
                     throw new Exception("module not installed", 1007);
