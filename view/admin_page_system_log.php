@@ -1,3 +1,13 @@
+<div class="log_menu tablenav top">
+    <button class="log_button button">Login</button>
+    <button class="log_button button">Email</button>
+    <button class="log_button button">Vcoin</button>
+    <button class="log_button button">New Account</button>
+    <button class="log_button button">Redemption(verification)</button>
+    <button class="log_button button">Redemption(verify)</button>
+    <button class="log_button button">Third party App Transaction Request</button>
+</div>
+
 <table id="admin_page_system_log" class="display" cellspacing="0" width="100%">
     <thead>
     <tr>
@@ -21,15 +31,3 @@
     </tr>
     </tfoot>
 </table>
-<!--<script id="action_bar_buttons" type="text/x-handlebars-template">
-    <input id="action_approve-{{lid}}" type="button" class="button" value="Approve" onclick="approve({{lid}});"/>
-    <input id="action_ignore-{{lid}}" type="button" class="button" value="Deny" onclick="reject({{lid}});"/>
-    <input id="action_view_doc-{{lid}}" type="button" class="button" value="View BR Doc" onclick="viewdoc({{lid}});"/>
-</script>
-<script id="view_pdf_company_br" type="text/x-handlebars-template">
-    <span>{{brno}}</span>
-        <a id="action_view_pdf-{{lid}}"
-               class="button"
-               value="pdf BR Doc"
-               href="{{copy_br}}">view Doc</a>
-</script>-->
