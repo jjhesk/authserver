@@ -5,14 +5,13 @@
 var setting_ob = setting_ob || {};
 
 jQuery(function ($) {
-    var api_domain = "http://devlogin.vcoinapp.com/api/";
+    var api_domain =  window.location.origin +"/api/";
 
     var widget_id = "vcoin_plan_review",
         $widget = $("#" + widget_id),
         api_request_postnum = api_domain + "cms/dashboard_request_pending_post_num/",
         api_request_list = api_domain + "cms/dashboard_request_listed_post_num/",
         $widget_container = $("#" + widget_id + " .inside");
-
 
     var account_status_template_output = Handlebars.compile($("#account_status_template").html());
     var set_content = {company_name: setting_ob.company_name, app_coins: setting_ob.app_coins};

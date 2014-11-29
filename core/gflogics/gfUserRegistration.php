@@ -43,6 +43,7 @@ if (!class_exists('gfUserRegistration')) {
         {
             if ($is_ajax) {
                 wp_enqueue_script("gflogins");
+                wp_enqueue_style("gf_hot_fix");
             }
         }
 

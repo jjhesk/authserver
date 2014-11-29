@@ -13,32 +13,32 @@ if (!class_exists('email_confirmation_verify')) {
         private $email, $hash, $rgID, $format;
         protected $message_internal, $query;
 
-        public function __construct($qu)
+        public function __construct($Q)
         {
-            $this->request_pnv($qu);
+            $this->request_pnv($Q);
         }
 
         /**
          * stable version...
          *
-         * @param $qu
+         * @param $Q
          * @throws Exception
          */
-        private function request_pnv($qu)
+        private function request_pnv($Q)
         {
-            if (!isset($qu->e))
+            if (!isset($Q->e))
                 throw new Exception("email is missing", 1001);
-            if (!isset($qu->h))
+            if (!isset($Q->h))
                 throw new Exception("hash is missing", 1002);
-            if (!isset($qu->r))
+            if (!isset($Q->r))
                 throw new Exception("rgID is missing", 1003);
-            if (!isset($qu->d))
+            if (!isset($Q->d))
                 throw new Exception("format is missing", 1004);
 
-            $this->email = $qu->e;
-            $this->hash = $qu->h;
-            $this->rgID = $qu->r;
-            $this->format = $qu->d;
+            $this->email = $Q->e;
+            $this->hash = $Q->h;
+            $this->rgID = $Q->r;
+            $this->format = $Q->d;
 
 
             $this->message_internal = "demo only for now";
@@ -49,15 +49,15 @@ if (!class_exists('email_confirmation_verify')) {
         /**
          * this may incur bugs in the SSL connect
          *
-         * @param $qu
+         * @param $Q
          * @throws Exception
          */
-        private function request_string($qu)
+        private function request_string($Q)
         {
 
             /** the email of the new user account **/
-            if (isset($qu->vdata)) {
-                $this->query = explode(";", $qu->vdata);
+            if (isset($Q->vdata)) {
+                $this->query = explode(";", $Q->vdata);
 
                 $this->email = $this->query[0];
                 $this->hash = $this->query[1];
@@ -136,15 +136,15 @@ if (!class_exists('email_confirmation_verify')) {
                 if ($check_hash == $this->hash && !email_exists($check_pending_list_email)) {
                     //$user_id = wp_create_user($check_pending_list_username, $check_pending_list_password, $check_pending_list_email);
 
-                   $new_user = new userRegister();
+                    $new_user = new userRegister();
                     $new_user->newUser($check_pending_list_username, $check_pending_list_email, $role, array(
                         "company_name" => $check_pending_list_company_name
                     ), $check_pending_list_password);
 
-                    $this->message_internal = "Verify success. Please login your app and start getting fun!";
+                    $this->message_internal = _x("Verify success. Please login your app and start getting fun!", "email");
                     //  $this->render("Verify success. Please login your app and start getting fun!");
                 } else {
-                    $this->message_internal = "Email verify is not success. As you have registered this Username before.";
+                    $this->message_internal = _x("Email verify is not success. As you have registered this Username before.", "email");
                     //    $this->render("Email verify is not success. As you have registered this Username before.");
                 }
             } catch (Exception $e) {

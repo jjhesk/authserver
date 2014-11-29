@@ -15,6 +15,11 @@ if (!class_exists('adminajax')):
             $this->controllers = $structure;
         }
 
+        function __destruct()
+        {
+            $this->controllers = NULL;
+        }
+
         function reg_admin_ajax_control($structure = null)
         {
             if ($structure != null)

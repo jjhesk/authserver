@@ -24,6 +24,19 @@ if (!class_exists('user_profile_editor')):
             //  add_filter("UserFieldRender", array(__CLASS__, "default_User_Render"), 10, 3);
         }
 
+        function __destruct()
+        {
+            $this->user_object = NULL;
+            $this->can_view = NULL;
+            $this->editor_right = NULL;
+            $this->box_title = NULL;
+            $this->field_ids = NULL;
+            $this->vcoin_panel_setting = NULL;
+            $this->current_role = NULL;
+            $this->html = NULL;
+            gc_collect_cycles();
+        }
+
         public static function default_User_Render(user_profile_editor $module, $key, $val)
         {
 
@@ -154,7 +167,7 @@ if (!class_exists('user_profile_editor')):
 
         /**
          * option key format
-         * control_panel_{{role name}}_{{option key to be applied}}
+         * cp_{{role name}}_{{option key to be applied}}
          * @param $key
          * @return string
          * @throws Exception
@@ -162,11 +175,38 @@ if (!class_exists('user_profile_editor')):
         public function get_panel_control($key)
         {
             if (isset($this->vcoin_panel_setting)) {
-                $_key_ = "control_panel_" . $this->current_role . "_" . $key;
+                $_key_ = "cp_" . $this->current_role . "_" . $key;
                 $return = $this->vcoin_panel_setting->getOption($_key_);
                 return intval($return);
             } else
                 throw new Exception("module not exist", 102);
+        }
+
+        public function titan_view_field($role_allow, $key, $var)
+        {
+            if ($this->current_role == "administrator") {
+                return $this->input_field($var, $key, false);
+            } else if ($role_allow == $this->current_role) {
+                $return = $this->vcoin_panel_setting->getOption("cp_" . $role_allow . "_" . $key);
+                return $this->can_view() && $return ? $var : "";
+            } else {
+                return "";
+            }
+        }
+
+        public function titan_field($role_allow, $key, $var)
+        {
+
+            //   print_r($this->current_role);
+            if ($this->current_role == "administrator") {
+                return $this->input_field($var, $key);
+            } else if ($role_allow == $this->current_role) {
+                $return = $this->vcoin_panel_setting->getOption("cp_" . $role_allow . "_" . $key);
+                // inno_log_db::log_vcoin_new_account(-1,212,$return);
+                return $this->input_field($var, $key, !$return);
+            } else {
+                return $this->input_field($var, $key, true);
+            }
         }
 
         /**
@@ -261,16 +301,12 @@ if (!class_exists('user_profile_editor')):
                 case "access_token":
                     $field_val = parent::getVal($this->user_object->ID, $key);
                     break;
-                case "mac_id":
-                    if (parent::has_role("administrator"))
-                        $field_val = $this->input_field($field_val, $key);
-                    // print_r($field_val);
-                    $desc = "The mac address can be done to ensuring stolen machine to be protected by the system";
-                    break;
-                case "vcoin":
-                    $val = parent::getVal($this->user_object->ID, $key);
-                    $field_val = intval($val) . "V";
-                    break;
+                /*         case "mac_id":
+                             if (parent::has_role("administrator"))
+                                 $field_val = $this->input_field($field_val, $key);
+                             // print_r($field_val);
+                             $desc = "The mac address can be done to ensuring stolen machine to be protected by the system";
+                             break;*/
                 case "stock_manager_report":
                     $link = admin_url("admin.php?page=innomanager-stock&staff=" . $this->user_object->ID);
                     $field_val = '<a class="button button-primary" href="' . $link . '">Review Report</a>';

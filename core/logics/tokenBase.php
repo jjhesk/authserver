@@ -19,7 +19,8 @@ if (!class_exists('tokenBase')):
             add_filter("token_auth_api_check", array("TokenAuthentication", "get_user_id"), 9, 2);
             add_filter("gen_token_SDK", array(__CLASS__, "api_token_sdk_oauth"), 10, 3);
             add_filter("display_user_data_after_auth", array(__CLASS__, "display_auth_data"), 15, 3);
-            // add_action("after_token_verified", array("TokenAuthentication", "init"), 10, 1);
+            add_action("after_token_verified", array("TokenAuthentication", "second_init"), 10, 3);
+
         }
 
         /**
@@ -31,31 +32,24 @@ if (!class_exists('tokenBase')):
         public static function display_auth_data($output, $user_id, $login_method)
         {
             global $wpdb;
-
-
             $output["profile_picture"] = isset($output['avatar']) ? $output['avatar'] : "";
             unset($output['url']);
             unset($output['role']);
             unset($output['avatar']);
             if ($login_method == "generate_auth_token") {
-                //$user_ID = $output['user']['id'];
                 $expiration = $output['exp'];
-                $table = $wpdb->prefix . "app_login_token_banks";
-                // $verbose = $wpdb->prepare("SELECT * FROM $table WHERE id=%d AND token=%s", $user_ID, $token);
-                // $result = $wpdb->get_row($verbose);
                 $newtoken = self::get_new_token($expiration . '.');
-                $insert = array(
-                    "token" => $newtoken,
-                    "exp" => $expiration,
-                    "user" => $user_id
-                );
-                $rs = $wpdb->insert($table, $insert);
                 $output['token'] = $newtoken;
-
+                TokenAuthentication::genAuthTokenRecord($newtoken, $expiration, $user_id);
+                try {
+                    $n = new app_download();
+                    $n->start_sdk_app_v2($_REQUEST["appkey"]);
+                    $output["open_app_result"] = $n->get_result();
+                } catch (Exception $e) {
+                    $output["open_app_result"] = $e->getMessage();
+                }
                 unset($expiration);
-                unset($table);
                 unset($newtoken);
-
                 return array("data" => $output);
             } elseif ($login_method == "generate_auth_token_third_party") {
                 $output['country'] = array(
@@ -63,6 +57,7 @@ if (!class_exists('tokenBase')):
                     "name" => get_user_meta($user_id, "country", true),
                 );
                 $output["birthday"] = get_user_meta($user_id, "birthday", true);
+
                 return $output;
             } else {
                 $output['country'] = array(
@@ -92,23 +87,20 @@ if (!class_exists('tokenBase')):
         public static function api_token_sdk_oauth(WP_User $user, $key, $hash)
         {
             global $wpdb;
-            $table = $wpdb->prefix . "oauth_api_consumers";
-            $verbose = $wpdb->prepare("SELECT * FROM $table WHERE oauthkey=%s", $key);
+            $table = $wpdb->prefix . "post_app_registration";
+            $verbose = $wpdb->prepare("SELECT * FROM $table WHERE app_key=%s", $key);
             $result_r = $wpdb->get_row($verbose);
             if (!$result_r) {
                 return -1;
             } else {
+                unset($verbose);
+                unset($table);
                 if ($result_r->status == 'dead') {
-                    unset($verbose);
-                    unset($table);
                     return -3;
-                } else if (self::hashMatch($hash, $key, $result_r->secret)) {
-                    unset($verbose);
-                    unset($table);
-                    return self::success_auth_sdk($result_r, $user);
+                } else if (self::hashMatch($hash, $result_r->app_key, $result_r->app_secret)) {
+                    $token = self::success_auth_sdk($result_r, $user);
+                    return $token;
                 } else {
-                    unset($verbose);
-                    unset($table);
                     unset($result_r);
                     unset($key);
                     unset($hash);
@@ -126,17 +118,19 @@ if (!class_exists('tokenBase')):
         {
             global $wpdb;
             $table = $wpdb->prefix . "app_login_token_banks";
-            $expiration = time() + 1209600;
+
             // inno_log_db::log_vcoin_error(-1, 19920, "testing i52");
+            $expiration = self::get_project_exp();
             $token = self::get_new_token($expiration . $result->secret);
             // inno_log_db::log_vcoin_error(-1, 19920, "testing i21");
             $insert = array(
-                "consumerid" => $result->id,
+                "consumerid" => $result->ID,
                 "exp" => $expiration,
                 "token" => $token,
                 "user" => $user->ID
             );
             $result_of_the_row = $wpdb->insert($table, $insert);
+
             return $token;
         }
 
@@ -158,6 +152,7 @@ if (!class_exists('tokenBase')):
             // inno_log_db::log_vcoin_error(-1, 19920, "testing i2");
             if ($exp > time()) throw new Exception("Invalid, expired token.", 1002);
             // $verbose_2 = $wpdb->prepare("SELECT * FROM $table WHERE token=%s", $token);
+
 
             return $result_r->user;
         }
@@ -182,7 +177,10 @@ if (!class_exists('tokenBase')):
         {
             //inno_log_db::log_vcoin_error(-1, 19921, "testing i3");
             $gen_hash = hash('sha512', $key . $secret);
-            inno_log_db::log_vcoin_login(-1, 19922, "check hash: input: " + $hash . " , calculated: " . $gen_hash);
+            if ($gen_hash != $hash)
+                inno_log_db::log_vcoin_login(-1, 19922, "unmatched hash: input: " + $hash . ",
+                 calculated: " . $gen_hash);
+
             return $gen_hash == $hash;
         }
 
@@ -195,5 +193,68 @@ if (!class_exists('tokenBase')):
             return hash_hmac('ripemd160', $str, LOGGED_IN_SALT);
         }
 
+        private static function get_project_exp()
+        {
+            if (!class_exists('TitanFramework')) return 0;
+            $settings = TitanFramework::getInstance("vcoinset");
+            $exp_future = (int)$settings->getOption("token_exp_limit");
+            $settings = NULL;
+            return time() + $exp_future;
+        }
+
+        public static function renew_token($Q)
+        {
+            global $json_api, $wpdb;
+            try {
+
+                if (!isset($Q->wasted)) throw new Exception("wasted key is not presented", 1720);
+                if (!isset($Q->hash)) throw new Exception("hash for renewal is not presented", 1721);
+                if (!isset($Q->app_k)) throw new Exception("app key for renewal is not presented", 1722);
+                if (!isset($Q->nouce)) throw new Exception("app nouce for renewal is not presented", 1723);
+                $nonce_id = $json_api->get_nonce_id('auth', 'generate_auth_cookie');
+                if (!wp_verify_nonce($Q->nonce, $nonce_id)) throw new Exception("Your 'nonce' value was incorrect. n:" . $nonce_id . ":" . $Q->nonce . 1724);
+                $token_bank_tb = $wpdb->prefix . "app_login_token_banks";
+                $post_register_tb = $wpdb->prefix . "post_app_registration";
+
+                $verbose_bank = $wpdb->prepare("SELECT
+                    t1.exp AS exp,
+                    t1.user AS user_id,
+                    t2.app_key AS appkey,
+                    t2.app_secret AS app_secret,
+                    t2.consumerid AS row_id
+                FROM
+                $token_bank_tb AS t1 LEFT JOIN $post_register_tb
+                AS t2 ON t1.consumerid = t2.ID WHERE t1.token=%s", $Q->wasted);
+
+
+                $old_token_data = $wpdb->get_row($verbose_bank);
+                if (!$old_token_data) throw new Exception("Invalid token.", 1725);
+
+                if ((int)$old_token_data->exp < time()) throw new Exception("This token is not expired.", 1726);
+                if (!self::hashMatch($Q->hash, $Q->app_k, $old_token_data->app_secret)) throw new Exception("calculation not matched", 1727);
+
+                // inno_log_db::log_vcoin_error(-1, 19920, "testing i52");
+                $e_future_time = self::get_project_exp();
+                $token = self::get_new_token($e_future_time . $old_token_data->app_secret);
+                // inno_log_db::log_vcoin_error(-1, 19920, "testing i21");
+                $insert = array(
+                    "consumerid" => $old_token_data->row_id,
+                    "exp" => $e_future_time,
+                    "token" => $token,
+                    "user" => $old_token_data->user_id
+                );
+
+                $wpdb->delete($token_bank_tb, array("token" => $Q->wasted), array("%s"));
+                $result_of_the_row = $wpdb->insert($token_bank_tb, $insert);
+                $old_token_data = $insert = NULL;
+
+                return array(
+                    "token" => $token,
+                    "exp" => $e_future_time
+                );
+            } catch (Exception $e) {
+                throw $e;
+            }
+        }
     }
 endif;

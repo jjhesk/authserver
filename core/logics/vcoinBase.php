@@ -64,7 +64,7 @@ if (!class_exists('vcoinBase')) {
          */
         public function setAmount($amount)
         {
-            $this->amount = $amount;
+            $this->amount = (int)$amount;
             return $this;
         }
 
@@ -94,23 +94,15 @@ if (!class_exists('vcoinBase')) {
                 $this->receive_uuid = userBase::getVal($this->user_gain_coin->ID, "uuid_key");
             if ($this->receive_uuid == "") throw new Exception("gain coin user account key is missing or please contact admin for user vcoin uuid.", 1020);
             if (!isset($this->receive_uuid)) throw new Exception("receiver not set", 1094);
-            if ($this->reference == "move coin api") {
-                $json = api_handler::curl_post(VCOIN_SERVER . "/api/coin/move",
-                    array(
-                        "debit" => $this->receive_uuid,
-                        "credit" => $this->send_uuid,
-                        "ref_code" => $this->reference,
-                        "amount" => $this->amount
-                    ));
-            } else {
-                $json = api_handler::curl_post(VCOIN_SERVER . "/api/coin/redeem",
-                    array(
-                        "debit" => $this->receive_uuid,
-                        "credit" => $this->send_uuid,
-                        "ref_code" => $this->reference,
-                        "count" => $this->amount
-                    ));
-            }
+
+            $json = api_handler::curl_post(VCOIN_SERVER . "/api/coin/move",
+                array(
+                    "debit" => $this->receive_uuid,
+                    "credit" => $this->send_uuid,
+                    "ref_code" => $this->reference,
+                    "amount" => $this->amount
+                ));
+
             $res = json_decode($json);
             unset($uuid);
             unset($json);
@@ -124,9 +116,7 @@ if (!class_exists('vcoinBase')) {
 
         public function get_tranaction_reference()
         {
-            // while (isset($this->transaction_reference)) {
             return $this->transaction_reference;
-            //  }
         }
 
 

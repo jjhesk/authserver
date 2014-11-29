@@ -8,7 +8,7 @@ jQuery(function ($) {
         this.$container = $("#" + component_name);
         this.$mission_table = $("#mission_table");
         this.action_id = action_id;
-        this.domain = "http://devlogin.vcoinapp.com/api/";
+        this.domain =  window.location.origin +"/api/";
         this.TableInit();
     };
     CheckPointAdmin.prototype = {

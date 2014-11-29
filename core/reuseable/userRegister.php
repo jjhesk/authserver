@@ -12,16 +12,34 @@ defined('ABSPATH') || exit;
 if (!class_exists('userRegister')) {
     class userRegister
     {
-        private $reg_user;
+        private $reg_user, $vcoin_transaction;
 
         public function __construct()
         {
 
         }
 
+        function __destruct()
+        {
+            $this->reg_user = NULL;
+            $this->vcoin_transaction = NULL;
+            gc_collect_cycles();
+        }
+
         public static function user_reg()
         {
             add_action("user_register", array(__CLASS__, "new_user_reg"), 11, 1);
+            add_action("delete_user", array(__CLASS__, "my_delete_user"), 11, 1);
+        }
+
+        public static function my_delete_user($user_id)
+        {
+            global $wpdb;
+            $user_obj = get_userdata($user_id);
+            $email = $user_obj->user_email;
+            $headers = 'From: ' . get_bloginfo("name") . ' <' . get_bloginfo("admin_email") . '>' . "\r\n";
+            wp_mail($email, 'You are being deleted, brah', 'Your account at ' . get_bloginfo("name") . ' is being deleted right now.', $headers);
+            api_cms_server::enable_account($user_id, false);
         }
 
         /**
@@ -40,7 +58,7 @@ if (!class_exists('userRegister')) {
                     }
                 }
             }
-
+            $user = NULL;
         }
 
         /**
@@ -59,9 +77,9 @@ if (!class_exists('userRegister')) {
          */
         private function create_vcoin_key_for_user()
         {
-            $vcoin = new vcoinBase();
+            $this->vcoin_transaction = new vcoinBase();
             $data = get_userdata($this->reg_user->ID);
-            $bind_id = $vcoin->create_new_user($data->user_email);
+            $bind_id = $this->vcoin_transaction->create_new_user($data->user_email);
             update_user_meta($this->reg_user->ID, "uuid_key", $bind_id);
         }
 
@@ -69,9 +87,10 @@ if (!class_exists('userRegister')) {
          * @param $login_name
          * @param $user_email
          * @param $role
-         * @param array $extrafields
+         * @param array $extra_fields
          * @param $pwd
          * @throws Exception
+         * @internal param array $extrafields
          */
         public function newUser($login_name, $user_email, $role, $extra_fields = array(), $pwd)
         {
@@ -86,13 +105,16 @@ if (!class_exists('userRegister')) {
                     $extra_fields["uuid_key"] = "";
                     $extra_fields["app_token"] = "";
                     $extra_fields["password"] = $pwd;
+                    $extra_fields["coin"] = 0;
+                    $extra_fields["coin_update"] = "";
                 } else if ($role == "developer") {
-                    $extra_fields["service_plan"] = "100";
-                    $extra_fields["app_coins"] = "0";
+                    $extra_fields["service_plan"] = 100;
+                    $extra_fields["app_coins"] = 0;
                 }
+                //  inno_log_db::log_vcoin_login(-1, 101222, "new user create_user_account.");
                 $this->reg_user = $this->create_user_account($login_name, $user_email, $role, $extra_fields, $pwd);
                 if ($role == "appuser") {
-                    inno_log_db::log_vcoin_login(-1, 101222, "new user and add uuid to the vcoin server.");
+                    //  inno_log_db::log_vcoin_login(-1, 101222, "new user and add uuid to the vcoin server.");
                     $this->create_vcoin_key_for_user();
                 }
             } catch (Exception $e) {
@@ -169,9 +191,8 @@ if (!class_exists('userRegister')) {
             try {
                 // $pwd = !$generate_password? wp_generate_password($length = 12, $include_standard_special_chars = TRUE);
                 //  add_action("user_register", array(__CLASS__, "user_reg_action_cb"), 10, 1);
-
                 remove_action("user_register", array(__CLASS__, "new_user_reg"));
-                $login_name_final = $role . gformBase::gen_order_num() . $login_name;
+                $login_name_final = $role . gformBase::gen_order_num() . join("_", explode(" ", $login_name));
                 $user_id = wp_create_user($login_name_final, $pwd, $user_email);
                 if (is_wp_error($user_id)) {
                     throw new Exception($user_id->get_error_message(), 10129);
@@ -179,9 +200,11 @@ if (!class_exists('userRegister')) {
                 add_action("user_register", array(__CLASS__, "new_user_reg"));
                 //   remove_action("user_register", array(__CLASS__, "user_reg_action_cb"));
                 $user = new WP_User($user_id);
+                add_user_meta($user_id, "nickname", $login_name, false);
                 foreach ($extra_fields as $key => $val) {
-                   // update_user_meta($user_id, $key, $val, false);
+                    // update_user_meta($user_id, $key, $val, false);
                     add_user_meta($user_id, $key, $val, false);
+
                 }
                 //  debugoc::upload_bmap_log(print_r($args, true), 29291);
                 //wp_insert_user($args);
@@ -227,7 +250,7 @@ if (!class_exists('userRegister')) {
             $user_login = $user_data->user_login;
             $user_email = $user_data->user_email;
 
-            do_action('retreive_password', $user_login);
+            //  do_action('retreive_password', $user_login);
             // Misspelled and deprecated
             do_action('retrieve_password', $user_login);
 

@@ -17,6 +17,7 @@ if (!class_exists('api_handler')) {
 
         public static function outputJson($mix)
         {
+            header('Access-Control-Allow-Origin: *');
             header('Content-Type: application/json');
             echo json_encode($mix);
             die();
@@ -34,10 +35,27 @@ if (!class_exists('api_handler')) {
             self::outputJson(array("obtain" => $data, "result" => "success", "code" => 1, "timestamp" => $d->getTimestamp()));
         }
 
+        /**
+         * This is for the use of client-side datatable.js
+         * @param $data
+         */
         public static function outSuccessDataTable($data)
         {
             $d = new DateTime();
             self::outputJson(array("data" => $data, "result" => "success", "code" => 1, "timestamp" => $d->getTimestamp()));
+        }
+
+        /**
+         * This is for the use of server-side datatable.js(paging)
+         * @param $data
+         */
+        public static function outSuccessPagingDataTable($data)
+        {
+            $d = new DateTime();
+            $meta = array("result" => "success", "code" => 1, "timestamp" => $d->getTimestamp());
+            $data = array_merge($data, $meta);
+            $d = NULL;
+            self::outputJson($data);
         }
 
         public static function outSuccess($return = false)
@@ -47,11 +65,20 @@ if (!class_exists('api_handler')) {
             if (!$return) self::outputJson($out); else return $out;
         }
 
-        public static function outFailWeSoft($code, $message, $return = false)
+        /**
+         * @param $code
+         * @param $_message
+         * @param bool $return
+         * @internal param $message
+         * @return array
+         */
+        public static function outFailWeSoft($code, $_message, $return = false)
         {
+            //
             $out = array(
-                "msg" => $message,
-                "result" => $code,
+                "msg" => messagebox::translateError($_message, $code),
+                //  "msg" => $_message,
+                "result" => (int)$code,
                 "timestamp" => -1,
                 "status" => "failure",
                 "data" => ""
@@ -59,10 +86,18 @@ if (!class_exists('api_handler')) {
             if (!$return) self::outputJson($out); else return $out;
         }
 
-        public static function outFail($code, $message, $return = false)
+        /**
+         * @param $code
+         * @param $_message
+         * @param bool $return
+         * @internal param $message
+         * @return array
+         */
+        public static function outFail($code, $_message, $return = false)
         {
             $out = array(
-                "msg" => $message,
+                "msg" => messagebox::translateError($_message, $code),
+                //  "msg" => $_message,
                 "result" => $code,
                 "timestamp" => -1,
                 "data" => "failure"
@@ -70,22 +105,22 @@ if (!class_exists('api_handler')) {
             if (!$return) self::outputJson($out); else return $out;
         }
 
+        /**
+         * @param $url
+         * @param array $post
+         * @param array $options
+         * @return string
+         */
         public static function curl_posts($url, array $post = NULL, array $options = array())
         {
-            if (class_exists("TitanFramework")) {
-                $vcoin_panel_setting = TitanFramework::getInstance("vcoinset");
-                $var = $vcoin_panel_setting->getOption("cert_path");
-                if (isset($var)) {
-                    define("CERT_PATH", $vcoin_panel_setting->getOption("cert_path"));
-                }
-                unset($var);
-                unset($vcoin_panel_setting);
-            }
+
             $options = wp_parse_args(array(
                 CURLOPT_TIMEOUT => 10,
                 CURLOPT_SSL_VERIFYPEER => true,
                 CURLOPT_CAINFO => CERT_PATH,
             ), $options);
+
+
             return self::curl_post($url, $post, $options);
         }
 
@@ -98,8 +133,6 @@ if (!class_exists('api_handler')) {
          */
         public static function curl_post($url, array $post = NULL, array $options = array())
         {
-
-
             $defaults = array(
                 CURLOPT_POST => 1,
                 CURLOPT_HEADER => 0,
@@ -111,7 +144,6 @@ if (!class_exists('api_handler')) {
                 CURLOPT_POSTFIELDS => http_build_query($post),
                 CURLOPT_SSL_VERIFYPEER => FALSE,
             );
-
             $ch = curl_init();
             curl_setopt_array($ch, ($options + $defaults));
             if (!$result = curl_exec($ch)) {
@@ -123,12 +155,37 @@ if (!class_exists('api_handler')) {
             return $result;
         }
 
+        /**
+         * @param $url
+         * @param array $post
+         * @param array $options
+         * @return string
+         */
         public static function curl_gets($url, array $post = NULL, array $options = array())
         {
             $options = wp_parse_args(array(
                 CURLOPT_TIMEOUT => 10,
                 CURLOPT_SSL_VERIFYPEER => true,
+                CURLOPT_CAINFO => CERT_PATH
+            ), $options);
+            return self::curl_get($url, $post, $options);
+        }
+
+        /**
+         * the cookie testing
+         * @param $url
+         * @param array $post
+         * @param array $options
+         * @param string $cookie
+         * @return string
+         */
+        public static function curl_get_cookie($url, array $post = NULL, array $options = array(), $cookie = "")
+        {
+            $options = wp_parse_args(array(
+                CURLOPT_TIMEOUT => 10,
+                CURLOPT_SSL_VERIFYPEER => true,
                 CURLOPT_CAINFO => CERT_PATH,
+                CURLOPT_COOKIE => $cookie
             ), $options);
             return self::curl_get($url, $post, $options);
         }
@@ -196,6 +253,8 @@ if (!class_exists('api_handler')) {
                 // inno_log_db::log_login_china_server_info(-1, 955, curl_error($ch), "-");
             } else
                 curl_close($ch);
+
+            $data_string = NULL;
             return json_decode($result);
         }
     }

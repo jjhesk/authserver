@@ -43,7 +43,7 @@ if (!class_exists('system_frontend')) {
             //  if (is_singular() && comments_open() && get_option('thread_comments'))
             //   wp_enqueue_script('comment-reply');
             wp_enqueue_script('jquery');
-            wp_deregister_script('underscore');
+            //wp_deregister_script('underscore');
             wp_register_script('underscore', HKM_LIBJS . 'vendor/underscore.js', array(), '1.5', false);
             wp_register_script('moment', HKM_LIBJS . 'vendor/moment.js', array('jquery'), '2.7', false);
             wp_register_script('xdantimepicker', HKM_LIBJS . 'vendor/xdantimepicker.js', array('jquery', 'moment'), '2.0', false);
@@ -88,8 +88,12 @@ if (!class_exists('system_frontend')) {
             wp_register_script('canvas_base64', HKM_LIBJS . 'imageprocess/base64bit.js', array('canvas_print'), '1.0', false);
             //    wp_register_script('base_map_review_control', HKM_LIBJS . 'print_base_map_control.js', array('jquery', 'canvas_print'), '1.0', false);
             //https://datatables.net/
-            wp_register_script('datatable', '//cdn.datatables.net/1.10.0/js/jquery.dataTables.js', array('jquery'), '1.0', false);
-            wp_register_script('datatable_refresh', '//cdn.datatables.net/plug-ins/28e7751dbec/api/fnReloadAjax.js', array('jquery'), '1.0', false);
+            // wp_register_script('datatable', '//cdn.datatables.net/1.10.0/js/jquery.dataTables.js', array('jquery'), '1.0', false);
+            //  wp_register_script('datatable_refresh', '//cdn.datatables.net/plug-ins/28e7751dbec/api/fnReloadAjax.js', array('jquery'), '1.0', false);
+            wp_register_script('datatable', HKM_LIBJS . 'vendor/dtable.js', array('jquery'), '1.10.0', false);
+            wp_register_script('datatable_refresh', HKM_LIBJS . 'vendor/dtableFnAjax.js', array('jquery', 'datatable'), '1.0', false);
+
+
             //map clusters
             wp_register_script('gmapscluster', 'http://maps.google.com/maps/api/js?sensor=true', array('jquery'));
             wp_register_script('gmaps', HKM_LIBJS . 'vendor/gmaps.js', array('gmapscluster'), '1.0', false);
@@ -99,15 +103,26 @@ if (!class_exists('system_frontend')) {
             wp_register_script('chart', HKM_LIBJS . 'vendor/Chart/Chart.js', array('jquery'), '1.0', false);
             //select2
             wp_register_script('select2', HKM_LIBJS . 'vendor/select2/select2.js', array('jquery'), '1.0', false);
-            //    wp_register_script('joblisttb', HKM_LIBJS . 'admin/jblisttb.js', array('jquery', 'kendo'), '1.0', false);
-            //    wp_register_script('cp_management', LIBJS_ADMIN_MODEL . 'CPManagement.js', array('jquery', 'datatable', 'datatable_refresh'), '1.0', false);
-            //  wp_register_script('job_report_list', LIBJS_ADMIN_MODEL . 'JobReportList.js', array('jquery', 'datatable', 'onecall_core_bar'), '1.0', false);
+            //datepicker
+            wp_register_script('datepicker', HKM_LIBJS . 'vendor/datepicker/jquery-ui.min.js', array('jquery'), '1.0', false);
+            //slick
+            wp_register_script('slick', HKM_LIBJS . 'vendor/slick/slick.min.js', array('jquery'), '1.0', false);
+            //remodal
+            wp_register_script('remodal', HKM_LIBJS . 'vendor/jquery.remodal.min.js', array('jquery'), '1.0', false);
+            //wp_register_script('joblisttb', HKM_LIBJS . 'admin/jblisttb.js', array('jquery', 'kendo'), '1.0', false);
+            //wp_register_script('cp_management', LIBJS_ADMIN_MODEL . 'CPManagement.js', array('jquery', 'datatable', 'datatable_refresh'), '1.0', false);
+            //wp_register_script('job_report_list', LIBJS_ADMIN_MODEL . 'JobReportList.js', array('jquery', 'datatable', 'onecall_core_bar'), '1.0', false);
             //wp_register_script('reportcontenteditor', LIBJS_ADMIN_MODEL . 'ReportContentEditor.js', array('jquery'), '1.0', false);
-            //  wp_register_script('listsubmission', LIBJS_ADMIN_MODEL . 'ListSubmission.js', array('jquery', 'datatable', 'datatable_refresh'), '1.0', false);
-            // wp_register_script('orderconfirmation', LIBJS_ADMIN_MODEL . 'JobOrderConfirmation.js', array('jquery'), '1.0', false);
+            //   wp_register_script('listsubmission', LIBJS_ADMIN_MODEL . 'ListSubmission.js', array('jquery', 'datatable', 'datatable_refresh'), '1.0', false);
+            //wp_register_script('orderconfirmation', LIBJS_ADMIN_MODEL . 'JobOrderConfirmation.js', array('jquery'), '1.0', false);
             //  wp_register_script('listtemplatecontrol', LIBJS_ADMIN_MODEL . 'ListTemplateControl.js', array('jquery', 'datatable', 'datatable_refresh', 'underscore'), '1.0', false);
-            wp_register_script('adminsupport', LIBJS_ADMIN_MODEL . 'adminsupporttools.js', array('jquery'), '1.0', false);
-            wp_register_script('AppConfigWidget', LIBJS_ADMIN_MODEL . 'AppConfigWidget.js', array('jquery'), '1.0', false);
+            wp_register_script('adminsupport', LIBJS_ADMIN_MODEL . 'adminsupporttools.js', array(
+                'jquery',
+                'onecall_core_bar'
+            ), '1.0', false);
+            wp_register_script('AppConfigWidget', LIBJS_ADMIN_MODEL . 'AppConfigWidget.js', array(
+                'adminsupport'
+            ), '1.0', false);
             /* wp_register_script('admin_post_job_process', LIBJS_ADMIN . 'jobpanel.js', array(
                  'jquery',
                  'datatable',
@@ -120,12 +135,37 @@ if (!class_exists('system_frontend')) {
                  'adminsupport'
              ), '1.0', true);*/
             //AppConfigWidget
+
+            wp_register_script('slick_slider', LIBJS_ADMIN_MODEL . 'slick_slider.js', array(
+                'jquery',
+                'slick'
+            ), '1.1', true);
+
             wp_register_script('admin_app_reg', LIBJS_ADMIN . 'admin_app_registration.js', array(
                 'jquery',
                 'onecall_core_bar',
                 'adminsupport',
                 'royalslider',
-                'select2'
+                'select2',
+                'android_search',
+                'ios_search',
+                'slick_slider'
+            ), '1.1', true);
+
+            wp_register_script('android_search', LIBJS_ADMIN_MODEL . 'android_search_app.js', array(
+                'jquery',
+                'onecall_core_bar',
+                'adminsupport',
+                'select2',
+                'slick_slider'
+            ), '1.1', true);
+
+            wp_register_script('ios_search', LIBJS_ADMIN_MODEL . 'ios_search_app.js', array(
+                'jquery',
+                'onecall_core_bar',
+                'adminsupport',
+                'select2',
+                'slick_slider'
             ), '1.1', true);
 
             /*wp_register_script('admin_post_company', LIBJS_ADMIN . 'company_panel.js', array(
@@ -146,12 +186,53 @@ if (!class_exists('system_frontend')) {
                 ), '1.0', false);
 
             wp_register_script('page_admin_app_reg_log', LIBJS_ADMIN . 'admin_app_reg_log.js',
-                array('page_list_support',
+                array(
+                    'adminsupport',
                     'datatable',
                     'datatable_refresh',
                     'jquery-ui-autocomplete',
-                    'onecall_core_bar'
+                    'onecall_core_bar',
+                    'coin_history',
+                    'slick_slider',
+                    'edit_app'
                 ), '1.0', false);
+
+            wp_register_script('handle_claim_fifo', LIBJS_ADMIN . 'claim_fifo.js',
+                array(
+                    'adminsupport',
+                    'datatable',
+                    'datatable_refresh',
+                    'jquery-ui-autocomplete',
+                    'onecall_core_bar',
+                    'coin_history',
+                    'slick_slider',
+                    'edit_app'
+                ), '1.0', false);
+
+            wp_register_script('coin_history', LIBJS_ADMIN_MODEL . 'coin_history_table.js',
+                array('jquery',
+                    'datatable',
+                    'datatable_refresh',
+                    'jquery-ui-autocomplete',
+                    'onecall_core_bar',
+                    'datepicker'
+                ), '1.0', false);
+
+            wp_register_script('page_history_transaction', LIBJS_ADMIN . 'admin_history_transaction.js',
+                array(
+                    'adminsupport',
+                    'datatable',
+                    'datatable_refresh',
+                    'jquery-ui-autocomplete',
+                    'onecall_core_bar',
+                    'datepicker'
+                ), '1.0', false);
+
+            wp_register_script('edit_app', LIBJS_ADMIN_MODEL . 'edit_app.js', array(
+                'jquery',
+                'onecall_core_bar',
+                'remodal'
+            ), '1.0', true);
 
             wp_register_script('page_admin_checkpoint', LIBJS_ADMIN . 'admin_checkpoint.js',
                 array('jquery',
@@ -159,7 +240,7 @@ if (!class_exists('system_frontend')) {
                     'datatable',
                     'datatable_refresh',
                     'jquery-ui-autocomplete',
-                    //  'listsubmission', 'listtemplatecontrol',
+                    // 'listsubmission', 'listtemplatecontrol',
                     'adminsupport',
                     'onecall_core_bar',
                     'royalslider',
@@ -189,7 +270,8 @@ if (!class_exists('system_frontend')) {
 
             wp_register_script('admin_profile', LIBJS_ADMIN . 'admin_profile.js', array(
                 'jquery',
-                'profile_switcher'
+                'profile_switcher',
+                'coin_history'
             ), '1.1', false);
 
             wp_register_script('dashboard_account', LIBJS_ADMIN . 'dashboard_account_status.js', array(
@@ -203,7 +285,16 @@ if (!class_exists('system_frontend')) {
 
             wp_register_script('gfordersupport', HKM_LIBJS . 'gravityforms/order.js', array('onecall_core_bar', 'gmaps', 'jquery'), '1.0', false);
             wp_register_script('gfnewcomsupport', HKM_LIBJS . 'gravityforms/reg_company.js', array('jquery', 'onecall_core_bar'), '1.0', false);
-            wp_register_script('gflogins', HKM_LIBJS . 'gravityforms/loginsdk.js', array('jquery', 'onecall_core_bar'), '1.0', false);
+            wp_register_script('mobile_bridge', LIBJS_ADMIN . 'sdk_native_lib.js', array(), '1.0', false);
+            wp_register_script('gflogins', HKM_LIBJS . 'gravityforms/loginsdk.min.js',
+                array(
+                    'jquery',
+                    'onecall_core_bar',
+                    'adminsupport',
+                    'mobile_bridge',
+                ),
+
+                '1.0', false);
             /*royalslider css*/
             wp_register_script('rsslider', HKM_LIBJS . 'gravityforms/reg_company.js', array('jquery', 'onecall_core_bar'), '1.0', false);
             /*
@@ -213,8 +304,20 @@ if (!class_exists('system_frontend')) {
 
             */
             wp_register_style('xdanstyle', HKM_LIBCSS . 'xdan/xdan.css', null, '2.0');
-            wp_register_style('datatable', '//cdn.datatables.net/1.10.0/css/jquery.dataTables.css', false, '1', 'screen');
+            wp_register_style('datatable', HKM_LIBCSS . 'dtable/dataTables.css', false, '1', 'screen');
+
+            //   wp_register_style('datatable', '//cdn.datatables.net/1.10.0/css/jquery.dataTables.css', false, '1', 'screen');
             wp_register_style('select2', HKM_LIBJS . 'vendor/select2/select2.css', false, '1', 'screen');
+            ////////datepicker theme css
+            wp_register_style('smoothness', HKM_LIBCSS . 'admin/jquery-ui-smoothness.css', false, '1', 'screen');
+            wp_register_style('datepicker_ui', HKM_LIBJS . 'vendor/datepicker/jquery-ui.min.css', false, '1', 'screen');
+            wp_register_style('datepicker_structure', HKM_LIBJS . 'vendor/datepicker/jquery-ui.structure.min.css', false, '1', 'screen');
+            wp_register_style('datepicker_theme', HKM_LIBJS . 'vendor/datepicker/jquery-ui.theme.min.css', false, '1', 'screen');
+            ///////
+            //slick
+            wp_register_style('slick', HKM_LIBJS . 'vendor/slick/slick.css', false, '1', 'screen');
+            //remodal
+            wp_register_style('remodal', HKM_LIBCSS . 'admin/jquery.remodal.css', false, '1', 'screen');
             /*royalslider css*/
             wp_register_style('rs-core', HKM_LIBCSS . 'royalslider/core.css', null, '9.5');
             wp_register_style('rs-min-white', HKM_LIBCSS . 'royalslider/rs-minimal-white.css', array("rs-core"), '9.5');

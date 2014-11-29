@@ -25,7 +25,8 @@ if (!class_exists("app_registration")) {
                     'name' => __('App Reg', HKM_LANGUAGE_PACK),
                     'cb' => array(__CLASS__, 'render_admin_page'),
                     'script' => 'page_admin_app_reg_log',
-                    'style' => array('adminsupportcss', 'datatable', 'dashicons'),
+                    'style' => array('adminsupportcss', 'datatable', 'dashicons'
+                    , 'smoothness', 'datepicker_ui', 'datepicker_structure', 'datepicker_theme', 'slick', 'remodal'),
                     //--- get_environoment_config
                     'script_localize' =>
                         array(
@@ -65,7 +66,7 @@ if (!class_exists("app_registration")) {
                     //  'script' => 'joblisttb',
                     //   'style' => 'kendo_default',
                     'script' => 'admin_app_reg',
-                    'style' => array('adminsupportcss', 'datatable', 'dashicons'),
+                    'style' => array('adminsupportcss', 'datatable', 'dashicons', 'profile_button', 'slick'),
 //optional
                     /*'script_localize' => array("jb_tablesource", array(
                         "tableurl" => site_url("/api/appaccess/") . "get_my_jobs_progress",

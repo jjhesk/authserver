@@ -16,10 +16,8 @@ if (!class_exists('JSON_API_Systemlog_Controller')) {
             $table_app_log = $wpdb->prefix . 'app_log';
             $myrows = $wpdb->get_results("SELECT * FROM $table_app_log WHERE event_code = 521");
 
-            foreach($myrows->data as $my_field)
-            {
-                if($my_field == "comments")
-                {
+            foreach ($myrows->data as $my_field) {
+                if ($my_field == "comments") {
                     $my_field = "";
                 }
             }
@@ -76,7 +74,7 @@ if (!class_exists('JSON_API_Systemlog_Controller')) {
 
         public static function check_point_mission_log()
         {
-            global $wpdb,$json_api;
+            global $wpdb, $json_api;
 
             $action_id = $json_api->query->aid;
             $table_checkpoint_log = $wpdb->prefix . 'action_reward';
@@ -86,21 +84,59 @@ if (!class_exists('JSON_API_Systemlog_Controller')) {
             api_handler::outSuccessDataTable($myrows);
         }
 
+        /**
+         * used by the developer only
+         */
         public static function app_reg_log()
         {
-            global $wpdb,$current_user;
+            global $wpdb, $current_user;
             $user_id = $current_user->ID;
-            $user_role = $current_user->roles[0];
-            $table_app_reg_log = $wpdb->prefix . 'oauth_api_consumers';
+            $table_app_reg_log = $wpdb->prefix . 'post_app_registration';
 
-            if ($user_role == "administrator")
-                $myrows = $wpdb->get_results("SELECT * FROM $table_app_reg_log");
-            else if ($user_role == "developer")
-                $myrows = $wpdb->get_results("SELECT * FROM $table_app_reg_log WHERE user = $user_id");
-            else return;
-
+            $myrows = $wpdb->get_results("SELECT * FROM $table_app_reg_log WHERE devuser = $user_id");
             api_handler::outSuccessDataTable($myrows);
         }
 
+        /**
+         * used by the admin
+         */
+        public static function app_reg_admin_processing()
+        {
+            global $wpdb, $current_user, $json_api;
+            try {
+                //     $user_id = $current_user->ID;
+                $user_role = $current_user->roles[0];
+                if ($user_role != "administrator") throw new Exception("you are not permitted to use this API", 101011);
+
+                $primaryKey = 'ID';
+
+                $columns = array(
+                    array('db' => 'ID', 'dt' => 'ID'),
+                    array('db' => 'devuser', 'dt' => 'devuser'),
+                    array('db' => 'devname', 'dt' => 'devname'),
+                    array('db' => 'status', 'dt' => 'status'),
+                    array('db' => 'store_id', 'dt' => 'store_id'),
+                    array('db' => 'app_key', 'dt' => 'app_key'),
+                    array('db' => 'app_secret', 'dt' => 'app_secret'),
+                    array('db' => 'platform', 'dt' => 'platform'),
+                    array('db' => 'post_id', 'dt' => 'post_id'),
+                    array('db' => 'deposit', 'dt' => 'deposit'),
+                    array('db' => 'payout', 'dt' => 'payout'),
+                    array('db' => 'description', 'dt' => 'description'),
+                    array('db' => 'vcoin_account', 'dt' => 'vcoin_account'),
+                    array('db' => 'app_title', 'dt' => 'app_title'),
+                    array('db' => 'icon', 'dt' => 'icon'),
+                    array('db' => 'image_urls', 'dt' => 'image_urls'),
+                );
+                $data_result = sspclass::simple($_GET, $wpdb, $wpdb->prefix . "post_app_registration",
+                    $primaryKey, $columns, $json_api->query);
+
+                api_handler::outSuccessPagingDataTable($data_result);
+
+            } catch (Exception $e) {
+                api_handler::outFailWeSoft($e->getCode(), $e->getMessage());
+            }
+
+        }
     }
 }

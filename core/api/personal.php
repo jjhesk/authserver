@@ -13,7 +13,7 @@ if (!class_exists('JSON_API_Personal_Controller')) {
             try {
                 if (class_exists("json_auth_central")) {
                     json_auth_central::auth_check_token_json();
-                    TokenAuthentication::init($json_api->query->token);
+                    //       TokenAuthentication::init($json_api->query->token);
                     $upload = new uploadfiles(-1, -1, "profile");
                     $upload->setUser($current_user);
 
@@ -39,7 +39,7 @@ if (!class_exists('JSON_API_Personal_Controller')) {
                 // do_action('auth_api_token_check');
                 if (class_exists("json_auth_central")) {
                     json_auth_central::auth_check_token_json();
-                    TokenAuthentication::init($json_api->query->token);
+                    //      TokenAuthentication::init($json_api->query->token);
                     $user = $current_user;
                     //User setting change request
 
@@ -70,7 +70,7 @@ if (!class_exists('JSON_API_Personal_Controller')) {
                 // do_action('auth_api_token_check');
                 if (class_exists("json_auth_central")) {
                     json_auth_central::auth_check_token_json();
-                    TokenAuthentication::init($json_api->query->token);
+                    //      TokenAuthentication::init($json_api->query->token);
                     $change = new changeUserDetail($json_api->query, $current_user);
                     //  return array("status" => "okay", "result" => "done.");
                     api_handler::outSuccessDataWeSoft($change->get_change_field_results());
@@ -95,12 +95,14 @@ if (!class_exists('JSON_API_Personal_Controller')) {
                     // do_action('auth_api_token_check');
                     if (class_exists("json_auth_central")) {
                         json_auth_central::auth_check_token_json();
-                        TokenAuthentication::init($json_api->query->token);
+                        //           TokenAuthentication::init($json_api->query->token);
                         api_handler::outSuccessDataWeSoft(json_auth_central::display_user_data($current_user, array(
                             "image_thumb" => "",
                             "about" => "",
                             "latest_action" => "",
-                            "prefer_language" => get_user_meta($current_user->ID, "language", true)
+                            "prefer_language" => get_user_meta($current_user->ID, "language", true),
+                            "coin" => (int)get_user_meta($current_user->ID, "coin", true),
+                            "coin_update" => get_user_meta($current_user->ID, "coin_update", true)
                         )));
 
                     } else {
@@ -124,20 +126,19 @@ if (!class_exists('JSON_API_Personal_Controller')) {
                 // do_action('auth_api_token_check');
                 if (class_exists("json_auth_central")) {
                     json_auth_central::auth_check_token_json();
-                    TokenAuthentication::init($json_api->query->token);
+                    //          TokenAuthentication::init($json_api->query->token);
                     $user = $current_user;
 
                     //  return array("status" => "okay", "result" => "done.");
                     $query = $json_api->query;
 
-                    if (!isset($query->comment_id)) throw new Exception("missing comment id", 1001);
-                    if (!isset($query->flag)) throw new Exception("missing flag", 1003);
+                    if (!isset($query->comment_id)) throw new Exception("missing comment id", 10001);
+                    if (!isset($query->flag)) throw new Exception("missing comment flag", 10003);
 
                     api_cms_server::crosscms("flagcomment", array(
                         "comment_id" => $query->comment_id,
                         "flag" => $query->flag,
                     ));
-
 
 
                     api_handler::outSuccess();
@@ -160,9 +161,9 @@ if (!class_exists('JSON_API_Personal_Controller')) {
                 if (class_exists("json_auth_central")) {
                     json_auth_central::auth_check_token_json();
                     $query_ls = $json_api->query;
-                    TokenAuthentication::init($query_ls->token);
-                    if (!isset($query_ls->comment_id)) throw new Exception("missing comment id", 1051);
-                    if (!isset($query_ls->reference_id)) throw new Exception("missing reference id", 1052);
+                    //       TokenAuthentication::init($query_ls->token);
+                    if (!isset($query_ls->comment_id)) throw new Exception("missing comment id", 10001);
+                    if (!isset($query_ls->reference_id)) throw new Exception("missing reference id", 10002);
                     $user = $current_user->ID;
                     api_cms_server::crosscms("remove_comment", array(
                         "comment_id" => $query_ls->comment_id,
@@ -188,14 +189,14 @@ if (!class_exists('JSON_API_Personal_Controller')) {
                 // do_action('auth_api_token_check');
                 if (class_exists("json_auth_central")) {
                     json_auth_central::auth_check_token_json();
-                    TokenAuthentication::init($json_api->query->token);
+                    //       TokenAuthentication::init($json_api->query->token);
                     $user = $current_user;
 
                     //  return array("status" => "okay", "result" => "done.");
                     $query = $json_api->query;
 
-                    if (!isset($query->objectid)) throw new Exception("missing object id", 1001);
-                    if (!isset($query->comment)) throw new Exception("missing comment", 1003);
+                    if (!isset($query->objectid)) throw new Exception("missing object id", 10004);
+                    if (!isset($query->comment)) throw new Exception("missing comment content", 10005);
                     /* api_handler::curl_post(CMS_SERVER . "/api/crosscms/makingcomment",
                          array(
                              "appid" => $query->appid,
@@ -279,19 +280,20 @@ if (!class_exists('JSON_API_Personal_Controller')) {
          */
         public static function test_initiate_app_sdk()
         {
-            global $json_api, $current_user, $app_merchan;
+            global $json_api, $current_user, $app_client;
             try {
                 // do_action('auth_api_token_check');
                 if (class_exists("json_auth_central")) {
                     //plugin
                     json_auth_central::auth_check_token_json();
-                    TokenAuthentication::init($json_api->query->token);
+                    //TokenAuthentication::init($json_api->query->token);
                     //theme
                     // TokenAuthentication::token_initiate($json_api->query->token);
-                    $t = isset($app_merchan) ? "set" : "not set";
+                    $t = isset($app_client) ? "set" : "not set";
                     api_handler::outSuccessDataWeSoft(array(
-                        // "appId" => $app_merchan->getappID(),
+                        // "appId" => $app_client->getappID(),
                         "app_merchan" => $t,
+                        "detail_object" => print_r($app_client, true)
                     ));
 
                     api_handler::outSuccess();

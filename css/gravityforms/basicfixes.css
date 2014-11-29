@@ -40,3 +40,53 @@
     box-shadow: none;
     border-radius: 0px;
 }
+
+
+#gform_submit_button_1.button.gform_button {
+    background: none repeat scroll 0 0 #ff6e12 !important;
+    border: 1px solid #cccccc !important;
+    border-radius: 5px !important;
+    color: #ffffff !important;
+    padding: 10px 30px;
+}
+
+#gform_submit_button_1.button.gform_button.disabled {
+    background: none repeat scroll 0 0 #cccccc !important;
+    border: 1px solid #ffffff !important;
+    border-radius: 5px;
+    color: #ffffff !important;
+    cursor: default;
+    padding: 10px 30px;
+    transition: all 0.4s ease-in-out 0s;
+}
+.gfield_description.validation_message.success {
+    color: #008000;
+}
+
+.gform_wrapper .gfield_checkbox li label, .gform_wrapper .gfield_radio li label {
+    margin: 0;
+}
+
+input[type=checkbox]#choice_5_1 {
+	display:none;
+}
+input[type=checkbox]#choice_5_1 + #label_5_1 {
+    background-position: 0 4px;
+    background-repeat: no-repeat;
+	cursor: pointer;
+    float: left;
+    line-height: 36px;
+    padding-left: 30px;
+}
+input[type=checkbox]#choice_5_1:checked + #label_5_1 {
+	background-position: 0 -28px;
+}
+#label_5_1 {
+	background:url(checkbox.png) no-repeat scroll 0px 0px rgba(0, 0, 0, 0);
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+user-select: none;
+}

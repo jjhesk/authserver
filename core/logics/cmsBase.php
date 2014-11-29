@@ -15,6 +15,11 @@ abstract class cmsBase
     {
     }
 
+    public function __destruct()
+    {
+        $this->panel_metabox = NULL;
+    }
+
     abstract protected function add_tab();
 
     abstract public static function addRWMetabox($meta_boxes);

@@ -181,6 +181,18 @@ if (!class_exists("SMSmd")):
             //  $this->password = apply_filters("md_sms_username", "56923181");
         }
 
+        function __destruct()
+        {
+            $this->md_secured_domains = NULL;
+            $this->md_server_domains = NULL;
+            $this->exceptions = NULL;
+            $this->_server = NULL;
+            $this->use_server = NULL;
+            $this->password = NULL;
+            $this->username = NULL;
+            gc_collect_cycles();
+        }
+
         public function setDestination($number)
         {
             $this->send_number = $number;
@@ -270,6 +282,7 @@ if (!class_exists("SMSmd")):
                         $post->setDestination($n);
                         $post->setSMSContent(urlencode($args["content"]));
                         $post->send();
+                        $post = NULL;
                     }
                 } else {
                     if (!isset($args["number"])) throw new Exception("there is no number presented", 1081);
@@ -281,6 +294,7 @@ if (!class_exists("SMSmd")):
                     $post->setSMSContent($args["content"]);
                     //  inno_log_db::log_vcoin_third_party_app_transaction(-1, 10173, "step3");
                     $post->send();
+                    $post = NULL;
                 }
             } catch (Exception $e) {
                 throw $e;

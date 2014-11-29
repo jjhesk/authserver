@@ -14,10 +14,24 @@ if (!class_exists('adminsupport')):
         private $script_id, $style_script_id;
         private $localized_id_handler, $localized_object_name, $localize_keys, $localize_merge_array;
         private $hidden_metaboxes;
-
+        private $publish_button_label;
         public function __construct($custom_post_type)
         {
             $this->post_type = $custom_post_type;
+        }
+
+        function __destruct()
+        {
+            $this->post_type = NULL;
+            $this->hidden_metaboxes = NULL;
+            $this->localized_id_handler = NULL;
+            $this->localized_object_name = NULL;
+            $this->localize_keys = NULL;
+            $this->localize_merge_array = NULL;
+            $this->style_script_id = NULL;
+            $this->script_id = NULL;
+            $this->publish_button_label = NULL;
+            gc_collect_cycles();
         }
 
         public function register()
@@ -202,7 +216,7 @@ if (!class_exists('adminsupport')):
         }
 
 
-        private $publish_button_label;
+
 
         public function change_publish_button_label($newlabel)
         {

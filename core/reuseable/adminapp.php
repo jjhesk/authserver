@@ -32,13 +32,14 @@ if (!class_exists('adminapp')):
 
         function __construct($args = array())
         {
+            global $current_user;
             $defaults = array(
                 "cap" => 'administrator',
                 "type" => "main",
                 "cb" => null,
                 "script_localize" => null,
                 "style" => null,
-                "script" => null,
+                "script" => null
             );
             $args = wp_parse_args($args, $defaults);
             extract($args);
@@ -64,7 +65,11 @@ if (!class_exists('adminapp')):
                 $this->sub_id = $sub_id;
                 $this->top_level_slug = 'users.php';
             }
-
+            if (isset($role)) {
+                if (!in_array($role, $current_user->roles)) {
+                    return false;
+                }
+            }
             if (isset($script_localize))
                 $this->script_localizer = $script_localize;
 
@@ -79,20 +84,6 @@ if (!class_exists('adminapp')):
             $this->set_script_enqueue($script, $this->support_script_id);
             $this->set_script_enqueue($style, $this->support_style_id);
 
-            unset($args);
-            unset($defaults);
-            unset($cap);
-            unset($title);
-            unset($name);
-            unset($script);
-            unset($style);
-            unset($script_localize);
-            unset($sub_id);
-            unset($icon);
-            unset($position);
-            unset($parent_id);
-
-
             if (!isset($cb)) {
                 return;
             } else {
@@ -101,7 +92,26 @@ if (!class_exists('adminapp')):
 
 
             // do not need it add_action('admin_enqueue_scripts', array('ocscript', 'register'));
-            add_action('admin_menu', array(&$this, "register"));
+            add_action('admin_menu', array($this, "register"));
+            $args = NULL;
+            $defaults = NULL;
+            $cap = NULL;
+            $title = NULL;
+            $name = NULL;
+            $script = NULL;
+            $style = NULL;
+            $script_localize = NULL;
+            $sub_id = NULL;
+            $icon = NULL;
+            $position = NULL;
+            $parent_id = NULL;
+
+        }
+
+        function __destruct()
+        {
+            $this->controllers = NULL;
+            gc_collect_cycles();
         }
 
         private function check_valuable(&$slug_id)
@@ -138,8 +148,10 @@ if (!class_exists('adminapp')):
             );
             $args = wp_parse_args($args, $defaults);
             $Instance = new self($args);
-            unset($args);
-            unset($defaults);
+
+            $args = NULL;
+            $defaults = NULL;
+            $Instance = NULL;
         }
 
         public function register()
@@ -174,7 +186,7 @@ if (!class_exists('adminapp')):
             }
 
             if (isset($this->support_script_id) || isset($this->support_style_id)) {
-                add_action('admin_enqueue_scripts', array(&$this, "wp_script"));
+                add_action('admin_enqueue_scripts', array($this, "wp_script"));
             }
 
         }

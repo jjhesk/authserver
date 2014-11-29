@@ -52,15 +52,15 @@ if (!function_exists('get_oc_template_mustache') && class_exists("Mustache_Engin
 add_action('phpmailer_init', 'wpse8170_phpmailer_init');
 function wpse8170_phpmailer_init(PHPMailer $phpmailer)
 {
-    $phpmailer->FromName = 'New H Innoactor';
-    $phpmailer->From = 'no-reply@innoactor.com';
-    $phpmailer->Hostname = 'innoactor.com';
-    $phpmailer->Host = 'smtp-mail.outlook.com';
+    $phpmailer->FromName = 'VCoinApp Support';
+    $phpmailer->From = 'support@vcoinapp.com';
+    $phpmailer->Hostname = 'vcoinapp.com';
+    $phpmailer->Host = 'smtp.googlemail.com';
     $phpmailer->Port = 587; // could be different
-    $phpmailer->Sender = 'admin@innoactor.com'; //reply to -email Sets the Sender email (Return-Path) of the message
+    $phpmailer->Sender = 'support@vcoinapp.com'; //reply to -email Sets the Sender email (Return-Path) of the message
     //=================================================
-    $phpmailer->Username = 'admin@innoactor.com'; // if required
-    $phpmailer->Password = '35832186'; // if required
+    $phpmailer->Username = 'suport.vcoinapp@gmail.com'; // if required
+    $phpmailer->Password = '66983097'; // if required
     $phpmailer->SMTPAuth = true; // if required
     $phpmailer->SMTPSecure = 'tls'; // enable if required, 'tls' is another possible value
     $phpmailer->Debugoutput = 'error_log';

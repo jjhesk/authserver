@@ -28,13 +28,13 @@ if (!class_exists('admindashboard')):
             $dataparam,
             $script_localize;
 
-        function __construct($key, $title, $for_role_key, $js = null, $css = array(), $script_localize = array())
+        function __construct($key, $title, $for_role_key, $js = null, $css = array(), $localize = array())
         {
             $this->key = $key;
             $this->title = $title;
             $this->access_role = $for_role_key;
-            if (count($script_localize) > 0) {
-                $this->script_localize = $script_localize;
+            if (count($localize) > 0) {
+                $this->script_localize = $localize;
             }
             if (count($js) > 0) {
                 $this->js = $js;
@@ -42,6 +42,19 @@ if (!class_exists('admindashboard')):
             if (count($css) > 0) {
                 $this->css = $css;
             }
+        }
+
+        function __destruct()
+        {
+            $this->access_role = NULL;
+            $this->key = NULL;
+            $this->title = NULL;
+            $this->view_key_file_name = NULL;
+            $this->js = NULL;
+            $this->css = NULL;
+            $this->dataparam = NULL;
+            $this->script_localize = NULL;
+            gc_collect_cycles();
         }
 
         public function setTemplate($view_key_file_name)
@@ -68,7 +81,8 @@ if (!class_exists('admindashboard')):
         public function js_load()
         {
             wp_enqueue_script($this->js);
-            wp_localize_script($this->js, $this->script_localize[0], $this->script_localize[1]);
+            if (isset($this->script_localize))
+                wp_localize_script($this->js, $this->script_localize[0], $this->script_localize[1]);
         }
 
         public function init()

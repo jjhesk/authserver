@@ -9,6 +9,27 @@ defined('ABSPATH') || exit;
  */
 class userBase
 {
+
+    public static function update_app_user_coin(WP_User $user)
+    {
+        try {
+            $uuid = self::getAppUserVcoinUUID($user);
+            $coinscount = api_cms_server::vcoin_account("balance", array("accountid" => $uuid));
+            //  inno_log_db::log_vcoin_login($user->ID, 93259, "found coin:" . $coinscount->coinscount);
+            update_user_meta($user->ID, "coin", $coinscount->coinscount);
+            update_user_meta($user->ID, "coin_update", date("F j, Y, g:i a"));
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
+
+    public static function getAppUserVcoinUUID(WP_User $user)
+    {
+        $uuid = get_user_meta($user->ID, "uuid_key", true);
+        if ($uuid == "") throw new Exception("the user does not have valid vcoin account, please go back and with the settings", 1079);
+        return $uuid;
+    }
+
     /**
      * @param $amount
      */
@@ -23,6 +44,24 @@ class userBase
             throw new Exception("unable to deduct reserved coins for the developer", 6011);
 
         unset($total_amount);
+        unset($coin);
+    }
+
+    public static function addDeveloperIDCoin($developr_id, $amount)
+    {
+        $coin = intval(get_user_meta((int)$developr_id, "app_coins", true));
+        $new = (int)$amount + (int)$coin;
+        update_user_meta((int)$developr_id, "app_coins", $new, $coin);
+        unset($new);
+        unset($coin);
+    }
+
+    public static function addDeveloperCoin(WP_User $developr, $amount)
+    {
+        $coin = intval(get_user_meta($developr->ID, "app_coins", true));
+        $new = (int)$amount + (int)$coin;
+        update_user_meta($developr->ID, "app_coins", $new, $coin);
+        unset($new);
         unset($coin);
     }
 
@@ -353,6 +392,14 @@ class userBase
         } catch (Exception $e) {
             throw $e;
         }
+    }
+
+    public static function check_permission_cms($role = "")
+    {
+        if (!is_user_logged_in()) throw new Exception("you are not login", 1901);
+        $current_user = wp_get_current_user();
+        if ($role != "") if ($current_user->roles[0] != $role) throw new Exception("permission is not right", 1902);
+        return $current_user;
     }
 
     public static function check_api_login()

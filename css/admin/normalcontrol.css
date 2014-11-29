@@ -42,11 +42,12 @@
 /*
 http://www.telerik.com/android-ui
 */
-#table_job_application .job_status{
+#table_job_application .job_status {
     padding: 3px;
     border-radius: 3px;
     display: inline-block;
 }
+
 #table_job_application .job_status.open {
     background-color: #aaf0b2;
     color: #15b311;
@@ -61,11 +62,22 @@ http://www.telerik.com/android-ui
     background-color: #3a3a3a;
     color: #eabe7c;
 }
+
 table.dataTable tbody tr.odd.selected,
-table.dataTable tbody tr.selected{
+table.dataTable tbody tr.selected {
     background-color: #aaf0b2 !important;
 }
+
 .dataTables_filter label,
-.dataTables_length label{
+.dataTables_length label {
     vertical-align: middle;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+table.form-table tbody th, table.form-table tbody td {
+    text-align: left;
 }

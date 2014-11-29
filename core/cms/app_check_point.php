@@ -34,6 +34,47 @@ if (!class_exists("app_check_point")) {
             add_filter("rwmb_meta_boxes", array(__CLASS__, "addRWMetabox"), 10, 1);
             //  add_action('rwmb_post_gift_meta_after_save_post', array(__CLASS__, "save_post_gift_meta"), 10, 1);
             $this->addAdminSupportMetabox();
+
+            add_filter('manage_edit-' . HKM_ACTION . '_columns', array(__CLASS__, "add_new_columns"), 10, 1);
+            add_action('manage_' . HKM_ACTION . '_posts_custom_column', array(__CLASS__, "manage_column"), 10, 2);
+        }
+
+
+        public static function manage_column($column_name, $id)
+        {
+            global $wpdb;
+            switch ($column_name) {
+                case 'type':
+                    echo get_post_meta($id, "occurrence", true);
+                    break;
+                case 'id':
+                    echo $id;
+                    break;
+
+                default:
+                    break;
+            } // end switch
+        }
+
+        public static function add_new_columns($new_columns)
+        {
+            $new_columns['cb'] = '<input type="checkbox" />';
+            $new_columns['id'] = __('ID');
+            $new_columns['title'] = _x('Mission Name', 'column name');
+
+            $new_columns['type'] = __('Trigger');
+            // $new_columns['author'] = __('Author');
+            $new_columns['categories'] = __('Categories');
+            $new_columns['tags'] = __('Tags');
+            $new_columns['date'] = _x('Date', 'column name');
+            unset($new_columns['author']);
+            unset($new_columns['date']);
+            return $new_columns;
+        }
+
+        function __destruct()
+        {
+            $this->vcoin_panel_support = NULL;
         }
 
         public static function trigger_host_cfg_savebox($post_id)
@@ -54,19 +95,19 @@ if (!class_exists("app_check_point")) {
         protected function add_tab()
         {
             $labels = array(
-                "name" => _x("Check Point", "post type general name"),
+                "name" => _x("Mission", "post type general name"),
                 "singular_name" => _x("Check Point", "post type singular name"),
-                "add_new" => _x("追加Check", HKM_LANGUAGE_PACK),
-                "add_new_item" => __("追加Check", HKM_LANGUAGE_PACK),
-                "edit_item" => __("修改Check", HKM_LANGUAGE_PACK),
-                "new_item" => __("追加Check", HKM_LANGUAGE_PACK),
-                "all_items" => __("所有Check", HKM_LANGUAGE_PACK),
-                "view_item" => __("看覽Check", HKM_LANGUAGE_PACK),
-                "search_items" => __("搜查Check", HKM_LANGUAGE_PACK),
-                "not_found" => __("沒有發現Check", HKM_LANGUAGE_PACK),
-                "not_found_in_trash" => __("在垃圾中沒有發現Check", HKM_LANGUAGE_PACK),
+                "add_new" => _x("追加", HKM_LANGUAGE_PACK),
+                "add_new_item" => __("追加", HKM_LANGUAGE_PACK),
+                "edit_item" => __("修改", HKM_LANGUAGE_PACK),
+                "new_item" => __("追加", HKM_LANGUAGE_PACK),
+                "all_items" => __("所有", HKM_LANGUAGE_PACK),
+                "view_item" => __("看覽", HKM_LANGUAGE_PACK),
+                "search_items" => __("搜查", HKM_LANGUAGE_PACK),
+                "not_found" => __("沒有發現", HKM_LANGUAGE_PACK),
+                "not_found_in_trash" => __("在垃圾中沒有發現 - Mission", HKM_LANGUAGE_PACK),
                 "parent_item_colon" => "",
-                "menu_name" => __("Check Point", HKM_LANGUAGE_PACK)
+                "menu_name" => __("Mission", HKM_LANGUAGE_PACK)
             );
             return $labels;
         }
@@ -89,7 +130,7 @@ if (!class_exists("app_check_point")) {
             if ($lang == 'ja') {
                 $text = __("Japanese", HKM_LANGUAGE_PACK);
             }
-            unset($lang);
+            $lang = NULL;
             return sprintf($description, $text);
         }
 
@@ -308,6 +349,10 @@ if (!class_exists("app_check_point")) {
                 "check_point_data_chart",
                 __("Check Point Chart", HKM_LANGUAGE_PACK),
                 get_oc_template('admin_checkpoint_chart'));
+
+
         }
+
+
     }
 }

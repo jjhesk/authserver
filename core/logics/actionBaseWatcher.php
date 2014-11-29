@@ -17,7 +17,7 @@ if (!class_exists("actionBaseWatcher")) {
         protected $table;
         protected $initial_result;
         protected $time_start, $time_end;
-        protected $f, $cycle_hours, $cycle_hours_in_seconds, $app_key;
+        protected $f, $cycle_hours, $cycle_hours_in_seconds, $app_key_selection;
         protected $reward_coins, $reward_action_id;
         protected $transaction_reference;
         protected $main_api_query;
@@ -25,13 +25,14 @@ if (!class_exists("actionBaseWatcher")) {
         protected $reward_status;
         protected $requires_obj_id;
         protected $_obj_id;
+        protected $db;
 
         public function __construct($query)
         {
             global $wpdb;
-
+            $this->db = $wpdb;
             $this->main_api_query = $query;
-            $this->table = $wpdb->prefix . "action_reward";
+            $this->table = $this->db->prefix . "action_reward";
         }
 
         private function get_rules()
@@ -40,7 +41,7 @@ if (!class_exists("actionBaseWatcher")) {
             $this->cycle_hours = intval(get_post_meta($this->reward_action_id, "cycle_reward", true));
             $this->cycle_hours_in_seconds = ($this->cycle_hours) * 3600;
             $this->f = intval(get_post_meta($this->reward_action_id, "delta_f", true));
-            $this->app_key = get_post_meta($this->reward_action_id, "sdk_app_key", true);
+            $this->app_key_selection = get_post_meta($this->reward_action_id, "sdk_app_key", true);
             $this->occurrence = get_post_meta($this->reward_action_id, "occurrence", true);
             $this->reward_coins = intval(get_post_meta($this->reward_action_id, "reward_coins", true));
             $this->requires_obj_id = intval(get_post_meta($this->reward_action_id, "requires_obj_id", true));
@@ -57,8 +58,12 @@ if (!class_exists("actionBaseWatcher")) {
             $d = new DateTime();
             $present_timestamp = $d->getTimestamp();
 
-            /*while ($start_time < ($present_timestamp - $cycle_hours_in_seconds))
-                $start_time += $cycle_hours_in_seconds;*/
+            /*
+
+               while ($start_time < ($present_timestamp - $cycle_hours_in_seconds))
+                $start_time += $cycle_hours_in_seconds;
+
+            */
 
             $start_time = $present_timestamp - ($present_timestamp % $this->cycle_hours_in_seconds);
 
@@ -97,17 +102,17 @@ if (!class_exists("actionBaseWatcher")) {
          */
         private function trigger_reward()
         {
-            global $app_merchan, $current_user;
+            global $app_client, $current_user;
 
-            if (!isset($app_merchan))
+            if (!isset($app_client))
                 throw new Exception("Not initiated", 1021);
 
-            if ($this->app_key == "imusictech")
+            if ($this->app_key_selection == "imusictech")
                 $credit_account_id = IMUSIC_UUID;
-            else if ($this->app_key == "developer") {
-                $credit_account_id = $app_merchan->getVcoinId();
-                $this->_obj_id = $app_merchan->getPostID();
-            } else if ($this->app_key == "merchant") {
+            else if ($this->app_key_selection == "developer") {
+                $credit_account_id = $app_client->getVcoinId();
+                $this->_obj_id = $app_client->getPostID(); // get the app post ID
+            } else if ($this->app_key_selection == "merchant") {
                 //check if the query contains stock_id
                 if (!isset($this->main_api_query->stock_id)) throw new Exception("stock_id is not defined", 1024);
                 $this->_obj_id = $this->main_api_query->stock_id;
@@ -118,10 +123,9 @@ if (!class_exists("actionBaseWatcher")) {
             }
 
             if ($credit_account_id == "")
-                throw new Exception("No Vcoin Account", 1023);
+                throw new Exception("No Vcoin Account is found", 1023);
 
-            $debit_user_vcoin_account_id = userBase::getVal($current_user->ID, "uuid_key");
-            if ($debit_user_vcoin_account_id == "") throw new Exception("user vcoin account is missing.", 1020);
+            $debit_user_vcoin_account_id = userBase::getAppUserVcoinUUID($current_user);
 
             /**
              * carry out the vcion transaction in here now
@@ -139,6 +143,7 @@ if (!class_exists("actionBaseWatcher")) {
                 inno_log_db::log_vcoin_third_party_app_transaction($current_user->ID, 10205, "move coin success:" . $this->transaction_reference);
             }
 
+            do_action("after_reward_is_triggered", $this->reward_action_id, $current_user, $coin_operation);
         }
 
         /**
@@ -148,48 +153,46 @@ if (!class_exists("actionBaseWatcher")) {
          */
         private function check_reward_status(WP_User $user)
         {
-            global $wpdb;
 
-            $table = $wpdb->prefix . "action_reward";
             $rules = "";
 
             if ($this->occurrence == "once") {
-                $query = $wpdb->prepare("SELECT
-            COUNT(*) FROM $table WHERE
+                $query = $this->db->prepare("SELECT
+            COUNT(*) FROM $this->table WHERE
             user=%d AND action=%d $rules",
                     $user->ID, $this->reward_action_id);
             } else {
                 list($time_start, $time_end) = $this->get_time_range();
                 if (isset($this->_obj_id)) {
-                    $query = $wpdb->prepare("SELECT
-            COUNT(*) FROM $table WHERE
+                    $query = $this->db->prepare("SELECT
+            COUNT(*) FROM $this->table WHERE
             user=%d AND action=%d $rules AND
             UNIX_TIMESTAMP(triggered) BETWEEN (%d) and (%d) AND object_id=%d",
                         $user->ID, $this->reward_action_id, $time_start, $time_end, intval($this->_obj_id));
                 } else {
-                    $query = $wpdb->prepare("SELECT
-            COUNT(*) FROM $table WHERE
+                    $query = $this->db->prepare("SELECT
+            COUNT(*) FROM $this->table WHERE
             user=%d AND action=%d $rules AND
             UNIX_TIMESTAMP(triggered) BETWEEN (%d) and (%d)",
                         $user->ID, $this->reward_action_id, $time_start, $time_end);
                 }
             }
 
-            $number = intval($wpdb->get_var($query));
+            $number = intval($this->db->get_var($query));
 
             if ($this->occurrence == "repeat_continuous") {
                 if ($number == 0) {
 
-                    $query = $wpdb->prepare("SELECT MAX(ID) FROM $this->table WHERE
+                    $query = $this->db->prepare("SELECT MAX(ID) FROM $this->table WHERE
                  rewarded=%d AND user=%d AND action=%d", 1, $user->ID, $this->reward_action_id);
 
-                    $latest_rewarded_id = $wpdb->get_var($query);
+                    $latest_rewarded_id = $this->db->get_var($query);
 
-                    $query = $wpdb->prepare("SELECT UNIX_TIMESTAMP(triggered) FROM $this->table WHERE ID>
+                    $query = $this->db->prepare("SELECT UNIX_TIMESTAMP(triggered) FROM $this->table WHERE ID>
                 %d AND user=%d AND action=%d ORDER BY ID DESC",
                         $latest_rewarded_id, $user->ID, $this->reward_action_id);
 
-                    $results = $wpdb->get_results($query);
+                    $results = $this->db->get_results($query);
 
                     $interval_start_time = $time_start - $this->cycle_hours_in_seconds;
                     $interval_end_time = $time_start;
@@ -234,7 +237,7 @@ if (!class_exists("actionBaseWatcher")) {
          */
         public function record(WP_User $user)
         {
-            global $wpdb;
+
 
             if (!isset($this->main_api_query->aid)) throw new Exception("missing action id", 1001);
             $this->reward_action_id = $this->main_api_query->aid;
@@ -242,12 +245,12 @@ if (!class_exists("actionBaseWatcher")) {
             $this->get_rules();
             if (get_post_type($this->reward_action_id) != HKM_ACTION) throw new Exception("the request action Point does not exist", 1011);
             if (get_post_status($this->reward_action_id) != 'publish') throw new Exception("The action point is not ready", 1012);
-            if ($this->app_key == -1) throw new Exception("SDK App Key is not selected", 1013);
+            if ($this->app_key_selection == -1) throw new Exception("SDK App Key is not selected", 1013);
             if ($this->occurrence == -1) throw new Exception("Occurrence is not selected", 1015);
             if ($this->f < 2) throw new Exception("Frequency should be more than 1 for both and
          repeatable simple and repeatable continuous", 1016);
 
-            $table = $wpdb->prefix . "action_reward";
+
             $current_time = current_time('mysql', 0);
 
             $check_reward_status = $this->check_reward_status($user);
@@ -256,17 +259,17 @@ if (!class_exists("actionBaseWatcher")) {
                 $data = array(
                     "user" => $user->ID,
                     "action" => $this->reward_action_id,
-                    "reference" => $this->app_key,
+                    "reference" => $this->app_key_selection,
                     "triggered" => $current_time,
                     "rewarded" => isset($this->reward_status) ? $this->reward_status : 0,
                     "mission_type" => $this->f,
                     "object_id" => isset($this->_obj_id) ? $this->_obj_id : -1,
                 );
-                $result = $wpdb->insert($table, $data);
+                $result = $this->db->insert($this->table, $data);
                 if (!$result) throw new Exception("insert not working", 1010);
             } else {
                 if ($this->occurrence == "repeat_continuous")
-                    throw new Exception("repeated trigger is not allowed within an interval", 1015);
+                    throw new Exception("repeated trigger is not allowed within an interval", 1017);
                 else throw new Exception("reward have been gained", 1014);
             }
 
@@ -292,13 +295,13 @@ if (!class_exists("actionBaseWatcher")) {
             $reward_action_id = 43;
             $wpdb->get_results("TRUNCATE TABLE vapp_action_reward");
             for ($i = 0; $i < 10; $i++) {
-                $table = $wpdb->prefix . "action_reward";
+
                 $data = array(
                     "user" => $current_user->ID,
                     "action" => $reward_action_id,
                     "reference" => "core"
                 );
-                $result = $wpdb->insert($table, $data);
+                $result = $this->db->insert($this->table, $data);
                 $this
                     ->get_rules($reward_action_id)
                     ->apply_rules($current_user, $reward_action_id);
@@ -320,25 +323,23 @@ if (!class_exists("actionBaseWatcher")) {
          */
         public function get_action_list($reward_action_id)
         {
-            global $wpdb;
-            $table = $wpdb->prefix . "action_reward";
-            $dl = $wpdb->prepare("SELECT * FROM $table WHERE action=%d",
+
+
+            $dl = $this->db->prepare("SELECT * FROM $this->table WHERE action=%d",
                 $reward_action_id);
-            return $wpdb->get_results($dl);
+            return $this->db->get_results($dl);
         }
 
 
         public function get_checkpoint_data()
         {
-            global $wpdb;
-
-            if (!isset($this->main_api_query->aid)) throw new Exception("missing action id", 1001);
+            if (!isset($this->main_api_query->aid)) throw new Exception("missing action id", 10009);
             $this->get_rules();
 
-            $query = $wpdb->prepare("SELECT UNIX_TIMESTAMP(triggered) FROM $this->table
+            $query = $this->db->prepare("SELECT UNIX_TIMESTAMP(triggered) FROM $this->table
             WHERE action=%d AND rewarded=%d ", $this->reward_action_id, 1);
 
-            $chart_data = $wpdb->get_results($query);
+            $chart_data = $this->db->get_results($query);
             $chart_data_label = array();
 
             if ($this->occurrence == "once") {

@@ -44,6 +44,7 @@ if (!class_exists('application_user_profile')):
                         "gender" => "SEX Gender",
                         "countrycode" => "Country",
                         "language" => "Language",
+                        "coin" => "Coin Count",
                         "last_login_lastlogintime" => "Last Login",
                     )
                 ),
@@ -134,18 +135,16 @@ if (!class_exists('application_user_profile')):
                     return $editor->input_field($var, $key);
                     break;
                 case "uuid_key":
-                    try {
-                        $option = $editor->get_panel_control($key);
-                        inno_log_db::log_vcoin_third_party_app_transaction(-1, 777, print_r($option, true));
-                        if ($option != 0) return $editor->input_field($var, $key);
-                        else return $editor->input_field($var, $key, true);
-                    } catch (Exception $e) {
-                        if ($editor->can_view()) return $editor->input_field($var, $key); else return $var;
-                    }
+                    return $editor->titan_view_field("appuser", $key, $var);
                     break;
+
+                case "coin":
+                    return $editor->titan_field("appuser", $key, $var);
+                    break;
+
                 //temporarily using input_field for testing
                 case "app_coins":
-                    return $editor->input_field($var, $key);
+                    return $editor->titan_field("developer", $key, $var);
                     break;
                 case "service_plan":
                     return $editor->input_field($var, $key);
@@ -174,6 +173,7 @@ if (!class_exists('application_user_profile')):
                 case "language":
                     return $editor->input_field($var, $key);
                     break;
+
                 default:
                     return "";
             }

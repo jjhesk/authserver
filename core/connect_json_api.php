@@ -46,6 +46,7 @@ if (!class_exists('connect_json_api')) {
             if ($this->is_da_plugin_active()) {
                 $this->list_functions = array(
                     'personal',
+                    'authen',
                     'email',
                     'systemlog',
                     'vcoin',
@@ -73,6 +74,9 @@ if (!class_exists('connect_json_api')) {
                 });
                 add_filter('json_api_redemption_controller_path', function () {
                     return JSONAPI_PATH . 'redemption.php';
+                });
+                add_filter('json_api_authen_controller_path', function () {
+                    return JSONAPI_PATH . 'authen.php';
                 });
                 add_filter('json_api_controllers', array($this, 'add_json_controllers'), 10, 1);
             } else {

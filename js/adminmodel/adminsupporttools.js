@@ -135,6 +135,7 @@ jQuery(function ($) {
                         if (key == keyParam) {
                             if (!value) {
                                 $("input#" + keyParam + "-hide", d.$container).trigger("click.postboxes");
+                                d.control_meta_box(key, true);
                                 d.control_list[keyParam] = true;
                             }
                         }
@@ -149,6 +150,7 @@ jQuery(function ($) {
                         if (key == keyParam) {
                             if (value) {
                                 $("input#" + keyParam + "-hide", d.$container).trigger("click.postboxes");
+                                d.control_meta_box(key, false);
                                 d.control_list[keyParam] = false;
                             }
                         }
@@ -162,12 +164,16 @@ jQuery(function ($) {
                     $.each(d.control_list, function (key, value) {
                         if (value != boool) {
                             $("input#" + key + "-hide", d.$container).trigger("click.postboxes");
+                            d.control_meta_box(key, boool);
                             d.control_list[key] = boool;
                         }
                     });
                 } else {
                     console.log("method OFF allow boolean only");
                 }
+            },
+            control_meta_box: function (key, boool) {
+                if (boool)  $("#" + key).show(); else $("#" + key).hide();
             },
             batch: function (controls, boool) {
                 var d = this;
@@ -386,7 +392,81 @@ jQuery(function ($) {
                     return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
                         s4() + '-' + s4() + s4() + s4();
                 };
-            })()
+            })(),
+            CreateSelection: function ($select_el, json_data) {
+                if ($select_el instanceof jQuery) {
+                    if (Handlebars == undefined) {
+                        console.log("Handlebars is not existed");
+                        return false;
+                    }
+                    var tmp = '<option value="{{reason_key}}">{{display_reason_string}}</option>',
+                        formater = Handlebars.compile(tmp), output = "";
+                    $.each(json_data, function (k, v) {
+                        output += formater({reason_key: k, display_reason_string: v});
+                    });
+                    $select_el.html(output);
+                } else   console.log("$select_el is not jquery");
+            }
+        }
+        AJAXLoader = function (widget_id, size, usage) {
+            this.show_loading = true;
+
+            if (size == undefined) {
+                console.log("application size is not set");
+                return;
+            }
+            if (usage == undefined) {
+                console.log("usage is not set");
+                return;
+            }
+            if (size == undefined) {
+                size = "big";
+                console.log("size is not default");
+            }
+
+            if (size == "big")
+                this.$loading = $("<img id='loading' src='./images/loading.gif' style='display:none; width:30px;height:30px; margin: 0 50%; margin-bottom: 5px;'>");
+            else if (size == "normal") {
+                this.$loading = $("<img id='loading' src='./images/loading.gif' style='display:none;'>");
+            } else {
+                this.$loading = $("<img id='loading' src='./images/loading.gif' style='display:none;'>");
+            }
+            if (usage == "dashboard") {
+                this.$widget_container = $("#" + widget_id + " .inside");
+            } else if (usage == "app_reg") {
+                if (widget_id instanceof jQuery) {
+                    this.$widget_container = widget_id;
+                } else this.$widget_container = $("#" + widget_id);
+            }
+
+            if (this.$widget_container.size() === 0) {
+                console.log("this element dom did not find : #" + widget_id);
+                return;
+            }
+
+            if ($("#loading", this.$widget_container).size() == 0)
+                this.$widget_container.after(this.$loading);
+            else {
+                this.$loading = $("#loading", this.$widget_container);
+            }
+        }
+        AJAXLoader.prototype = {
+            onLoad: function () {
+                var d = this;
+                if (d.show_loading) {
+                    console.log("start");
+                    d.$loading.show();
+                    d.show_loading = false;
+                }
+            },
+            onLoadDone: function () {
+                var d = this;
+                if (!d.show_loading) {
+                    d.$loading.hide();
+                    console.log("end");
+                    d.show_loading = true;
+                }
+            }
         }
 
 
@@ -446,6 +526,8 @@ jQuery(function ($) {
                             } else {
                                 console.log("the callback function for the failure event is not propery set.");
                             }
+                        } else {
+                            alert(response.msg);
                         }
                     }
 
@@ -460,45 +542,6 @@ jQuery(function ($) {
                     d.loader = Loader;
                 } else {
                     console.log("instance type of not correct");
-                }
-            }
-        }
-        AJAXLoader = function (widget_id, size, usage) {
-            this.show_loading = true;
-            if (size == undefined) {
-                size = "big";
-            }
-            if (size == "big")
-                this.$loading = $("<img id='loading' src='./images/loading.gif' style='display:none; width:30px;height:30px; margin: 0 50%; margin-bottom: 5px;'>");
-            else if (size == "normal") {
-                this.$loading = $("<img id='loading' src='./images/loading.gif' style='display:none;'>");
-            }
-            if (usage == "dashboard") {
-                this.$widget_container = $("#" + widget_id + " .inside");
-            }
-            else if (usage == "app_reg")
-                this.$widget_container = $("#" + widget_id);
-            if ($("#loading", this.$widget_container).size() == 0)
-                this.$widget_container.after(this.$loading);
-            else {
-                this.$loading = $("#loading", this.$widget_container);
-            }
-        }
-        AJAXLoader.prototype = {
-            onLoad: function () {
-                var d = this;
-                if (d.show_loading) {
-                    console.log("start");
-                    d.$loading.show();
-                    d.show_loading = false;
-                }
-            },
-            onLoadDone: function () {
-                var d = this;
-                if (!d.show_loading) {
-                    d.$loading.hide();
-                    console.log("end");
-                    d.show_loading = true;
                 }
             }
         }

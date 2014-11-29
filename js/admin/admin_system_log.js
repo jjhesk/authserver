@@ -10,6 +10,7 @@ jQuery(function ($) {
 
         $table.dataTable({
             processing: true,
+            "order": [ 0, 'desc' ],
             ajax: domain + "api/systemlog/login_log/",
             columns: [
                 { data: "ID" },
@@ -22,7 +23,7 @@ jQuery(function ($) {
                 { data: "event_code" },
                 { data: "error_code" }
             ],
-            "dom": '<"log_menu">lfrtip',
+            "dom": 'lfrtip',
             fnRowCallback: function (nRow, full, iDisplayIndex, iDisplayIndexFull) {
                 var $row = $(nRow)
                 //  console.log(d.template_used_data);
@@ -45,15 +46,6 @@ jQuery(function ($) {
             log_menu_verify = "Redemption(verify)",
             log_menu_third_party = "Third party App Transaction Request";
 
-        $("div.log_menu").html(
-            '<button class ="log_button">' + log_menu_login + '</button>' +
-                '<button class="log_button">' + log_menu_email + '</button>' +
-                '<button class="log_button">' + log_menu_vcoin + '</button>' +
-                '<button class="log_button">' + log_menu_new_account + '</button>' +
-                '<button class="log_button">' + log_menu_verification + '</button>' +
-                '<button class="log_button">' + log_menu_verify + '</button>' +
-                '<button class="log_button">' + log_menu_third_party + '</button>'
-        );
         $("div.log_menu").css({"text-align": "center", "padding-top": "20px"});
         $(".log_button").on("click", function (e) {
                 switch (e.target.innerHTML) {

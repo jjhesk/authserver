@@ -20,7 +20,9 @@ class install_db
             'action_reward' => $wpdb->prefix . 'action_reward',
             'oauth_api_consumers' => $wpdb->prefix . 'oauth_api_consumers',
             'merchants' => $wpdb->prefix . 'merchants',
-            'app_login_token_banks' => $wpdb->prefix . 'app_login_token_banks'
+            'app_login_token_banks' => $wpdb->prefix . 'app_login_token_banks',
+            'post_app_registration' => $wpdb->prefix . 'post_app_registration',
+            'post_app_download' => $wpdb->prefix . 'post_app_download'
         );
     }
 
@@ -39,6 +41,20 @@ class install_db
     public function fake_drop_table()
     {
 
+    }
+
+    public static function reg_hook($file_path)
+    {
+        $install_check = new self();
+        $install_check->registration_plugin_hooks($file_path);
+        $install_check = NULL;
+    }
+
+    public static function install_db_manually()
+    {
+        $k = new self();
+        $k->create_tables();
+        $k = NULL;
     }
 
     /**
@@ -94,6 +110,27 @@ class install_db
 			) $charset_collate;");
 
         $this->db->query(
+            "CREATE TABLE IF NOT EXISTS {$this->api_tables['post_app_registration']} (
+                 ID bigint(20) NOT NULL AUTO_INCREMENT,
+                 post_id bigint(20) NOT NULL,
+                 devuser bigint(20) NOT NULL,
+                 devname varchar(60) NOT NULL,
+                 icon varchar(300) NOT NULL,
+                 vcoin_account varchar(50) NOT NULL,
+                 status enum('pending','beta','launched','dead','removed','denied') CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+                 app_title varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+                 app_key varchar(100) NOT NULL, app_secret varchar(100) NOT NULL,
+                 store_id varchar(200) NOT NULL,
+                 description longtext CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+                 platform enum('ios','android','other') NOT NULL DEFAULT 'other',
+                 deposit int(11) NOT NULL DEFAULT '0',
+                 payout int(11) NOT NULL DEFAULT '0',
+                 image_urls longtext NOT NULL,
+                 regtime timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                 PRIMARY KEY (ID)
+			) $charset_collate;");
+
+        $this->db->query(
             "CREATE TABLE IF NOT EXISTS {$this->api_tables['action_reward']} (
 			ID bigint(20) NOT NULL AUTO_INCREMENT,
 			user bigint(20) NOT NULL,
@@ -105,6 +142,15 @@ class install_db
 			object_id bigint(20) NOT NULL,
 			PRIMARY KEY (ID),
 			KEY ID (ID)
+			) $charset_collate;");
+
+        $this->db->query(
+            "CREATE TABLE IF NOT EXISTS {$this->api_tables['post_app_download']} (
+			 ID bigint(20) NOT NULL,
+             download_user bigint(20) NOT NULL,
+             app_key varchar(30) NOT NULL,
+             triggered tinyint(4) NOT NULL,
+             time timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 			) $charset_collate;");
 
         $this->db->query(
@@ -145,6 +191,8 @@ class install_db
             KEY user (user),
             KEY ID (ID)
 			) $charset_collate;");
+
+
 
     }
 

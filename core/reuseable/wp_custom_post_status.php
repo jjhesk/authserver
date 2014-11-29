@@ -53,7 +53,7 @@ if (!class_exists('wp_custom_post_status')) :
 
         /**
          * Construct
-         * @return void
+         * @return \wp_custom_post_status
          */
         public function __construct()
         {
