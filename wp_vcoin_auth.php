@@ -24,6 +24,7 @@ define("HKM_LIBCSS", AUTH_SERVER_URI . "/css/");
 define("HKM_LIBFONTS", AUTH_SERVER_URI . "/fonts/");
 define("HKM_IMG_PATH", AUTH_SERVER_URI . "/images/");
 define("HKM_ART_PATH", AUTH_SERVER_URI . "/hkm/art/");
+define("HKM_GAME_CAMPAIGN", "campaign");
 define('EXIMAGE', AUTH_SERVER_URI . '/extensions/art/');
 define('INNO_IMAGE_DIR', AUTH_SERVER_URI . '/images/');
 define("EXTENSIONS_PATH", AUTH_SERVER_PATH . DIRECTORY_SEPARATOR . 'thirdparty' . DIRECTORY_SEPARATOR);
@@ -90,6 +91,7 @@ function child_create_objects()
     $m4 = new app_transaction_history();
     $m5 = new application_user_profile();
     $m6 = new tokenBase();
+    $m_6 = new vcoinapp_campaig();
     $m7 = new system_log_display();
     $m8 = new app_check_point();
     $m9 = new app_registration();
@@ -99,7 +101,7 @@ function child_create_objects()
     $m13 = new EmailTrigger();
     userRegister::user_reg();
     //add_filter("email_activation_label", "email_activation_custom_label", 10, 1);
-    $m1 = $m2 = $m13 = $m3 = $m4 = $m5 = $m6 = $m7 = $m8 = $m9 = $m10 = $m11 = $m12 = $system_script_manager = NULL;
+    $m1 = $m2 = $m13 = $m3 = $m_6 = $m4 = $m5 = $m6 = $m7 = $m8 = $m9 = $m10 = $m11 = $m12 = $system_script_manager = NULL;
     gc_collect_cycles();
 }
 
