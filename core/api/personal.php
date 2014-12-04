@@ -14,12 +14,8 @@ if (!class_exists('JSON_API_Personal_Controller')) {
                 if (class_exists("json_auth_central")) {
                     json_auth_central::auth_check_token_json();
                     //       TokenAuthentication::init($json_api->query->token);
-                    $upload = new uploadfiles(-1, -1, "profile");
-                    $upload->setUser($current_user);
-
-                    api_handler::outSuccessDataWeSoft(array(
-                        "change_result" => "done"
-                    ));
+                    $message = uploadProfilePic::uploadProfile($current_user);
+                    api_handler::outSuccessDataWeSoft($message);
                 } else {
                     throw new Exception("module not installed", 1007);
                 }
@@ -89,29 +85,30 @@ if (!class_exists('JSON_API_Personal_Controller')) {
          */
         public static function display_user()
         {
-            {
-                global $json_api, $current_user;
-                try {
-                    // do_action('auth_api_token_check');
-                    if (class_exists("json_auth_central")) {
-                        json_auth_central::auth_check_token_json();
-                        //           TokenAuthentication::init($json_api->query->token);
-                        api_handler::outSuccessDataWeSoft(json_auth_central::display_user_data($current_user, array(
-                            "image_thumb" => "",
-                            "about" => "",
-                            "latest_action" => "",
-                            "prefer_language" => get_user_meta($current_user->ID, "language", true),
-                            "coin" => (int)get_user_meta($current_user->ID, "coin", true),
-                            "coin_update" => get_user_meta($current_user->ID, "coin_update", true)
-                        )));
 
-                    } else {
-                        throw new Exception("module not installed", 1007);
-                    }
-                } catch (Exception $e) {
-                    api_handler::outFailWeSoft($e->getCode(), $e->getMessage());
+            global $json_api, $current_user;
+            try {
+                // do_action('auth_api_token_check');
+                if (class_exists("json_auth_central")) {
+                    json_auth_central::auth_check_token_json();
+                    // TokenAuthentication::init($json_api->query->token);
+                    $user = new WP_User($current_user);
+                    api_handler::outSuccessDataWeSoft(json_auth_central::display_user_data($current_user, array(
+                        "image_thumb" => userBase::get_personal_profile_image($user),
+                        "about" => "",
+                        "latest_action" => "",
+                        "prefer_language" => get_user_meta($current_user->ID, "language", true),
+                        "coin" => (int)get_user_meta($current_user->ID, "coin", true),
+                        "coin_update" => get_user_meta($current_user->ID, "coin_update", true)
+                    )));
+
+                } else {
+                    throw new Exception("module not installed", 1007);
                 }
+            } catch (Exception $e) {
+                api_handler::outFailWeSoft($e->getCode(), $e->getMessage());
             }
+
         }
 
         /**

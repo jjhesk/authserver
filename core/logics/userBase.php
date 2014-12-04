@@ -10,6 +10,28 @@ defined('ABSPATH') || exit;
 class userBase
 {
 
+    public static function get_personal_profile_image(WP_User $user)
+    {
+        $imageId = (int)get_user_meta($user->ID, "profile_picture_uploaded", true);
+        $image = wp_get_attachment_image_src($imageId, 'large');
+        if (count($image) > 0) {
+            return $image[0];
+        } else return self::get_default_profile_image($user->ID);
+    }
+
+    public static function get_default_profile_image($user_id)
+    {
+        $gender = strtolower(get_user_meta($user_id, "gender", true));
+        $titan = TitanFramework::getInstance('vcoinset');
+        $profile_pic = $gender == "m" ? $titan->getOption("default_male_profile_pic") : $titan->getOption("default_female_profile_pic");
+        return $profile_pic;
+    }
+
+    /**
+     * @param WP_User $user
+     * @return int
+     * @throws Exception
+     */
     public static function update_app_user_coin(WP_User $user)
     {
         try {
@@ -18,6 +40,7 @@ class userBase
             //  inno_log_db::log_vcoin_login($user->ID, 93259, "found coin:" . $coinscount->coinscount);
             update_user_meta($user->ID, "coin", $coinscount->coinscount);
             update_user_meta($user->ID, "coin_update", date("F j, Y, g:i a"));
+            return (int)$coinscount->coinscount;
         } catch (Exception $e) {
             throw $e;
         }

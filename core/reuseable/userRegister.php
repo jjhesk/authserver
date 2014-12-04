@@ -12,11 +12,11 @@ defined('ABSPATH') || exit;
 if (!class_exists('userRegister')) {
     class userRegister
     {
-        private $reg_user, $vcoin_transaction;
+        private $reg_user, $vcoin_transaction, $titan;
 
         public function __construct()
         {
-
+            $this->titan = TitanFramework::getInstance('vcoinsetting');
         }
 
         function __destruct()
@@ -81,6 +81,17 @@ if (!class_exists('userRegister')) {
             $data = get_userdata($this->reg_user->ID);
             $bind_id = $this->vcoin_transaction->create_new_user($data->user_email);
             update_user_meta($this->reg_user->ID, "uuid_key", $bind_id);
+            $free_v_coin = (int)$this->titan->getOption("vcoin_registration");
+
+            if ($free_v_coin > 0) {
+                $this->vcoin_transaction = new vcoinBase();
+                $this->vcoin_transaction->setReceive($bind_id);
+                $this->vcoin_transaction->setSender(IMUSIC_UUID);
+                $this->vcoin_transaction->setAmount($free_v_coin);
+                $this->vcoin_transaction->setTransactionReference("free coin");
+                $this->vcoin_transaction->CommitTransaction();
+            }
+
         }
 
         /**
@@ -107,6 +118,7 @@ if (!class_exists('userRegister')) {
                     $extra_fields["password"] = $pwd;
                     $extra_fields["coin"] = 0;
                     $extra_fields["coin_update"] = "";
+                    $extra_fields["profile_picture_uploaded"] = "";
                 } else if ($role == "developer") {
                     $extra_fields["service_plan"] = 100;
                     $extra_fields["app_coins"] = 0;
@@ -200,11 +212,11 @@ if (!class_exists('userRegister')) {
                 add_action("user_register", array(__CLASS__, "new_user_reg"));
                 //   remove_action("user_register", array(__CLASS__, "user_reg_action_cb"));
                 $user = new WP_User($user_id);
-                add_user_meta($user_id, "nickname", $login_name, false);
+
+                update_user_meta($user_id, "nickname", $login_name, false);
                 foreach ($extra_fields as $key => $val) {
                     // update_user_meta($user_id, $key, $val, false);
                     add_user_meta($user_id, $key, $val, false);
-
                 }
                 //  debugoc::upload_bmap_log(print_r($args, true), 29291);
                 //wp_insert_user($args);

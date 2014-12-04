@@ -23,6 +23,7 @@ if (!class_exists('tokenBase')):
 
         }
 
+
         /**
          * @param $output
          * @param $user_id
@@ -32,7 +33,8 @@ if (!class_exists('tokenBase')):
         public static function display_auth_data($output, $user_id, $login_method)
         {
             global $wpdb;
-            $output["profile_picture"] = isset($output['avatar']) ? $output['avatar'] : "";
+            $user = new WP_User($user_id);
+            $output["profile_picture"] = userBase::get_personal_profile_image($user);
             unset($output['url']);
             unset($output['role']);
             unset($output['avatar']);

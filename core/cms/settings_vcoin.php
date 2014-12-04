@@ -24,8 +24,8 @@ if (!class_exists('settings_vcoin')) {
 
         public function __construct()
         {
-      //      add_action('tf_create_options', array($this, 'createMyOptions'));
-           $this->createMyOptions();
+            //add_action('tf_create_options', array($this, 'createMyOptions'));
+            $this->createMyOptions();
         }
 
         public function createMyOptions()
@@ -51,40 +51,34 @@ if (!class_exists('settings_vcoin')) {
                 'type' => 'text',
                 'id' => 'twitter_en',
             ));
+            $this->tab->createOption(array(
+                'name' => 'twitter japanese',
+                'type' => 'text',
+                'id' => 'twitter_ja',
 
-            $this->tab->createOption(
-                array(
-                    'name' => 'twitter japanese',
-                    'type' => 'text',
-                    'id' => 'twitter_ja',
-
-                ));
-
+            ));
             $this->tab->createOption(array(
                 'name' => 'twitter chinese',
                 'type' => 'text',
                 'id' => 'twitter_cn',
 
             ));
-
             $this->tab->createOption(array(
                 'name' => 'twitter others',
                 'type' => 'text',
                 'id' => 'twitter_extra',
 
             ));
-            $this->tab->createOption(
-                array(
-                    'name' => 'facebook english',
-                    'type' => 'text',
-                    'id' => 'fb_en',
-                ));
-            $this->tab->createOption(
-                array(
-                    'name' => 'facebook japanese',
-                    'type' => 'text',
-                    'id' => 'fb_ja',
-                ));
+            $this->tab->createOption(array(
+                'name' => 'facebook english',
+                'type' => 'text',
+                'id' => 'fb_en',
+            ));
+            $this->tab->createOption(array(
+                'name' => 'facebook japanese',
+                'type' => 'text',
+                'id' => 'fb_ja',
+            ));
             $this->tab->createOption(array(
                 'name' => 'facebook chinese',
                 'type' => 'text',
@@ -95,20 +89,16 @@ if (!class_exists('settings_vcoin')) {
                 'type' => 'text',
                 'id' => 'fb_extra',
             ));
-
-
-            $this->tab->createOption(
-                array(
-                    'name' => 'g+ english',
-                    'type' => 'text',
-                    'id' => 'gplus_en', 'desc' => 'demo .. '
-                ));
-            $this->tab->createOption(
-                array(
-                    'name' => 'g+ japanese',
-                    'type' => 'text',
-                    'id' => 'gplus_ja', 'desc' => 'demo .. '
-                ));
+            $this->tab->createOption(array(
+                'name' => 'g+ english',
+                'type' => 'text',
+                'id' => 'gplus_en', 'desc' => 'demo .. '
+            ));
+            $this->tab->createOption(array(
+                'name' => 'g+ japanese',
+                'type' => 'text',
+                'id' => 'gplus_ja', 'desc' => 'demo .. '
+            ));
             $this->tab->createOption(array(
                 'name' => 'g+ chinese',
                 'type' => 'text',
@@ -120,11 +110,9 @@ if (!class_exists('settings_vcoin')) {
                 'id' => 'gplus_extra',
                 'desc' => 'demo .. '
             ));
-
             $this->tab->createOption(array(
                 'type' => 'save'
             ));
-
 
         }
 

@@ -11,7 +11,7 @@ abstract class submission_basic
 {
 
     private static $folder_name_basemap = 'returnbasemap';
-    private static $folder_name_signature = 'signatures';
+    private static $folder_name_signature = 'profiles';
     private static $folder_name_site_photo = 'work_site_description';
 
     abstract function uploadcpdata();

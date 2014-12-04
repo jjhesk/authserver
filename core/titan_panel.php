@@ -65,6 +65,45 @@ if (!class_exists('TitanFramework')) {
         'icon' => 'dashicons-chart-area'
     ));
 
+
+    /*
+     * Create our normal options tab
+     */
+
+    $tab = $adminPanel->createTab(array(
+        'name' => __('User Profiles', HKM_LANGUAGE_PACK),
+    ));
+
+    $tab->createOption(array(
+        'name' => 'Male Default',
+        'type' => 'upload',
+        'desc' => 'Upload your image for the logo for the default profile picture',
+        'id' => 'default_male_profile_pic'
+    ));
+
+    $tab->createOption(array(
+        'name' => 'Female Default',
+        'type' => 'upload',
+        'desc' => 'Upload your image for the default profile picture',
+        'id' => 'default_female_profile_pic'
+    ));
+
+    $tab->createOption(array(
+        'name' => 'Vcoin Free on Registration',
+        //cp_{{role name}}_{{option key to be applied}}
+        'id' => 'vcoin_registration',
+        'type' => 'number',
+        'max' => 1000,
+        'min' => 10,
+        'step' => 10,
+        'desc' => 'This is given on the first time registration only.',
+        'default' => false,
+    ));
+
+    $tab->createOption(array(
+        'type' => 'save'
+    ));
+
     /*
      * Create our normal options tab
      */
@@ -534,7 +573,6 @@ if (!class_exists('TitanFramework')) {
     ));
 
 
-
     $tab->createOption(array(
         'name' => 'Success Reward Submission Message Templates',
         'type' => 'heading',
@@ -688,27 +726,27 @@ if (!class_exists('TitanFramework')) {
     $tab->createOption(array(
         'type' => 'save'
     ));
-/*
-    $tab = $adminPanel->createTab(array(
-        'name' => 'Gravity Form Control',
-    ));
-    $tab->createOption(array(
-        'name' => 'E-coupon registration',
-        'type' => 'heading',
-    ));
-    $tab->createOption(array(
-        'name' => 'form ID',
-        'id' => 'gf_ecoupon_app',
-        'type' => 'number',
-        'max' => 20,
-        'min' => 0,
-        'step' => 1,
-        'desc' => 'The GF form id for this application.',
+    /*
+        $tab = $adminPanel->createTab(array(
+            'name' => 'Gravity Form Control',
+        ));
+        $tab->createOption(array(
+            'name' => 'E-coupon registration',
+            'type' => 'heading',
+        ));
+        $tab->createOption(array(
+            'name' => 'form ID',
+            'id' => 'gf_ecoupon_app',
+            'type' => 'number',
+            'max' => 20,
+            'min' => 0,
+            'step' => 1,
+            'desc' => 'The GF form id for this application.',
 
-    ));
-    $tab->createOption(array(
-        'type' => 'save'
-    ));*/
+        ));
+        $tab->createOption(array(
+            'type' => 'save'
+        ));*/
 
     /*******************************************************
      * TITAN FRAMEWORK CODE END

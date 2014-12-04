@@ -9,6 +9,8 @@ defined('ABSPATH') || exit;
 
 class uploadfiles extends submission_basic
 {
+
+
     //enum  machine_data
     //      basemap
     //      sitephoto
@@ -58,11 +60,7 @@ class uploadfiles extends submission_basic
         $json_array = json_decode($raw);
         $post_job_id = $json_array->post_id;
         $machine_id = $json_array->device_id;
-        $format = array(
-            '%s',
-            '%d',
-            '%s'
-        );
+        $format = array('%s', '%d', '%s');
         $entry = array('machine_data' => $raw, 'post_job_id' => $post_job_id, 'android_id' => $machine_id);
         $result_insert = $wpdb->insert(DB_PROJECTRETURN, $entry, $format);
         //  $out = $result_insert == null ? -1 : $wpdb->insert_id;
@@ -109,7 +107,7 @@ class uploadfiles extends submission_basic
             if (intval($this->job_id) > 0) {
                 return $this->control_media_upload($this->job_id);
             } else {
-             //   debugoc::upload_bmap_log('error! target job ID is not set', 552169);
+                //   debugoc::upload_bmap_log('error! target job ID is not set', 552169);
                 throw new Exception('error! target job ID is not set', 5584);
             }
         } catch (Exception $e) {
@@ -134,7 +132,7 @@ class uploadfiles extends submission_basic
 
         try {
             $attachments = array();
-           // debugoc::upload_bmap_log('wp_generate_attachment_metadata start.', 552169);
+            // debugoc::upload_bmap_log('wp_generate_attachment_metadata start.', 552169);
 
             /**
              * mime type data checking
@@ -149,11 +147,11 @@ class uploadfiles extends submission_basic
                 throw new Exception("files not detected. array is [] ", 4091);
             } else {
                 if ($_FILES) {
-                 //   debugoc::upload_bmap_log('$_FILES start.', 552169);
+                    //   debugoc::upload_bmap_log('$_FILES start.', 552169);
                     foreach ($_FILES as $file => $array) {
                         if ($_FILES[$file]['error'] !== UPLOAD_ERR_OK) {
                             $fileerrormessage = $_FILES[$file]['error'];
-                          //  debugoc::upload_bmap_log('upload error. message: ' . $fileerrormessage . '. the next file process will continue.', 552169);
+                            //  debugoc::upload_bmap_log('upload error. message: ' . $fileerrormessage . '. the next file process will continue.', 552169);
                             continue;
                         }
 
@@ -199,7 +197,7 @@ class uploadfiles extends submission_basic
                         }
                         array_push($attachments, $attach_result_id);
                     }
-                   // debugoc::upload_bmap_log('submission_nature start.' . $this->submission_nature, 552169);
+                    // debugoc::upload_bmap_log('submission_nature start.' . $this->submission_nature, 552169);
                     $this->update_row_meta($this->uploaded_return_id, $this->submission_nature, $attachments);
                 }
             }

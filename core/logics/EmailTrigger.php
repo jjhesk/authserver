@@ -47,8 +47,6 @@ class EmailTrigger
 
     public function reward_claim($data)
     {
-
-
         $this->email_message = $this->text_template("email_claim_r1", $data);
         $this->trigger_mail("xxxx");
     }
