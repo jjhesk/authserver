@@ -16,16 +16,16 @@ if (!class_exists('JSON_API_Mission_Controller')) {
         {
             global $json_api;
             try {
-                if (class_exists("json_auth_central")) {
-                    json_auth_central::auth_check_token_json();
-                    $Q = $json_api->query;
-                    //  if (!isset($Q->camp_id)) throw new Exception ("campaign ID  not exist", 1752);
-                    $cam = new CampaignList($Q);
-                    api_handler::outSuccessDataWeSoft($cam->getResultArr());
+                //  if (class_exists("json_auth_central")) {
+                //      json_auth_central::auth_check_token_json();
+                $Q = $json_api->query;
+                //  if (!isset($Q->camp_id)) throw new Exception ("campaign ID  not exist", 1752);
+                $cam = new CampaignList($Q);
+                api_handler::outSuccessDataWeSoft($cam->getResultArr());
 
-                } else {
-                    throw new Exception("module not installed", 1007);
-                }
+                ///  } else {
+                //      throw new Exception("module not installed", 1007);
+                //  }
             } catch (Exception $e) {
                 api_handler::outFailWeSoft($e->getCode(), $e->getMessage());
             }

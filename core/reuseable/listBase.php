@@ -62,6 +62,12 @@ abstract class listBase
         endif;
     }
 
+    /**
+     * @param $id
+     * @param array $args
+     * @return mixed
+     * @throws Exception
+     */
     abstract protected function inDaLoop($id, $args = array());
 
     public function getResultArr()
@@ -185,10 +191,10 @@ abstract class listBase
         } else {
             if ($image) {
                 return array(
-                 /*   "unpress" => z_taxonomy_image_url($cat->term_id),
-                    "press" => z_taxonomy_image_url($cat->term_id, 2),
-                    "unpress_s" => z_taxonomy_image_url($cat->term_id, 3),
-                    "press_s" => z_taxonomy_image_url($cat->term_id, 4),*/
+                    /*   "unpress" => z_taxonomy_image_url($cat->term_id),
+                       "press" => z_taxonomy_image_url($cat->term_id, 2),
+                       "unpress_s" => z_taxonomy_image_url($cat->term_id, 3),
+                       "press_s" => z_taxonomy_image_url($cat->term_id, 4),*/
 
                     "name" => trim($cat_name),
                     "description" => $desc,

@@ -79,8 +79,7 @@ class CampaignList extends listBase
                    $arr['category__in'] = $category;
                }
            }*/
-
-
+        //  $arr["order"] = "desc";
         $this->config = array(
             "post_type" => HKM_GAME_CAMPAIGN,
             "posts_per_page" => -1,
