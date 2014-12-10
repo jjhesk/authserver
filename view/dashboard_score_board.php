@@ -2,22 +2,22 @@
     <div class="article">
         <div class="item row">
             <div class="col-xs-3">
-                <p class="source">AW Commercial Aviation</p>
+                <p class="source"><?php _e('AW Commercial Aviation', HKM_LANGUAGE_PACK); ?></p>
             </div>
             <div class="col-xs-6">
-                <p class="title">CSeries Supplier Scramble</p>
+                <p class="title"><?php _e('CSeries Supplier Scramble', HKM_LANGUAGE_PACK); ?></p>
             </div>
             <div class="col-xs-3">
-                <p class="pubdate">Mar 22</p>
+                <p class="pubdate"><?php _e('Mar 22', HKM_LANGUAGE_PACK); ?></p>
             </div>
         </div>
         <div class="description row">
             <div class="col-xs-3">&nbsp;</div>
             <div class="col-xs-6">
-                <h1>CSeries Supplier Scramble</h1>
+                <h1><?php _e('CSeries Supplier Scramble', HKM_LANGUAGE_PACK); ?></h1>
 
-                <p>Three months before the planned first flight of its CSeries, Bombardier is grappling with supplier
-                    issues crucial to meeting its production cost...</p>
+                <p><?php _e('Three months before the planned first flight of its CSeries, Bombardier is grappling with supplier
+                    issues crucial to meeting its production cost...', HKM_LANGUAGE_PACK); ?></p>
             </div>
             <div class="col-xs-3">&nbsp;</div>
         </div>

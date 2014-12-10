@@ -3,18 +3,18 @@
         <thead>
         <tr>
             <th></th>
-            <th>Name</th>
-            <th>Cate.</th>
-            <th>ID</th>
+            <th><?php _e('Name', HKM_LANGUAGE_PACK); ?></th>
+            <th><?php _e('Cate.', HKM_LANGUAGE_PACK); ?></th>
+            <th><?php _e('ID', HKM_LANGUAGE_PACK); ?></th>
         </tr>
         </thead>
 
         <tfoot>
         <tr>
             <th></th>
-            <th>Name</th>
-            <th>Cate.</th>
-            <th>ID</th>
+            <th><?php _e('Name', HKM_LANGUAGE_PACK); ?></th>
+            <th><?php _e('Cate.', HKM_LANGUAGE_PACK); ?></th>
+            <th><?php _e('ID', HKM_LANGUAGE_PACK); ?></th>
         </tr>
         </tfoot>
     </table>
@@ -23,7 +23,7 @@
                type="button"
                onclick="template_controller.click_function_add_page({{id}});"
                class="button addpagebutton"
-               value="Add Page"/>
+               value="<?php _e('Add Page', HKM_LANGUAGE_PACK); ?>"/>
     </script>
     <script id="button_image" type="text/x-handlebars-template">
         <a id="basemap-{{attachmentid}}"
@@ -32,14 +32,14 @@
 </div>
 <div class="rwmb-field rwmb-text-wrapper">
     <div class="rwmb-label">
-        <label for="drawmap">draw maps</label></div>
+        <label for="drawmap"><?php _e('draw maps', HKM_LANGUAGE_PACK); ?></label></div>
     <div class="rwmb-input drawmapbuttons">
 
     </div>
 </div>
 <div class="rwmb-field rwmb-text-wrapper">
     <div class="rwmb-label">
-        <label for="site-photo">site photos</label></div>
+        <label for="site-photo"><?php _e('site photos', HKM_LANGUAGE_PACK); ?></label></div>
     <div class="rwmb-input sitephotobuttons">
 
     </div>

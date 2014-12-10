@@ -10,15 +10,15 @@
         <thead>
         <tr>
             <th></th>
-            <th>Revision Number</th>
-            <th>Submission Time</th>
+            <th><?php _e('Revision Number', HKM_LANGUAGE_PACK); ?></th>
+            <th><?php _e('Submission Time', HKM_LANGUAGE_PACK); ?></th>
         </tr>
         </thead>
         <tfoot>
         <tr>
             <th></th>
-            <th>Revision Number</th>
-            <th>Submission Time</th>
+            <th><?php _e('Revision Number', HKM_LANGUAGE_PACK); ?></th>
+            <th><?php _e('Submission Time', HKM_LANGUAGE_PACK); ?></th>
         </tr>
         </tfoot>
     </table>

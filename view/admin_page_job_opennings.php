@@ -8,18 +8,18 @@
     <thead>
     <tr>
         <th></th>
-        <th>Job ID</th>
-        <th>Release Time</th>
-        <th>Location</th>
+        <th><?php _e('Job ID', HKM_LANGUAGE_PACK); ?></th>
+        <th><?php _e('Release Time', HKM_LANGUAGE_PACK); ?></th>
+        <th><?php _e('Location', HKM_LANGUAGE_PACK); ?></th>
     </tr>
     </thead>
 
     <tfoot>
     <tr>
         <th></th>
-        <th>Job ID</th>
-        <th>Release Time</th>
-        <th>Location</th>
+        <th><?php _e('Job ID', HKM_LANGUAGE_PACK); ?></th>
+        <th><?php _e('Release Time', HKM_LANGUAGE_PACK); ?></th>
+        <th><?php _e('Location', HKM_LANGUAGE_PACK); ?></th>
     </tr>
     </tfoot>
 </table>

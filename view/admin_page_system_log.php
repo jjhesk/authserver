@@ -1,33 +1,33 @@
 <div class="log_menu tablenav top">
-    <button class="log_button button">Login</button>
-    <button class="log_button button">Email</button>
-    <button class="log_button button">Vcoin</button>
-    <button class="log_button button">New Account</button>
-    <button class="log_button button">Redemption(verification)</button>
-    <button class="log_button button">Redemption(verify)</button>
-    <button class="log_button button">Third party App Transaction Request</button>
+    <button class="log_button button"><?php _e('Login', HKM_LANGUAGE_PACK); ?></button>
+    <button class="log_button button"><?php _e('Email', HKM_LANGUAGE_PACK); ?></button>
+    <button class="log_button button"><?php _e('Vcoin', HKM_LANGUAGE_PACK); ?></button>
+    <button class="log_button button"><?php _e('New Account', HKM_LANGUAGE_PACK); ?></button>
+    <button class="log_button button"><?php _e('Redemption(verification)', HKM_LANGUAGE_PACK); ?></button>
+    <button class="log_button button"><?php _e('Redemption(verify)', HKM_LANGUAGE_PACK); ?></button>
+    <button class="log_button button"><?php _e('Third party App Transaction Request', HKM_LANGUAGE_PACK); ?></button>
 </div>
 
 <table id="admin_page_system_log" class="display" cellspacing="0" width="100%">
     <thead>
     <tr>
-        <th>ID</th>
-        <th>User</th>
-        <th>Message</th>
-        <th>Time</th>
-        <th>Event Code</th>
-        <th>Error Code</th>
+        <th><?php _e('ID', HKM_LANGUAGE_PACK); ?></th>
+        <th><?php _e('User', HKM_LANGUAGE_PACK); ?></th>
+        <th><?php _e('Message', HKM_LANGUAGE_PACK); ?></th>
+        <th><?php _e('Time', HKM_LANGUAGE_PACK); ?></th>
+        <th><?php _e('Event Code', HKM_LANGUAGE_PACK); ?></th>
+        <th><?php _e('Error Code', HKM_LANGUAGE_PACK); ?></th>
     </tr>
     </thead>
 
     <tfoot>
     <tr>
-        <th>ID</th>
-        <th>User</th>
-        <th>Message</th>
-        <th>Time</th>
-        <th>Event Code</th>
-        <th>Error Code</th>
+        <th><?php _e('ID', HKM_LANGUAGE_PACK); ?></th>
+        <th><?php _e('User', HKM_LANGUAGE_PACK); ?></th>
+        <th><?php _e('Message', HKM_LANGUAGE_PACK); ?></th>
+        <th><?php _e('Time', HKM_LANGUAGE_PACK); ?></th>
+        <th><?php _e('Event Code', HKM_LANGUAGE_PACK); ?></th>
+        <th><?php _e('Error Code', HKM_LANGUAGE_PACK); ?></th>
     </tr>
     </tfoot>
 </table>

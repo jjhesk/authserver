@@ -1,19 +1,19 @@
 <table id="mission_table" class="display" cellspacing="0" width="100%">
     <thead>
     <tr>
-        <th>ID</th>
-        <th>User</th>
-        <th>Time</th>
-        <th>Formats</th>
+        <th><?php _e('ID', HKM_LANGUAGE_PACK); ?></th>
+        <th><?php _e('User', HKM_LANGUAGE_PACK); ?></th>
+        <th><?php _e('Time', HKM_LANGUAGE_PACK); ?></th>
+        <th><?php _e('Formats', HKM_LANGUAGE_PACK); ?></th>
     </tr>
     </thead>
 
     <tfoot>
     <tr>
-        <th>ID</th>
-        <th>User</th>
-        <th>Time</th>
-        <th>Formats</th>
+        <th><?php _e('ID', HKM_LANGUAGE_PACK); ?></th>
+        <th><?php _e('User', HKM_LANGUAGE_PACK); ?></th>
+        <th><?php _e('Time', HKM_LANGUAGE_PACK); ?></th>
+        <th><?php _e('Formats', HKM_LANGUAGE_PACK); ?></th>
     </tr>
     </tfoot>
 </table>

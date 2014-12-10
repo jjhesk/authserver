@@ -213,28 +213,24 @@ class sspclass
      * @param  string $table SQL table to query
      * @param  string $primaryKey Primary key of the table
      * @param  array $columns Column information array
-     * @param string $json_query
+     * @param string $condition
+     * @internal param string $json_query
      * @internal param $usage
      * @internal param array $sql_details SQL connection details - see sql_connect()
      * @return array          Server-side processing response array
      */
-    static function simple($request, $wpdb, $table, $primaryKey, $columns, $json_query = "")
+    static function simple($request, $wpdb, $table, $primaryKey, $columns, $condition = "")
     {
         $bindings = array();
         $db = $wpdb;
         $sorting_condition = "";
-        if (isset($json_query->sort)) {
-            $sort = $json_query->sort;
+        if ($condition != "") {
             if (isset($request['search']) && $request['search']['value'] != '') {
-                if ($sort != "all")
-                    $sorting_condition = "AND status " . " LIKE " . "'%" . $json_query->sort . "%'";
-                else $sorting_condition = "";
+                $sorting_condition = "AND " . $condition;
             } else {
-                if ($sort != "all")
-                    $sorting_condition = "WHERE status " . " LIKE " . "'%" . $json_query->sort . "%'";
-                else $sorting_condition = "";
+                $sorting_condition = "WHERE " . $condition;
             }
-        }
+        } else $sorting_condition = "";
         // Build the SQL query string from the request
         $limit = self::limit($request, $columns);
         $order = self::order($request, $columns);
@@ -258,6 +254,7 @@ class sspclass
 			 $order
 			 $limit
 			 ";
+
         // Main query to actually get the data
         $data = $db->get_results($prepare_statement, ARRAY_A);
         // Data set length after filtering

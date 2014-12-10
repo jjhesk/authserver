@@ -8,21 +8,21 @@
     <thead>
     <tr>
         <th></th>
-        <th>Job ID</th>
-        <th>Project ID</th>
-        <th>Job Status</th>
+        <th><?php _e('Job ID', HKM_LANGUAGE_PACK); ?></th>
+        <th><?php _e('Project ID', HKM_LANGUAGE_PACK); ?></th>
+        <th><?php _e('Job Status', HKM_LANGUAGE_PACK); ?></th>
     </tr>
     </thead>
 
     <tfoot>
     <tr>
         <th></th>
-        <th>Job ID</th>
-        <th>Project ID</th>
-        <th>Job Status</th>
+        <th><?php _e('Job ID', HKM_LANGUAGE_PACK); ?></th>
+        <th><?php _e('Project ID', HKM_LANGUAGE_PACK); ?></th>
+        <th><?php _e('Job Status', HKM_LANGUAGE_PACK); ?></th>
     </tr>
     </tfoot>
 </table>
 <script id="action_bar_buttons" type="text/x-handlebars-template">
-    <input id="action_viewtask-{{lid}}" type="button" class="button" value="View" onclick="ViewJob({{lid}});"/>
+    <input id="action_viewtask-{{lid}}" type="button" class="button" value="<?php _e('View', HKM_LANGUAGE_PACK); ?>" onclick="ViewJob({{lid}});"/>
 </script>

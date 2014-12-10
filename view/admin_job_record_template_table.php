@@ -1,19 +1,19 @@
 <table id="report_archive" class="display" cellspacing="0" width="100%">
     <thead>
     <tr>
-        <th>ID</th>
-        <th>Report</th>
-        <th>Status</th>
-        <th>Formats</th>
+        <th><?php _e("ID", HKM_LANGUAGE_PACK); ?></th>
+        <th><?php _e("Report", HKM_LANGUAGE_PACK); ?></th>
+        <th><?php _e("Status", HKM_LANGUAGE_PACK); ?></th>
+        <th><?php _e("Formats", HKM_LANGUAGE_PACK); ?></th>
     </tr>
     </thead>
 
     <tfoot>
     <tr>
-        <th>ID</th>
-        <th>Report</th>
-        <th>Status</th>
-        <th>Formats</th>
+        <th><?php _e("ID", HKM_LANGUAGE_PACK); ?></th>
+        <th><?php _e("Report", HKM_LANGUAGE_PACK); ?></th>
+        <th><?php _e("Status", HKM_LANGUAGE_PACK); ?></th>
+        <th><?php _e("Formats", HKM_LANGUAGE_PACK); ?></th>
     </tr>
     </tfoot>
 </table>

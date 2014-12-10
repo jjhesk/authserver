@@ -1,3 +1,3 @@
 <div class="home">
-    this is the administrator login home page
+    <?php _e("this is the administrator login home page", HKM_LANGUAGE_PACK); ?>
 </div>

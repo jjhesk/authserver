@@ -1,8 +1,8 @@
 <div class="editorbar">
-    <input onclick="remove_current_template()" type="button" value="remove" class="button"/>
-    <input onclick="edit_current_template()" type="button" value="edit" class="button"/></div>
+    <input onclick="remove_current_template()" type="button" value="<?php _e('remove', HKM_LANGUAGE_PACK); ?>" class="button"/>
+    <input onclick="edit_current_template()" type="button" value="<?php _e('edit', HKM_LANGUAGE_PACK); ?>" class="button"/></div>
 <div class="book">
-    <div id="information_tag"><span>XX/XX</span></div>
+    <div id="information_tag"><span><?php _e('XX/XX', HKM_LANGUAGE_PACK); ?></span></div>
     <div id="displayContentEditor" class="royalSlider rsDefault">
     </div>
 </div>
@@ -43,7 +43,7 @@
 <!-- section helpers -->
 <script id="_footer" type="text/x-handlebars-template">
     <footer>
-        <span class="left">UtilityINFO (1Call) Limited</span>
+        <span class="left"><?php _e('UtilityINFO (1Call) Limited', HKM_LANGUAGE_PACK); ?></span>
         <span class="central">{{current_page}}</span>
         <span class="right">{{month_year}}</span>
     </footer>
@@ -54,7 +54,7 @@
         <span class="controls-row">{{report_title}}</span>
 
         <div class="controls-row">
-            <span class="alignleft">Cable detection at Victoria Park Road, Causeway Bay</span>
+            <span class="alignleft"><?php _e('Cable detection at Victoria Park Road, Causeway Bay', HKM_LANGUAGE_PACK); ?></span>
             <span class="alignright">{{project_no}}</span>
         </div>
     </header>

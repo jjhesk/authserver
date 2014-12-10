@@ -8,7 +8,7 @@
 
 ?>
 <div class="wallet">
-    <span class="title">My Coin</span>
+    <span class="title"><?php _e('My Coin', HKM_LANGUAGE_PACK); ?></span>
     <span class="value">{{app_coins}}</span>
 </div>
 <!-- The Coin -->

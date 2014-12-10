@@ -11,26 +11,26 @@
         <thead>
         <tr>
             <th></th>
-            <th>CP ID</th>
-            <th>CP Name</th>
-            <th>status</th>
+            <th><?php _e('CP ID', HKM_LANGUAGE_PACK); ?></th>
+            <th><?php _e('CP Name', HKM_LANGUAGE_PACK); ?></th>
+            <th><?php _e('status', HKM_LANGUAGE_PACK); ?></th>
         </tr>
         </thead>
 
         <tfoot>
         <tr>
             <th></th>
-            <th>CP ID</th>
-            <th>CP Name</th>
-            <th>status</th>
+            <th><?php _e('CP ID', HKM_LANGUAGE_PACK); ?></th>
+            <th><?php _e('CP Name', HKM_LANGUAGE_PACK); ?></th>
+            <th><?php _e('status', HKM_LANGUAGE_PACK); ?></th>
         </tr>
         </tfoot>
     </table>
     <script id="action_bar_buttons" type="text/x-handlebars-template">
-        <input id="action_approve-{{cp_id}}" type="button" class="button" value="Approve"
+        <input id="action_approve-{{cp_id}}" type="button" class="button" value="<?php _e('Approve', HKM_LANGUAGE_PACK); ?>"
                onclick="approve({{cp_id}});"/>
-        <input id="action_ignore-{{cp_id}}" type="button" class="button" value="Deny" onclick="reject({{cp_id}});"/>
-        <input id="action_view_doc-{{cp_id}}" type="button" class="button" value="View BR Doc"
+        <input id="action_ignore-{{cp_id}}" type="button" class="button" value="<?php _e('Deny', HKM_LANGUAGE_PACK); ?>" onclick="reject({{cp_id}});"/>
+        <input id="action_view_doc-{{cp_id}}" type="button" class="button" value="<?php _e('View BR Doc', HKM_LANGUAGE_PACK); ?>"
                onclick="reject({{cp_id}});"/>
     </script>
 </div>
@@ -52,9 +52,9 @@
     <div id="misc-publishing-actions">
         <div class="boardcast_status misc-pub-section curtime misc-pub-curtime">
             <span id="nsent"><div
-                    class="dashicons dashicons-megaphone"></div>Notification frequency: <b>{{nsent}}</b></span><br/>
-            <span id="rsvp"><div class="dashicons dashicons-flag"></div>Responses: <b>{{response}}</b></span><br/>
-            <span id="cpsent"><div class="dashicons dashicons-groups"></div>CP Notified sent: <b>{{sent_cps}}</b></span><br/>
+                    class="dashicons dashicons-megaphone"></div><?php _e('Notification frequency: ', HKM_LANGUAGE_PACK); ?><b>{{nsent}}</b></span><br/>
+            <span id="rsvp"><div class="dashicons dashicons-flag"></div><?php _e('Responses', HKM_LANGUAGE_PACK); ?>: <b>{{response}}</b></span><br/>
+            <span id="cpsent"><div class="dashicons dashicons-groups"></div><?php _e('CP Notified sent:', HKM_LANGUAGE_PACK); ?> <b>{{sent_cps}}</b></span><br/>
         </div>
         <div class="clear"></div>
     </div>

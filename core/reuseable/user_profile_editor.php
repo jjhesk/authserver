@@ -18,6 +18,8 @@ if (!class_exists('user_profile_editor')):
         protected $vcoin_panel_setting;
         protected $current_role;
 
+        private $css, $js, $overall_template;
+
         public function __construct()
         {
             $this->editor_right = array('administrator');
@@ -124,17 +126,20 @@ if (!class_exists('user_profile_editor')):
                 return '<br><span class="description">' . $desc . '</span>';
         }
 
-        private function do_enqueue_script($css = null, $js = null, $script_localize = null)
+        private function do_enqueue_script($script_localize = null)
         {
-            if (isset($css)) {
-                wp_enqueue_style($css);
+            if (isset($this->css)) {
+                wp_enqueue_style($this->css);
             }
-            if (isset($js)) {
-                wp_enqueue_script($js);
+            if (isset($this->js)) {
+                wp_enqueue_script($this->js);
 
                 if (count($script_localize) > 0) {
                     wp_localize_script($js, $script_localize[0], $script_localize[1]);
                 }
+            }
+            if (isset($this->overall_template)) {
+                //  add_action("wp_print_scripts",  );
             }
         }
 
