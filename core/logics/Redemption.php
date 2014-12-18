@@ -74,7 +74,8 @@ if (!class_exists('Redemption')) {
                     "price" => $Q->price,
                     "address_id" => $Q->address_id,
                     "distribution" => $Q->distribution,
-                    "extension_id" => $Q->extension_id
+                    "extension_id" => $Q->extension_id,
+                    "lang" => $Q->lang
                 );
                 inno_log_db::log_vcoin_third_party_app_transaction(-1, 839284, print_r($params, true));
                 $data = api_cms_server::crosscms("redeemrewardsubmission", $params, false, false);

@@ -17,25 +17,25 @@ jQuery(function ($) {
 
         CoinHistory.prototype = {
             tableInit: function () {
-                var d = this;
-                d.$table.dataTable({
-                        processing: true,
-                        "order": [ 1, 'desc' ],
-                        ajax: "",
-                        columns: [
-                            { data: "transid"},
-                            { data: "time"},
-                            { data: "count"},
-                            { data: "ref_code"}
+                    var d = this;
+                    d.$table.dataTable({
+                            processing: true,
+                            "order": [ 1, 'desc' ],
+                            ajax: "",
+                            columns: [
+                                { data: "transid"},
+                                { data: "time"},
+                                { data: "count"},
+                                { data: "ref_code"}
                         ],
                         "dom": '<"back_to_reg_log"><"feature_button"><"datepicker">lfrtip',
                         "initComplete": function (settings, json) {
                             var back_button_template = Handlebars.compile($("#editor_back_btn").html());
                             var back = $("div.back_to_reg_log");
                             var feature_button_template = Handlebars.compile($("#editor_controller_bar").html());
-                            var feature = $("div.feature_button")
-                            back.html(back_button_template);
-                            feature.html(feature_button_template);
+                            var feature = $("div.feature_button");
+                            back.html(back_button_template());
+                            feature.html(feature_button_template());
                             feature.css({"text-align": "center", "padding-top": "20px"});
                             feature = $("div.feature_button");
                             var feature_button = $("button", feature), back_button = $("button", back);
@@ -104,7 +104,6 @@ jQuery(function ($) {
                 var d = this;
                 d.role = role;
                 d.uuid = uuid;
-                console.log(d.domain + "api/cms/coin_history/?index=-1&feature=spot&uuid=" + d.uuid + "&" + d.role + "=1");
                 d.$table.fnReloadAjax(d.domain + "api/cms/coin_history/?index=-1&feature=spot&uuid=" + d.uuid + "&" + d.role + "=1");
             }
         }

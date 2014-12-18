@@ -18,8 +18,6 @@ if (!class_exists('user_profile_editor')):
         protected $vcoin_panel_setting;
         protected $current_role;
 
-        private $css, $js, $overall_template;
-
         public function __construct()
         {
             $this->editor_right = array('administrator');
@@ -126,34 +124,33 @@ if (!class_exists('user_profile_editor')):
                 return '<br><span class="description">' . $desc . '</span>';
         }
 
-        private function do_enqueue_script($script_localize = null)
+        private function do_enqueue_script($css = array(), $js = null, $script_localize = array())
         {
-            if (isset($this->css)) {
-                wp_enqueue_style($this->css);
+            if (count($css) > 0) {
+                foreach ($css as $style) {
+                    wp_enqueue_style($style);
+                }
             }
-            if (isset($this->js)) {
-                wp_enqueue_script($this->js);
-
+            if (isset($js)) {
+                wp_enqueue_script($js);
                 if (count($script_localize) > 0) {
                     wp_localize_script($js, $script_localize[0], $script_localize[1]);
                 }
-            }
-            if (isset($this->overall_template)) {
-                //  add_action("wp_print_scripts",  );
             }
         }
 
         /**
          * @param $field_val
          * @param $key
-         * @param null $css
-         * @param null $js
+         * @param array|null $css
+         * @param array|null $js
+         * @param array $localize
          * @internal param null $script_localize
          * @return string
          * example: input_switch($var, $key, "profile_button", "admin_profile",
          * field_id is the hidden field holding the value of the switch
          */
-        public function input_switch($field_val, $key, $css = null, $js = null)
+        public function input_switch($field_val, $key, $css = array(), $js = null, $localize = array())
         {
             $checked = $field_val == "1" ? "checked" : "";
             $switch_container = '
@@ -166,7 +163,7 @@ if (!class_exists('user_profile_editor')):
                     </label>
                     </div>';
 
-            $this->do_enqueue_script($css, $js);
+            $this->do_enqueue_script($css, $js, $localize);
             return $switch_container;
         }
 

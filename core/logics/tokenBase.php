@@ -18,11 +18,16 @@ if (!class_exists('tokenBase')):
             add_filter("api_token_authen", array(__CLASS__, "authen"), 10, 1);
             add_filter("token_auth_api_check", array("TokenAuthentication", "get_user_id"), 9, 2);
             add_filter("gen_token_SDK", array(__CLASS__, "api_token_sdk_oauth"), 10, 3);
+            add_filter("jsonapi_output_error", array(__CLASS__, "jsonapi_output_error"), 10, 2);
             add_filter("display_user_data_after_auth", array(__CLASS__, "display_auth_data"), 15, 3);
             add_action("after_token_verified", array("TokenAuthentication", "second_init"), 10, 3);
 
         }
 
+        public static function jsonapi_output_error($data_message, $code)
+        {
+            return messagebox::translateError($data_message, $code);
+        }
 
         /**
          * @param $output

@@ -88,17 +88,7 @@ if (!class_exists('TitanFramework')) {
         'id' => 'default_female_profile_pic'
     ));
 
-    $tab->createOption(array(
-        'name' => 'Vcoin Free on Registration',
-        //cp_{{role name}}_{{option key to be applied}}
-        'id' => 'vcoin_registration',
-        'type' => 'number',
-        'max' => 1000,
-        'min' => 10,
-        'step' => 10,
-        'desc' => 'This is given on the first time registration only.',
-        'default' => false,
-    ));
+
 
     $tab->createOption(array(
         'type' => 'save'
@@ -394,7 +384,17 @@ if (!class_exists('TitanFramework')) {
         'desc' => 'The Beta Coin is the value of the coin to be given when first the pending application is approved as a beta app. The Beta Coin will be assigned to the beta app and the deposit amount is deducted by the Beta Coin amount. When the beta app is finally advanced to launched state, the rest of the amount in the deposit will be added to the beta app account and it will be launched app. This value will be only used when the Beta Feature is enabled. For detail please refer to the Support Features.',
         'default' => false,
     ));
-
+    $tab->createOption(array(
+        'name' => 'Vcoin Free on Registration',
+        //cp_{{role name}}_{{option key to be applied}}
+        'id' => 'vcoin_registration',
+        'type' => 'number',
+        'max' => 1000,
+        'min' => 10,
+        'step' => 10,
+        'desc' => 'This is given on the first time registration only.',
+        'default' => false,
+    ));
 
     $tab->createOption(array(
         'type' => 'save'
@@ -451,7 +451,7 @@ if (!class_exists('TitanFramework')) {
         'type' => 'textarea',
         'id' => 'email_reward_r',
         'desc' => 'The email template will be used for sending out the single email to person when the successful redemption of the product/gift/reward is triggered. There are a several keys can be called and they are listed as below:<br>
-  {{username}} {{useremail}} {{choiceofaddress}} {{productname}} {{qr1}} {{qr2}} {{expirydate}} {{costofvcoin}}
+  {{username}} {{useremail}} {{address_en}} {{address_zh}} {{product_name_zh}} {{product_name_en}} {{qr1}} {{qr2}} {{expirydate}} {{amount}} {{phone}}
   '
     ));
 

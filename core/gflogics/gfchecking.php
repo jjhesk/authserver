@@ -17,6 +17,7 @@ if (!class_exists("gfchecking")):
             );
         }
 
+
         public static function check_field_exist_brNO($fields, $br_no_field_id)
         {
             global $wpdb;
@@ -37,6 +38,26 @@ if (!class_exists("gfchecking")):
                 return self::outErrorCheck($e);
             }
         }
+
+
+        public static function check_password_security($fields, $password_security_field_id)
+        {
+            try {
+                $watch_order = 0;
+                foreach ($fields as $field) {
+                    if ($field['id'] == $password_security_field_id) {
+                        $check = parent::getPostVal($password_security_field_id);
+                        if (!preg_match(changeUserDetail::get_pattern(), $check, $matches))
+                            throw new Exception("Password must have between 8-35 characters/digits/symbols.", 1034);
+                    }
+                    $watch_order++;
+                }
+                return false;
+            } catch (Exception $e) {
+                return self::outErrorCheck($e);
+            }
+        }
+
 
         public static function check_field_email_only($fields, $email_field_id)
         {

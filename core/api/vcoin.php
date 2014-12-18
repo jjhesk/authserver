@@ -6,39 +6,6 @@
 if (!class_exists('JSON_API_Vcoin_Controller')) {
     class JSON_API_Vcoin_Controller
     {
-        public static function watchvideo()
-        {
-            global $json_api, $current_user, $app_client;
-            try {
-                // do_action('auth_api_token_check');
-                if (class_exists("json_auth_central")) {
-                    json_auth_central::auth_check_token_json();
-                    $Q = $json_api->query;
-                    if ($app_client->isVcoinApp()) {
-                        if (!isset($Q->post_id)) throw new Exception("post_id is missing.", 1712);
-                        $obj = api_cms_server::crosscms("reward_transaction_metadata", array(
-                            "post_id" => $Q->post_id
-                        ), false);
-
-
-                        $coin = new vcoinBase();
-                        $coin->setSender($obj->uuid);
-                        $coin->setCoinGainer($current_user);
-                        $coin->setAmount($obj->amount);
-                        $coin->setTransactionReference("video watch payout ID:" . $Q->post_id);
-                        $coin->CommitTransaction();
-
-
-                        api_handler::outSuccessDataWeSoft(array(
-                            "trace_id" => $coin->get_tranaction_reference()
-                        ));
-                    } else throw new Exception("this is not vcoinapp", 1777);
-                } else throw new Exception("module not installed", 1007);
-            } catch (Exception $e) {
-                api_handler::outFailWeSoft($e->getCode(), $e->getMessage());
-            }
-        }
-
         /**
          * triggered from the SDK App and the vcoin App
          */
@@ -105,12 +72,12 @@ if (!class_exists('JSON_API_Vcoin_Controller')) {
 
                     $uuid = userBase::getVal($current_user->ID, "uuid_key");
                     if ($uuid == "") throw new Exception("the current user does not have valid vcoin account, please go back and with the settings", 1079);
-                    $coinscount = api_cms_server::vcoin_account("balance", array("accountid" => $uuid));
+                    list($coin, $time, $uuid_end) = userBase::update_app_user_coin_advance($current_user);
                     $name = $current_user->user_firstname . " " . $current_user->user_lastname . " (" . $current_user->display_name . ")";
                     $devname = $app_client->get_developer_name();
                     api_handler::outSuccessDataWeSoft(array(
-                        "account_id" => $uuid,
-                        "coin" => intval($coinscount->coinscount),
+                        "account_id" => $uuid_end,
+                        "coin" => (int)$coin,
                         "account_user_name" => $name,
                         "developer_name" => $devname,
                     ));
@@ -140,13 +107,33 @@ if (!class_exists('JSON_API_Vcoin_Controller')) {
                     $Q = $json_api->query;
 
                     //  if (!isset($Q->accountid)) throw new Exception("account is missing.", 1001);
-                    if (!isset($Q->feature)) throw new Exception("missing feature for vcoin history", 10006);
-                    if (isset($Q->app_uuid)) $uuid = $Q->app_uuid; else $uuid = userBase::getAppUserVcoinUUID($current_user);
-                    $data_final = app_transaction_history::get_history_api($uuid, $Q);
+
+                    $data_final = app_transaction_history::get_history_api($uuid, $Q, $current_user);
                     api_handler::outSuccessDataWeSoft($data_final);
                 } else {
                     throw new Exception("module not installed", 1007);
                 }
+            } catch (Exception $e) {
+                api_handler::outFailWeSoft($e->getCode(), $e->getMessage());
+            }
+        }
+
+        /**
+         *will be not using in the next build.
+         */
+        public static function watchvideo()
+        {
+            global $json_api, $current_user, $app_client;
+            try {
+                // do_action('auth_api_token_check');
+                if (class_exists("json_auth_central")) {
+                    json_auth_central::auth_check_token_json();
+                    if ($app_client->isVcoinApp()) {
+                        $video = new app_video();
+                        $video->just_watched($json_api->query);
+                        api_handler::outSuccessDataWeSoft($video->get_result());
+                    } else throw new Exception("this is not vcoinapp", 1777);
+                } else throw new Exception("module not installed", 1007);
             } catch (Exception $e) {
                 api_handler::outFailWeSoft($e->getCode(), $e->getMessage());
             }

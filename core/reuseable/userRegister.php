@@ -16,7 +16,7 @@ if (!class_exists('userRegister')) {
 
         public function __construct()
         {
-            $this->titan = TitanFramework::getInstance('vcoinsetting');
+
         }
 
         function __destruct()
@@ -77,12 +77,12 @@ if (!class_exists('userRegister')) {
          */
         private function create_vcoin_key_for_user()
         {
+            $this->titan = TitanFramework::getInstance('vcoinsetting');
             $this->vcoin_transaction = new vcoinBase();
             $data = get_userdata($this->reg_user->ID);
             $bind_id = $this->vcoin_transaction->create_new_user($data->user_email);
             update_user_meta($this->reg_user->ID, "uuid_key", $bind_id);
             $free_v_coin = (int)$this->titan->getOption("vcoin_registration");
-
             if ($free_v_coin > 0) {
                 $this->vcoin_transaction = new vcoinBase();
                 $this->vcoin_transaction->setReceive($bind_id);
@@ -91,6 +91,10 @@ if (!class_exists('userRegister')) {
                 $this->vcoin_transaction->setTransactionReference("free coin");
                 $this->vcoin_transaction->CommitTransaction();
             }
+            inno_log_db::log_vcoin_email(-1, 901201,
+                "new free coin from opening account. added (v)" . $free_v_coin . " to the account user " . $this->reg_user->ID .
+                " with trace_id" . $this->vcoin_transaction->get_tranaction_reference() . " and the uuid key is " . $bind_id
+            );
 
         }
 
@@ -204,7 +208,8 @@ if (!class_exists('userRegister')) {
                 // $pwd = !$generate_password? wp_generate_password($length = 12, $include_standard_special_chars = TRUE);
                 //  add_action("user_register", array(__CLASS__, "user_reg_action_cb"), 10, 1);
                 remove_action("user_register", array(__CLASS__, "new_user_reg"));
-                $login_name_final = $role . gformBase::gen_order_num() . join("_", explode(" ", $login_name));
+                $namelist = explode(" ", $login_name);
+                $login_name_final = $role . gformBase::gen_order_num() . join("_", $namelist);
                 $user_id = wp_create_user($login_name_final, $pwd, $user_email);
                 if (is_wp_error($user_id)) {
                     throw new Exception($user_id->get_error_message(), 10129);
@@ -213,11 +218,16 @@ if (!class_exists('userRegister')) {
                 //   remove_action("user_register", array(__CLASS__, "user_reg_action_cb"));
                 $user = new WP_User($user_id);
 
-                update_user_meta($user_id, "nickname", $login_name, false);
                 foreach ($extra_fields as $key => $val) {
                     // update_user_meta($user_id, $key, $val, false);
                     add_user_meta($user_id, $key, $val, false);
                 }
+
+                update_user_meta($user_id, 'display_name', $login_name);
+                update_user_meta($user_id, "nickname", $login_name);
+                update_user_meta($user_id, "first_name", $namelist[0]);
+                update_user_meta($user_id, "last_name", $namelist[1]);
+
                 //  debugoc::upload_bmap_log(print_r($args, true), 29291);
                 //wp_insert_user($args);
                 $user->remove_role('subscriber');

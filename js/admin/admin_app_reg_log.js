@@ -79,7 +79,7 @@ jQuery(function ($) {
                     current = Number(d.bal.html()),
                     field_coin = Number(d.value_input.val()) ,
                     next = field_coin + current,
-                    zero_ch = field_coin != 0 && next < 200
+                    zero_ch = field_coin != 0 && next < setting_ob.upper_beta_limit
                     ;
                 if (zero_ch) {
                     var enter = new JAXAPIsupport(domain + "api/cms/cmsappbalanceoperate", {
@@ -88,7 +88,7 @@ jQuery(function ($) {
                     enter.add_loader(d.loader_coin);
                     enter.init();
                 } else {
-                    alert("please assign an number or the total needs to be more than 200 in beta.");
+                    alert("please assign an number or the total needs to be more than " + setting_ob.upper_beta_limit + " in beta.");
                 }
             },
             cb_value: function (that, data) {

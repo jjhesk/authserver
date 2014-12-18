@@ -10,10 +10,12 @@ if (!class_exists("app_registration")) {
     class app_registration
     {
         private $system_log;
+        private $settings;
 
         public function __construct()
         {
             global $system_script_manager, $current_user;
+            $this->settings = TitanFramework::getInstance('vcoinset');
             $this->system_log = new adminapp(
                 array(
                     'type' => 'main',
@@ -34,6 +36,7 @@ if (!class_exists("app_registration")) {
                             array(
                                 "url" => DOMAIN_API,
                                 "role" => $current_user->roles[0],
+                                "upper_beta_limit" => (int)$this->settings->getOption("app_coin_beta")
                             )
                         )
                     //----  get
@@ -53,6 +56,11 @@ if (!class_exists("app_registration")) {
             //  )
             );
             $this->add_new_app();
+        }
+
+        function __destruct()
+        {
+            $this->settings = NULL;
         }
 
         private function add_new_app()

@@ -188,14 +188,33 @@ if (!class_exists('JSON_API_Mission_Controller')) {
             try {
                 if (class_exists("json_auth_central")) {
                     json_auth_central::auth_check_token_json();
-
                     $trigger = new app_download();
                     $trigger->start_sdk_app($json_api->query);
-
                     api_handler::outSuccessDataWeSoft($trigger->get_result());
                 } else {
                     throw new Exception("module not installed", 1007);
                 }
+            } catch (Exception $e) {
+                api_handler::outFailWeSoft($e->getCode(), $e->getMessage());
+            }
+        }
+
+        /**
+         * watched video and trigger vcoin distributions
+         */
+        public static function watchvideo()
+        {
+            global $json_api, $current_user, $app_client;
+            try {
+                // do_action('auth_api_token_check');
+                if (class_exists("json_auth_central")) {
+                    json_auth_central::auth_check_token_json();
+                    if ($app_client->isVcoinApp()) {
+                        $video = new app_video();
+                        $video->just_watched($json_api->query);
+                        api_handler::outSuccessDataWeSoft($video->get_result());
+                    } else throw new Exception("this is not vcoinapp", 1777);
+                } else throw new Exception("module not installed", 1007);
             } catch (Exception $e) {
                 api_handler::outFailWeSoft($e->getCode(), $e->getMessage());
             }
@@ -216,7 +235,6 @@ if (!class_exists('JSON_API_Mission_Controller')) {
                     $trigger = new actionBaseWatcher($json_api->query);
                     $trigger->record($current_user);
                     userBase::update_app_user_coin($current_user);
-
 
                     api_handler::outSuccessDataWeSoft($trigger->reward_result());
                 } else {

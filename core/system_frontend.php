@@ -270,8 +270,10 @@ if (!class_exists('system_frontend')) {
 
             wp_register_script('admin_profile', LIBJS_ADMIN . 'admin_profile.js', array(
                 'jquery',
+                'onecall_core_bar',
+                'adminsupport',
                 'profile_switcher',
-                'coin_history'
+                'coin_history',
             ), '1.1', false);
 
             wp_register_script('dashboard_account', LIBJS_ADMIN . 'dashboard_account_status.js', array(

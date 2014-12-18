@@ -12,7 +12,6 @@ jQuery(function ($) {
             this.$store_id = $("#store_id", this.$container);
             this.$icon_url = $("#icon_url", this.$container);
             this.$desc_area = $("#desc_area", this.$container);
-
             this.$app_log_table = app_log_table;
             this.method = method
             this.domain = window.location.origin + "/";
@@ -22,9 +21,9 @@ jQuery(function ($) {
         AppEditor.prototype = {
             init_table: function () {
                 var d = this;
-                var back_button = $(".back_to_log", d.$container), holder = "";
+                var $back_button = $(".back_to_log", d.$container), holder = "";
                 var screenshots = d.data.image_urls.split(";_;");
-
+                console.log(d.data.status);
                 $("#admin_page_app_reg_wrapper").addClass("hidden");
                 d.$container.removeClass("hidden");
 
@@ -38,22 +37,18 @@ jQuery(function ($) {
                 });
                 $("#image_row").html(holder);
 
-                $(".browse_image_button ").removeClass("disabled");
-                back_button.removeClass("disabled");
-                back_button.on(interactions, {that: d}, d.press_back);
+                $back_button.on(interactions, {that: d}, d.press_back).removeClass("disabled");
 
-                var add_image_button = $(".add_image_url_button", this.$container);
-                var remove_image_button = $(".remove_image_url_button", this.$container);
-                var browse_button = $(".browse_image_button", this.$container);
-                var update_button = $("#update_app", this.$container);
+                var $add_image_button = $(".add_image_url_button", this.$container);
+                var $remove_image_button = $(".remove_image_url_button", this.$container);
+                var $browse_button = $(".browse_image_button", this.$container);
+                var $update_button = $("#update_app", this.$container);
 
-                add_image_button.on(interactions, {that: d}, d.add_image_input);
-                remove_image_button.on(interactions, {that: d}, d.delete_image_input);
-
-                browse_button.on(interactions, {that: d}, d.init_image).removeClass("hidden");
-                update_button.off(interactions);
-                update_button.on(interactions, {that: d}, d.update_this_app);
-                update_button.removeClass("disabled");
+                $add_image_button.on(interactions, {that: d}, d.add_image_input);
+                $remove_image_button.on(interactions, {that: d}, d.delete_image_input);
+                $browse_button.on(interactions, {that: d}, d.init_image).removeClass("hidden").removeClass("disabled");
+                $update_button.off(interactions);
+                $update_button.on(interactions, {that: d}, d.update_this_app).removeClass("disabled");
             },
             update_this_app: function (e) {
                 var d = e.data.that;
@@ -64,18 +59,11 @@ jQuery(function ($) {
                     $add_btn = $(".add_image_url_button"),
                     $remove_btn = $(".remove_image_url_button");
 
-
-                $(this).addClass("disabled");
-                $back_btn.addClass("disabled");
-                $browse_btn.addClass("hidden");
-                $add_btn.addClass("disabled");
-                $remove_btn.addClass("disabled");
-                $(this).off(interactions);
-                $back_btn.off(interactions);
-                $browse_btn.off(interactions);
-                $add_btn.off(interactions);
-                $remove_btn.off(interactions);
-
+                $(this).addClass("disabled").off(interactions);
+                $back_btn.addClass("disabled").off(interactions);
+                $browse_btn.addClass("hidden").off(interactions);
+                $add_btn.addClass("disabled").off(interactions);
+                $remove_btn.addClass("disabled").off(interactions);
 
                 var $td = $(this).closest("td");
                 $("#loading", $td).remove();
@@ -150,7 +138,7 @@ jQuery(function ($) {
             refresh_table: function () {
                 var d = this;
                 d.off_table();
-                d.$app_log_table.fnReloadAjax(d.domain + "api/systemlog/" + d.method);
+                d.$app_log_table.fnReloadAjax(d.domain + "api/systemlog/" + d.method + "/?sort=" + d.data.status);
             },
             off_table: function () {
                 var d = this;

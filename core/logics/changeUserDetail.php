@@ -11,6 +11,15 @@ class changeUserDetail
 {
     protected $user, $name_field, $f_container;
 
+    public static function get_pattern()
+    {
+        //this old combinations
+        //  $pattern = '/^(?=.{8,}$)(?=[^A-Z]*[A-Z][^A-Z]*$)\w*\W\w*$/g';
+        //this new requirements only allow at least 8 or more characters
+        $pattern = '/^.{8,35}$/';
+        return $pattern;
+    }
+
     /**
      * @param $query
      * @param WP_User $user
@@ -27,12 +36,16 @@ class changeUserDetail
             }
             if ($user && wp_check_password($query->old_password, $user->data->user_pass, $user->ID)) {
                 $this->name_field = "password";
+                if (!preg_match(self::get_pattern(), $query->password, $matches, PREG_OFFSET_CAPTURE))
+                    throw new Exception("Password must have between 8-35 characters/digits/symbols. ", 1034);
+                /*  throw new Exception("Not a secured password. Please make sure that the password 1) must contain at least one digit, 2) must contain at least one uppercase character, 3) must contain at least one special symbol", 1034);*/
+                inno_log_db::log_vcoin_third_party_app_transaction($this->user->ID, 3923, "change password: " . $query->password);
                 $this->f_container[] = array(
                     "field" => $this->name_field,
                     "value" => $query->password,
                 );
             } else {
-                throw new Exception("the password does not match to set the new password", 1032);
+                throw new Exception("Your old password is not matched", 1032);
             }
 
         }
@@ -140,7 +153,8 @@ class changeUserDetail
     /**
      * committing the changes
      */
-    private function commit_changes()
+    private
+    function commit_changes()
     {
         $f = array(
             "password", "email", "description", "nickname", "first_name", "last_name", "user_url"
@@ -158,7 +172,8 @@ class changeUserDetail
     /**
      * @return array
      */
-    public function get_change_field_results()
+    public
+    function get_change_field_results()
     {
         return $this->f_container;
     }
@@ -166,7 +181,8 @@ class changeUserDetail
     /**
      * @return string
      */
-    public function get_field()
+    public
+    function get_field()
     {
         return $this->name_field;
     }
@@ -175,7 +191,8 @@ class changeUserDetail
      * @param $name_field
      * @param $input
      */
-    private function change_wp($name_field, $input)
+    private
+    function change_wp($name_field, $input)
     {
         if ($name_field == "password") {
             wp_set_password($input, $this->user->ID);
@@ -193,14 +210,15 @@ class changeUserDetail
      * @param $name_field
      * @param $input
      */
-    private function change($name_field, $input)
+    private
+    function change($name_field, $input)
     {
-       // update_user_meta($this->user->ID, $name_field, $input);
+        // update_user_meta($this->user->ID, $name_field, $input);
         if (get_user_meta($this->user->ID, $name_field, true) == "") {
             add_user_meta($this->user->ID, $name_field, $input, false);
-           // inno_log_db::log_vcoin_third_party_app_transaction(-1, 10101, "change field on add user meta: " . $input);
+            // inno_log_db::log_vcoin_third_party_app_transaction(-1, 10101, "change field on add user meta: " . $input);
         } else {
-           // inno_log_db::log_vcoin_third_party_app_transaction(-1, 10101, "change field on update user meta: " . $input);
+            // inno_log_db::log_vcoin_third_party_app_transaction(-1, 10101, "change field on update user meta: " . $input);
             update_user_meta($this->user->ID, $name_field, $input);
         }
     }

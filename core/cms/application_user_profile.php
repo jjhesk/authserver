@@ -67,8 +67,13 @@ if (!class_exists('application_user_profile')):
             add_action('edit_user_profile', array(&$this, "add_profile_options"), 10, 1);
             add_action('edit_user_profile_update', array(&$this, 'update'), 99, 1);
             add_action('personal_options_update', array(&$this, 'update'), 99, 1);
+            add_action('admin_head', array(&$this, 'header_insert_script'), 10);
         }
 
+        public function header_insert_script()
+        {
+            echo get_oc_template("admin_profile_coin_history");
+        }
 
         /**
          * @param $user_id
@@ -156,10 +161,24 @@ if (!class_exists('application_user_profile')):
                     return $editor->input_field($var, $key);
                     break;
                 case "account_enable":
-                    return $editor->input_switch($var, $key, "profile_button", "admin_profile");
+                    $app_user_uuid = get_user_meta($_GET["user_id"], "uuid_key", true);
+                    return $editor->input_switch($var, $key,
+                        array(
+                            "profile_button",
+                            "datatable",
+                            "smoothness",
+                            "datepicker_ui",
+                            "datepicker_structure",
+                            "datepicker_theme"
+                        ),
+                        "admin_profile",
+                        array("setting_ob", array(
+                            "uuid" => $app_user_uuid,
+                            "user_id" => $_GET["user_id"]
+                        )));
                     break;
                 case "setting_push_sms":
-                    return $editor->input_switch($var, $key, "profile_button", "admin_profile");
+                    return $editor->input_switch($var, $key);
                     break;
                 case "countrycode":
                     return $editor->input_field($var, $key);

@@ -8,6 +8,8 @@
   Author URI:
   License: GPLv3
  */
+
+define("KEY_SOURCE", "jiwjiof");
 include_once(ABSPATH . 'wp-admin/includes/plugin.php');
 define('AUTH_SERVER_PATH', dirname(__FILE__));
 define('AUTH_SERVER_URI', plugins_url("wp_vcoin_auth_server"));
@@ -70,6 +72,8 @@ foreach ($destinations as $folder) {
     }
 }
 
+
+
 define("GF_FORM_USER_REG", 1);
 define("gf_user_registration_token", 6);
 define("gf_field_email_token", 6);
@@ -78,6 +82,8 @@ define("gf_field_login_name", 2);
 define("gf_field_company", 1);
 define("gf_field_password", 4);
 define("gf_field_role", 8);
+
+
 global $system_script_manager;
 function child_create_objects()
 {

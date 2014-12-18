@@ -26,9 +26,12 @@ if (!class_exists('gfUserRegistration')) {
             $result = false;
             $form = $validation_result["form"];
             $formID = $form['id'];
-            $current_page = rgpost('gform_source_page_number_' . $formID) ? rgpost('gform_source_page_number_' . $formID) : 1;
+            $current_page = rgpost('gform_source_page_number_' . $formID) ?
+                rgpost('gform_source_page_number_' . $formID) : 1;
+
             if ($formID == GF_FORM_USER_REG) {
                 $result = gfchecking::check_field_email_only($form['fields'], gf_field_email);
+                $result = gfchecking::check_password_security($form['fields'], gf_field_password);
             }
 
             if ($result) {

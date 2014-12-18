@@ -46,6 +46,33 @@ class userBase
         }
     }
 
+    /**
+     * @param WP_User $user
+     * @return array
+     * @throws Exception
+     */
+    public static function update_app_user_coin_advance(WP_User $user)
+    {
+        try {
+            $uuid = self::getAppUserVcoinUUID($user);
+            $coinscount = api_cms_server::vcoin_account("balance", array("accountid" => $uuid));
+            //  inno_log_db::log_vcoin_login($user->ID, 93259, "found coin:" . $coinscount->coinscount);
+            $time = date("F j, Y, g:i a");
+            update_user_meta($user->ID, "coin", $coinscount->coinscount);
+            update_user_meta($user->ID, "coin_update", $time);
+
+
+            return array(
+                (int)$coinscount->coinscount,
+                $time,
+                $uuid
+            );
+
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
+
     public static function getAppUserVcoinUUID(WP_User $user)
     {
         $uuid = get_user_meta($user->ID, "uuid_key", true);

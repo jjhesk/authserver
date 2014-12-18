@@ -128,8 +128,17 @@ if (!class_exists('JSON_API_Systemlog_Controller')) {
                     array('db' => 'icon', 'dt' => 'icon'),
                     array('db' => 'image_urls', 'dt' => 'image_urls'),
                 );
+
+                if (isset($json_api->query->sort)) {
+                    if ($json_api->query->sort != "all")
+                        $condition = "status " . " LIKE " . "'%" . $json_api->query->sort . "%'";
+                    else {
+                        $condition = "";
+                    }
+                }else $condition = "";
+
                 $data_result = sspclass::simple($_GET, $wpdb, $wpdb->prefix . "post_app_registration",
-                    $primaryKey, $columns, $json_api->query);
+                    $primaryKey, $columns, $condition);
 
                 api_handler::outSuccessPagingDataTable($data_result);
 

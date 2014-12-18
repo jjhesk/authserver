@@ -6,31 +6,16 @@
  * Date: 14年11月13日
  * Time: 上午10:58
  */
-class app_download
+class app_download extends triggerbase
 {
-    private $db, $table, $output_result, $customer, $settings;
 
     public function __construct()
     {
-        global $wpdb, $current_user;
-        $this->db = $wpdb;
-        $this->customer = $current_user;
+        parent::__construct();
         $this->table = $this->db->prefix . "post_app_download";
         $this->regtable = $this->db->prefix . "post_app_registration";
-        $this->settings = TitanFramework::getInstance('vcoinset');
-
     }
 
-    public function __destruct()
-    {
-        $this->settings = NULL;
-        $this->db = NULL;
-    }
-
-    public function get_result()
-    {
-        return $this->output_result;
-    }
 
     public function download($Q)
     {
@@ -46,8 +31,11 @@ class app_download
                 "app_key" => $Q->down_app_key,
                 "triggered" => 0
             );
-            $this->db->insert($this->table_new, $data_insert);
+            $this->db->insert($this->table, $data_insert);
             $this->output_result = $data_insert;
+            // give another
+            $this->start_sdk_app_v2($Q->down_app_key);
+
         } else {
             throw new Exception("you have already downloaded", 1552);
         }
@@ -60,7 +48,7 @@ class app_download
         $R = $this->db->get_row($L);
         if ($R) {
             $this->db->update(
-                $this->table_new,
+                $this->table,
                 array("triggered" => 1),
                 array("ID" => $R->ID),
                 array('%d'), array('%d')
@@ -74,7 +62,7 @@ class app_download
     public function start_sdk_app($Q)
     {
         if (!isset($Q->appkey)) throw new Exception("appkey is missing", 10010);
-        if ($Q->appkey == APPKEY_VCOINAPP)throw new Exception("sdk appkey is not verified", 1553);
+        if ($Q->appkey == APPKEY_VCOINAPP) throw new Exception("sdk appkey is not verified", 1553);
 
         $L = $this->db->prepare("SELECT * FROM $this->table WHERE app_key=%s AND download_user=%d AND triggered=%d", $Q->appkey, $this->customer->ID, 0);
         $R = $this->db->get_row($L);

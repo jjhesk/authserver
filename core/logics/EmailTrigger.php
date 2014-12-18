@@ -8,7 +8,7 @@
  */
 class EmailTrigger
 {
-    protected $titan, $must_ache, $email_message, $template_keys;
+    protected $titan, $must_ache, $email_message, $template_keys, $sending_email;
 
     public function __construct()
     {
@@ -36,29 +36,40 @@ class EmailTrigger
     {
         $data->username = "";
         $this->email_message = $this->text_template("email_con_0", $data);
+
+        $user = new WP_User((int)$data->user);
+        $this->sending_email = $user->user_email;
+
         $this->trigger_mail("xxxx");
     }
 
     public function reward_submission($data)
     {
         $this->email_message = $this->text_template("email_reward_r", $data);
+
+        $user = new WP_User((int)$data->user);
+        $this->sending_email = $user->user_email;
+
         $this->trigger_mail("xxxx");
     }
 
     public function reward_claim($data)
     {
         $this->email_message = $this->text_template("email_claim_r1", $data);
+
+        $user = new WP_User((int)$data->user);
+        $this->sending_email = $user->user_email;
+
         $this->trigger_mail("xxxx");
     }
 
 
     private function trigger_mail($subject = "vcoin email")
     {
-        $headers = 'From: VcoinSys <admin@vcoinapp.com>' . "\r\n";
-        $to = get_bloginfo("admin_email");
+        $headers = 'From: VcoinSys <admin@vcoinapp.com>' . "\r\n Cc:" . get_bloginfo("admin_email");
 
         inno_log_db::log_vcoin_email(-1, 9900, $this->email_message);
-        wp_mail($to, $subject, $this->email_message, $headers);
+        wp_mail($this->sending_email, $subject, $this->email_message, $headers);
 
     }
 } 

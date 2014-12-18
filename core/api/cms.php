@@ -362,6 +362,68 @@ if (!class_exists('JSON_API_Cms_Controller')) {
         }
 
         /**
+         * retrieve the user balance from the vcoin server
+         */
+        public static function getuserbalance()
+        {
+            global $json_api;
+            try {
+                $Q = $json_api->query;
+                userBase::check_permission_cms("administrator");
+                if (!isset($Q->_uid)) throw new Exception("invalid ID", 1601);
+                $app_user = new WP_User($Q->_uid);
+                list($coin, $time, $uuid) = userBase::update_app_user_coin_advance($app_user);
+                api_handler::outSuccessData(array(
+                    "account_id" => $uuid,
+                    "coin" => (int)$coin,
+                    "update_time" => $time
+                ));
+
+            } catch (Exception $e) {
+                api_handler::outFailWeSoft($e->getCode(), $e->getMessage());
+            }
+        }
+
+        /**
+         * the adjustment of user vcoin on the user account.
+         */
+        public static function cmsuserbalanceoperate()
+        {
+            global $json_api;
+            try {
+                $Q = $json_api->query;
+                // $post_app_registration = $wpdb->prefix . "post_app_registration";
+                userBase::check_permission_cms("administrator");
+                $titan = TitanFramework::getInstance('vcoinset');
+                if (!isset($Q->_uid)) throw new Exception("invalid ID", 1601);
+                if (!isset($Q->mt)) throw new Exception("invalid amount", 1603);
+                $app_user = new WP_User($Q->_uid);
+                list($coin_amount_current, $time, $uuid) = userBase::update_app_user_coin_advance($app_user);
+
+                $amount = (int)$Q->mt;
+                $coin = new vcoinBase();
+                if ($amount > 0) {
+                    $coin->setSender($titan->getOption("imusic_uuid"));
+                    $coin->setReceive($uuid);
+                } else {
+                    $coin->setSender($uuid);
+                    $coin->setReceive($titan->getOption("imusic_uuid"));
+                }
+                $amount = abs($amount);
+                $coin->setAmount($amount);
+                $coin->setTransactionReference("Officer coin adjustment");
+                $coin->CommitTransaction();
+
+                api_handler::outSuccessData(array(
+                    "trace_id" => $coin->get_tranaction_reference(),
+                    "coin" => $amount
+                ));
+            } catch (Exception $e) {
+                api_handler::outFailWeSoft($e->getCode(), $e->getMessage());
+            }
+        }
+
+        /**
          * allow user to add coins and deduct coins
          */
         public static function cmsappbalanceoperate()
