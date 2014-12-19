@@ -12,4 +12,11 @@ Version: 1.0
 Author: Heskom,
 Author URI:
 License: GPLv3
-  
+
+##feature highlights
+ - api authentications
+ - application registrations
+ - data bank for app key and app secret
+ - creating account for each new registered app
+ - adding coins on each testing account, beta account, and launched account
+ - user coin managements
