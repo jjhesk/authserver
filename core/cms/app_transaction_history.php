@@ -68,12 +68,14 @@ class app_transaction_history
      * @internal param $index
      * @return mixed
      */
-    public static function get_history_api($uuid, $Q, $current_user)
+    public static function get_history_api($uuid, $Q, $current_user = null)
     {
         try {
 
             if (!isset($Q->feature)) throw new Exception("missing feature for vcoin history", 10006);
-            if (isset($Q->app_uuid)) $uuid = $Q->app_uuid; else $uuid = userBase::getAppUserVcoinUUID($current_user);
+            if (isset($Q->app_uuid)) $uuid = $Q->app_uuid; else if ($current_user) {
+                $uuid = userBase::getAppUserVcoinUUID($current_user);
+            }
 
             if (!isset($uuid) || $uuid == "") throw new Exception("get history uuid is missing. Check settings on user profile", 10008);
             if (!isset($Q->start)) $start = ""; else $start = $Q->start;
@@ -112,8 +114,14 @@ class app_transaction_history
                 if (isset($R->Message)) {
                     inno_log_db::log_vcoin_third_party_app_transaction(-1, 20211, print_r($param, true));
                     throw new Exception($R->Message, 5202);
-                } else
-                    return $R->data;
+                } else {
+                    if ($bal == "no") {
+                        return $R->data->history;
+                    } else {
+                        return $R->data;
+                    }
+                }
+
             }
         } catch (Exception $e) {
             throw $e;

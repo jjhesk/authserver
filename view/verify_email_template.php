@@ -7,11 +7,11 @@
  */
 
 get_header('email_respnse_name');
+$style_uri = get_template_directory_uri();
 //if ($logo = get_option('dp_login_logo')) {
 ?>
-    <div class="notice"><img class="aligncenter" src=""/>
-        <span class="aligncenter">{{message}}</span>
-    </div>
+<style>html{overflow:hidden; background: url("<? echo $style_uri; ?>/vcoin/event_bg.png") no-repeat scroll  center center #393045 !important;}</style>
+    <div id="confirmmsgafterregister" class="confirmmsgafterregister verifyemailmsg">{{message}}</div>
 <?php
 //}
 get_footer('email_respnse_name');

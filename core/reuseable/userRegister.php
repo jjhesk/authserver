@@ -77,18 +77,18 @@ if (!class_exists('userRegister')) {
          */
         private function create_vcoin_key_for_user()
         {
-            $this->titan = TitanFramework::getInstance('vcoinsetting');
+            $this->titan = TitanFramework::getInstance('vcoinset');
             $this->vcoin_transaction = new vcoinBase();
             $data = get_userdata($this->reg_user->ID);
             $bind_id = $this->vcoin_transaction->create_new_user($data->user_email);
             update_user_meta($this->reg_user->ID, "uuid_key", $bind_id);
-            $free_v_coin = (int)$this->titan->getOption("vcoin_registration");
-            if ($free_v_coin > 0) {
+            $free_v_coin = $this->titan->getOption("vcoin_registration");
+            if (intval($free_v_coin) > 0) {
                 $this->vcoin_transaction = new vcoinBase();
                 $this->vcoin_transaction->setReceive($bind_id);
                 $this->vcoin_transaction->setSender(IMUSIC_UUID);
                 $this->vcoin_transaction->setAmount($free_v_coin);
-                $this->vcoin_transaction->setTransactionReference("free coin");
+                $this->vcoin_transaction->setTransactionReference("new account coins");
                 $this->vcoin_transaction->CommitTransaction();
             }
             inno_log_db::log_vcoin_email(-1, 901201,
