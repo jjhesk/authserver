@@ -25,6 +25,19 @@ class EmailTrigger
         $this->must_ache = NULL;
     }
 
+    private function combineUserTags($data)
+    {
+
+        if (isset($data->user)) {
+            $user = new WP_User((int)$data->user);
+            $this->sending_email = $user->user_email;
+            $name_normal = $user->firstname . " " . $user->lastname;
+            $data->username = trim($name_normal) == "" ? $user->user_nicename : $name_normal;
+            $data->useremail = $user->user_email;
+        }
+        return $data;
+    }
+
     public function text_template($template_name, $keys)
     {
         inno_log_db::log_vcoin_email(-1, 9900, print_r($keys, true));
@@ -34,40 +47,29 @@ class EmailTrigger
 
     public function redeem_coupon($data)
     {
-        $data->username = "";
+        $data = $this->combineUserTags($data);
         $this->email_message = $this->text_template("email_con_0", $data);
-
-        $user = new WP_User((int)$data->user);
-        $this->sending_email = $user->user_email;
-
-        $this->trigger_mail("xxxx");
+        $this->trigger_mail($this->titan->getOption("reward_coupon_subject"));
     }
 
     public function reward_submission($data)
     {
+        $data = $this->combineUserTags($data);
         $this->email_message = $this->text_template("email_reward_r", $data);
-
-        $user = new WP_User((int)$data->user);
-        $this->sending_email = $user->user_email;
-
-        $this->trigger_mail("xxxx");
+        $this->trigger_mail($this->titan->getOption("reward_submission_subject"));
     }
 
     public function reward_claim($data)
     {
+        $data = $this->combineUserTags($data);
         $this->email_message = $this->text_template("email_claim_r1", $data);
-
-        $user = new WP_User((int)$data->user);
-        $this->sending_email = $user->user_email;
-
-        $this->trigger_mail("xxxx");
+        $this->trigger_mail($this->titan->getOption("reward_claim_subject"));
     }
 
 
     private function trigger_mail($subject = "vcoin email")
     {
         $headers = 'From: VcoinSys <admin@vcoinapp.com>' . "\r\n Cc:" . get_bloginfo("admin_email");
-
         inno_log_db::log_vcoin_email(-1, 9900, $this->email_message);
         wp_mail($this->sending_email, $subject, $this->email_message, $headers);
 

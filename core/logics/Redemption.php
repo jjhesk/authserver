@@ -77,9 +77,11 @@ if (!class_exists('Redemption')) {
                     "extension_id" => $Q->extension_id,
                     "lang" => $Q->lang
                 );
+
                 inno_log_db::log_vcoin_third_party_app_transaction(-1, 839284, print_r($params, true));
                 $data = api_cms_server::crosscms("redeemrewardsubmission", $params, false, false);
                 inno_log_db::log_vcoin_third_party_app_transaction(-1, 839285, print_r($data, true));
+
                 /**
                  * record transaction
                  */
@@ -136,59 +138,78 @@ if (!class_exists('Redemption')) {
          */
         public function pickup($Q)
         {
-
-            if (!isset($Q->redemption_procedure)) throw new Exception("redemption_procedure is missing", 10101);
-            $procedure = (int)$Q->redemption_procedure;
-            if ($procedure == 2) {
-                $data = api_cms_server::crosscms("redeemobtain_user_scan", array(
-                    "user" => $this->user_object->ID,
-                    "qr" => $Q->qr
-                ), true);
+            try {
+                if (!isset($Q->redemption_procedure)) throw new Exception("redemption_procedure is missing", 10101);
+                $procedure = (int)$Q->redemption_procedure;
+                if ($procedure == 2) {
+                    $data = api_cms_server::crosscms("redeemobtain_user_scan", array(
+                        "user" => $this->user_object->ID,
+                        "qr" => $Q->qr
+                    ), true);
+                }
+                if ($procedure == 1) {
+                    $data = api_cms_server::crosscms("redeemobtain_user_scan", array(
+                        "user" => $this->user_object->ID,
+                        "qr" => $Q->qr,
+                        "note" => $Q->note
+                    ), true);
+                }
+                /**
+                 * "user_id" => (int)$Q->user,
+                 * "stock_id" => (int)$redeem_record->stock_id,
+                 * "claim_time" => $time_now,
+                 * "processed_by" => "RESTAURANT",
+                 * "address_id" => (int)$stock_count_detail->location_id,
+                 * "trace_id" => $redeem_record->trace_id
+                 */
+                //  $data->message = messagebox::successMessage(77007, $data);
+                $this->transaction_result_success = $data;
+                do_action("on_reward_claim", $data);
+            } catch (ErrorException $e) {
+                throw $e;
+            } catch (Exception $e) {
+                throw $e;
             }
-            if ($procedure == 1) {
-                $data = api_cms_server::crosscms("redeemobtain_user_scan", array(
-                    "user" => $this->user_object->ID,
-                    "qr" => $Q->qr,
-                    "note" => $Q->note
-                ), true);
-            }
-            /**
-             * "user_id" => (int)$Q->user,
-             * "stock_id" => (int)$redeem_record->stock_id,
-             * "claim_time" => $time_now,
-             * "processed_by" => "RESTAURANT",
-             * "address_id" => (int)$stock_count_detail->location_id,
-             * "trace_id" => $redeem_record->trace_id
-             */
-            //  $data->message = messagebox::successMessage(77007, $data);
-            $this->transaction_result_success = $data;
-            do_action("on_reward_claim", $data);
         }
 
         public function cms_obtain_simple($Q)
         {
-            $data = api_cms_server::crosscms("redeemobtain_vendor_scan", array(
-                "user" => $this->user_object->ID,
-                "step" => $Q->step,
-                "qr" => isset($Q->qr) ? $Q->qr : "",
-                "trace_id" => isset($Q->trace_id) ? $Q->trace_id : ""
-            ), false);
-            //   $data->message = messagebox::successMessage(77008, $data);
-            $this->transaction_result_success = $data;
-            do_action("on_reward_claim", $data);
+            try {
+                $data = api_cms_server::crosscms("redeemobtain_vendor_scan", array(
+                    "user" => $this->user_object->ID,
+                    "step" => $Q->step,
+                    "qr" => isset($Q->qr) ? $Q->qr : "",
+                    "trace_id" => isset($Q->trace_id) ? $Q->trace_id : ""
+                ), false);
+                //   $data->message = messagebox::successMessage(77008, $data);
+                $this->transaction_result_success = $data;
+                do_action("on_reward_claim", $data);
+            } catch (ErrorException $e) {
+                throw $e;
+            } catch (Exception $e) {
+                throw $e;
+            }
         }
 
         public function cms_obtain_complex($Q)
         {
-            $data = api_cms_server::crosscms("redeemobtain_vendor_scan_two_step", array(
-                "mac_id" => $Q->mac,
-                "step" => $Q->step,
-                "qr" => isset($Q->qr) ? $Q->qr : "",
-                "trace_id" => isset($Q->trace_id) ? $Q->trace_id : ""
-            ), false);
-            // $data->message = messagebox::successMessage(77009, $data);
-            $this->transaction_result_success = $data;
-            do_action("on_reward_claim", $data);
+            try {
+                $data = api_cms_server::crosscms("redeemobtain_vendor_scan_two_step", array(
+                    "mac_id" => $Q->mac,
+                    "step" => $Q->step,
+                    "qr" => isset($Q->qr) ? $Q->qr : "",
+                    "trace_id" => isset($Q->trace_id) ? $Q->trace_id : ""
+                ), false);
+                // $data->message = messagebox::successMessage(77009, $data);
+                $this->transaction_result_success = $data;
+                if (intval($Q->step) == 2) {
+                    do_action("on_reward_claim", $data);
+                }
+            } catch (ErrorException $e) {
+                throw $e;
+            } catch (Exception $e) {
+                throw $e;
+            }
         }
     }
 }

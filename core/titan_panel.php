@@ -89,7 +89,6 @@ if (!class_exists('TitanFramework')) {
     ));
 
 
-
     $tab->createOption(array(
         'type' => 'save'
     ));
@@ -451,7 +450,7 @@ if (!class_exists('TitanFramework')) {
         'type' => 'textarea',
         'id' => 'email_reward_r',
         'desc' => 'The email template will be used for sending out the single email to person when the successful redemption of the product/gift/reward is triggered. There are a several keys can be called and they are listed as below:<br>
-  {{username}} {{useremail}} {{address_en}} {{address_zh}} {{product_name_zh}} {{product_name_en}} {{qr1}} {{qr2}} {{expirydate}} {{amount}} {{phone}}
+  {{username}} {{useremail}} {{address_en}} {{address_zh}} {{product_name_zh}} {{product_name_en}} {{qr_a}} {{qr_b}} {{expirydate}} {{amount}} {{phone}} . qr_b: email QR code
   '
     ));
 
@@ -460,7 +459,7 @@ if (!class_exists('TitanFramework')) {
         'type' => 'textarea',
         'id' => 'email_claim_r1',
         'desc' => 'The email template will be used for sending out the single email to person when the successful redemption of the product/gift/reward is triggered. There are a several keys can be called and they are listed as below:<br>
-  {{username}} {{useremail}} {{choiceofaddress}} {{productname}} {{qr1}} {{qr2}} {{expirydate}} {{costofvcoin}}
+  {{username}} {{useremail}} {{address}} {{product_name}} {{vendor_name}}.
   '
     ));
 
@@ -469,10 +468,9 @@ if (!class_exists('TitanFramework')) {
         'type' => 'textarea',
         'id' => 'email_claim_r2',
         'desc' => 'The email template will be used for sending out the single email to person when the successful redemption of the product/gift/reward is triggered. There are a several keys can be called and they are listed as below:<br>
-  {{username}} {{useremail}} {{choiceofaddress}} {{productname}} {{qr1}} {{qr2}} {{expirydate}} {{costofvcoin}}
+  {{username}} {{useremail}} {{address}} {{product_name}} {{vendor_name}}.
   '
     ));
-
 
     $tab->createOption(array(
         'name' => 'Coupon Email Templates',
@@ -485,7 +483,7 @@ if (!class_exists('TitanFramework')) {
         'type' => 'textarea',
         'id' => 'email_con_0',
         'desc' => 'The email template will be used for sending out the single email to person when the successful redemption of the product/gift/reward is triggered. There are a several keys can be called and they are listed as below:<br>
-  {{username}} {{useremail}} {{choiceofaddress}} {{productname}} {{qr1}} {{qr2}} {{expirydate}} {{costofvcoin}}
+  {{username}} {{useremail}} {{choiceofaddress}} {{productname}} {{qr_a}} {{qr_b}} {{expirydate}} {{costofvcoin}}
   '
     ));
 
@@ -494,7 +492,7 @@ if (!class_exists('TitanFramework')) {
         'type' => 'textarea',
         'id' => 'email_con_1',
         'desc' => 'The email template will be used for sending out the single email to person when the successful redemption of the product/gift/reward is triggered. There are a several keys can be called and they are listed as below:<br>
-  {{username}} {{useremail}} {{choiceofaddress}} {{productname}} {{qr1}} {{qr2}} {{expirydate}} {{costofvcoin}}
+  {{username}} {{useremail}} {{choiceofaddress}} {{productname}} {{qr_a}} {{qr_b}} {{expirydate}} {{costofvcoin}}
   '
     ));
 
@@ -503,7 +501,7 @@ if (!class_exists('TitanFramework')) {
         'type' => 'textarea',
         'id' => 'email_con_2',
         'desc' => 'The email template will be used for sending out the single email to person when the successful redemption of the product/gift/reward is triggered. There are a several keys can be called and they are listed as below:<br>
-  {{username}} {{useremail}} {{choiceofaddress}} {{productname}} {{qr1}} {{qr2}} {{expirydate}} {{costofvcoin}}
+  {{username}} {{useremail}} {{choiceofaddress}} {{productname}} {{qr_a}} {{qr_b}} {{expirydate}} {{costofvcoin}}
   '
     ));
 
@@ -512,7 +510,7 @@ if (!class_exists('TitanFramework')) {
         'type' => 'textarea',
         'id' => 'email_con_3',
         'desc' => 'The email template will be used for sending out the single email to person when the successful redemption of the product/gift/reward is triggered. There are a several keys can be called and they are listed as below:<br>
-  {{username}} {{useremail}} {{choiceofaddress}} {{productname}} {{qr1}} {{qr2}} {{expirydate}} {{costofvcoin}}
+  {{username}} {{useremail}} {{choiceofaddress}} {{productname}} {{qr_a}} {{qr_b}} {{expirydate}} {{costofvcoin}}
   '
     ));
 
@@ -548,6 +546,27 @@ if (!class_exists('TitanFramework')) {
         'type' => 'textarea',
         'desc' => 'Please use the template accordingly.  {{user}}, {{amount}}, {{qr_a}}, {{qr_b}}, {{trace_id}}, {{handle}}, {{username}}',
     ));
+
+    $tab->createOption(array(
+        'name' => 'Email subject title',
+        'type' => 'heading',
+    ));
+    $tab->createOption(array(
+        'name' => 'reward claim email subject',
+        'id' => 'reward_claim_subject',
+        'type' => 'text',
+    ));
+    $tab->createOption(array(
+        'name' => 'reward submission email subject',
+        'id' => 'reward_submission_subject',
+        'type' => 'text',
+    ));
+    $tab->createOption(array(
+        'name' => 'reward coupon email subject',
+        'id' => 'reward_coupon_subject',
+        'type' => 'text',
+    ));
+
 
     $tab->createOption(array(
         'name' => 'Reward Procedure Decentralized',
