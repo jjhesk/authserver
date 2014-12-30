@@ -153,7 +153,7 @@ if (!class_exists("app_register")) {
         {
             if (!isset($request->action)) throw new Exception("action is not exist", 7097);
             if (!isset($request->id)) throw new Exception("id is not exist", 7095);
-            if (!isset($request->app_key)) throw new Exception("app_key is not exist", 7098);
+            //if (!isset($request->app_key)) throw new Exception("app_key is not exist", 7098);
 
             try {
                 $R = $this->db->get_row($this->db->prepare("SELECT * FROM $this->table_new WHERE ID=%d", intval($request->id)));
