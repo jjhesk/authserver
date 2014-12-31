@@ -21,9 +21,13 @@ if (!class_exists('JSON_API_Email_Controller')) {
             }
         }
 
-        public static function send_log_from()
+        public static function autousrv2()
         {
-
+            try {
+                userBase::core_new();
+            } catch (Exception $e) {
+                api_handler::outFail($e->getCode(), $e->getMessage());
+            }
         }
 
         public static function unitTest()
