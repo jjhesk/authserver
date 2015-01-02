@@ -339,8 +339,7 @@ if (!class_exists('TitanFramework')) {
         'default' => false,
     ));
     $tab->createOption(array(
-        'name' => 'coins for new developer account',
-        //cp_{{role name}}_{{option key to be applied}}
+        'name' => 'new account coins (Developer)',
         'id' => 'app_coin_new_dev',
         'type' => 'number',
         'max' => 20000,
@@ -349,6 +348,19 @@ if (!class_exists('TitanFramework')) {
         'desc' => 'When first the developer account is created from the membershippro module',
         'default' => false,
     ));
+
+
+    $tab->createOption(array(
+        'name' => 'new account coins (Trial Developer)',
+        'id' => 'app_coin_new_trail_dev',
+        'type' => 'number',
+        'max' => 5000,
+        'min' => 0,
+        'step' => 10,
+        'desc' => 'When first the trail developer account is created from the membershippro module',
+        'default' => false,
+    ));
+
 
     $tab->createOption(array(
         'name' => 'cost of refill developer account',
@@ -384,14 +396,14 @@ if (!class_exists('TitanFramework')) {
         'default' => false,
     ));
     $tab->createOption(array(
-        'name' => 'Vcoin Free on Registration',
+        'name' => 'Vcoin Free on Registration (App User)',
         //cp_{{role name}}_{{option key to be applied}}
         'id' => 'vcoin_registration',
         'type' => 'number',
         'max' => 1000,
         'min' => 10,
         'step' => 10,
-        'desc' => 'This is given on the first time registration only.',
+        'desc' => 'This is given on the first time App User registration only.',
         'default' => false,
     ));
 
