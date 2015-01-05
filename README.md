@@ -20,3 +20,9 @@ License: GPLv3
  - creating account for each new registered app
  - adding coins on each testing account, beta account, and launched account
  - user coin managements
+
+##setup instruction
+1. download the package in zip
+2. download and install plugins from the list:  Titan Framework, WordPress Importer, Meta Box, JSON API, JSON API Auth, Email Login, Gravity Forms
+2. open and upload as a folder at the /app/wp-content/plugins
+3. login the backend and enable module.
