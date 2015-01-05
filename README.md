@@ -30,6 +30,5 @@ License: GPLv3
 ##API Document
 https://docs.google.com/document/d/1ZJbHnUr7lj6lvds62Qcpu7FTZF-Oh61UGt6xLmT4st0/pub
 
-##Thanks to 
+##Thanks to previous packages
 - https://github.com/bobthecow/mustache.php
-- 
