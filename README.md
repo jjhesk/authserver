@@ -26,3 +26,6 @@ License: GPLv3
 2. download and install plugins from the list:  Titan Framework, WordPress Importer, Meta Box, JSON API, JSON API Auth, Email Login, Gravity Forms
 2. open and upload as a folder at the /app/wp-content/plugins
 3. login the backend and enable module.
+
+##API Document
+https://docs.google.com/document/d/1ZJbHnUr7lj6lvds62Qcpu7FTZF-Oh61UGt6xLmT4st0/pub
