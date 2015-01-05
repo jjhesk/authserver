@@ -22,7 +22,8 @@ class install_db
             'merchants' => $wpdb->prefix . 'merchants',
             'app_login_token_banks' => $wpdb->prefix . 'app_login_token_banks',
             'post_app_registration' => $wpdb->prefix . 'post_app_registration',
-            'post_app_download' => $wpdb->prefix . 'post_app_download'
+            'post_app_download' => $wpdb->prefix . 'post_app_download',
+            'campaign_people' => $wpdb->prefix . 'campaign_people'
         );
     }
 
@@ -98,6 +99,7 @@ class install_db
                 $charset_collate .= ' COLLATE ' . $this->db->collate;
         }
 
+
         $this->db->query(
             "CREATE TABLE IF NOT EXISTS {$this->api_tables['app_log']} (
 			 ID bigint(20) NOT NULL AUTO_INCREMENT,
@@ -107,7 +109,8 @@ class install_db
 			 event_code bigint(20) NOT NULL,
 			 error_code bigint(20) NOT NULL,
 			 PRIMARY KEY (ID)
-			) $charset_collate;");
+			) $charset_collate;"
+        );
 
         $this->db->query(
             "CREATE TABLE IF NOT EXISTS {$this->api_tables['post_app_registration']} (
@@ -128,7 +131,8 @@ class install_db
                  image_urls longtext NOT NULL,
                  regtime timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                  PRIMARY KEY (ID)
-			) $charset_collate;");
+			) $charset_collate;"
+        );
 
         $this->db->query(
             "CREATE TABLE IF NOT EXISTS {$this->api_tables['action_reward']} (
@@ -142,7 +146,8 @@ class install_db
 			object_id bigint(20) NOT NULL,
 			PRIMARY KEY (ID),
 			KEY ID (ID)
-			) $charset_collate;");
+			) $charset_collate;"
+        );
 
         $this->db->query(
             "CREATE TABLE IF NOT EXISTS {$this->api_tables['post_app_download']} (
@@ -151,7 +156,8 @@ class install_db
              app_key varchar(30) NOT NULL,
              triggered tinyint(4) NOT NULL,
              time timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-			) $charset_collate;");
+			) $charset_collate;"
+        );
 
         $this->db->query(
             "CREATE TABLE IF NOT EXISTS {$this->api_tables['oauth_api_consumers']} (
@@ -167,7 +173,8 @@ class install_db
 			 platform enum('ios','android') NOT NULL,
 			 registration_data varchar(200) NOT NULL COMMENT 'the pending meta data',
 			 PRIMARY KEY (id)
-			) $charset_collate;");
+			) $charset_collate;"
+        );
 
         $this->db->query(
             "CREATE TABLE IF NOT EXISTS {$this->api_tables['merchants']} (
@@ -178,7 +185,8 @@ class install_db
             nature enum('COUPON','REWARD') COLLATE utf8_bin NOT NULL,
             PRIMARY KEY (ID),
             KEY user (vendor_id)
-			) $charset_collate;");
+			) $charset_collate;"
+        );
 
         $this->db->query(
             "CREATE TABLE IF NOT EXISTS {$this->api_tables['app_login_token_banks']} (
@@ -190,9 +198,36 @@ class install_db
             create_time timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
             KEY user (user),
             KEY ID (ID)
-			) $charset_collate;");
+			) $charset_collate;"
+        );
 
+        $this->db->query(
+            "CREATE TABLE IF NOT EXISTS {$this->api_tables['campaign_people']} (
+             ID bigint(20) NOT NULL AUTO_INCREMENT,
+             campagin_id bigint(20) NOT NULL,
+             user_id bigint(20) NOT NULL,
+             message text COLLATE utf8_unicode_ci NOT NULL,
+             backers bigint(20) NOT NULL DEFAULT '0',
+             flaged int(11) NOT NULL DEFAULT '-1',
+             reward_gained int(11) NOT NULL DEFAULT '-1',
+             reward_id int(11) NOT NULL DEFAULT '-1',
+             coupon_id int(11) NOT NULL DEFAULT '-1',
+             order int(11) NOT NULL,
+             time_start timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+             PRIMARY KEY (ID),
+             KEY ID (ID)
+            ) $charset_collate;"
+        );
 
+        $this->db->query(
+            "CREATE TABLE IF NOT EXISTS {$this->api_tables['campaign_relationship']} (
+             ID bigint(20) NOT NULL AUTO_INCREMENT,
+             backer_id bigint(20) NOT NULL,
+             user_id bigint(20) NOT NULL,
+             camp_id bigint(20) NOT NULL,
+             PRIMARY KEY (ID)
+            ) $charset_collate;"
+        );
 
     }
 
