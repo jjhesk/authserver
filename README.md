@@ -1,4 +1,4 @@
-authentication server plugin platform
+Authentication server plugin platform  [![Build Status](https://travis-ci.org/jjhesk/v-server-sdk-bank.svg?branch=master)](https://travis-ci.org/jjhesk/v-server-sdk-bank)
 =====================================
 
 This is the large scale plugin moduel for coinapp server. 
