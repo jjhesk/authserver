@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<ruleset name="Paid Memberships Pro Mod WordPress Plugin Coding Standards">
+<ruleset name="SDK vCoin Server Module WordPress Plugin Coding Standards">
 	<!-- Set a description for this ruleset. -->
 	<description>A custom set of code standard rules to check for Meta Box.</description>
 
