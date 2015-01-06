@@ -13,7 +13,7 @@ Author: Heskom,
 Author URI:
 License: GPLv3
 
-##feature highlights
+##Feature highlights
  - api authentications
  - application registrations
  - data bank for app key and app secret
@@ -32,6 +32,7 @@ License: GPLv3
  * [Email Login](https://github.com/wp-plugins/wp-email-login)
  * [Gravity Forms](http://www.gravityforms.com/) full package
  * [WPML](http://wpml.org/zh-hans/) full package
+ * [Paid Membership Pro Mod](https://github.com/jjhesk/PaidMembershipsProMod)
 2. open and upload as a folder at the /app/wp-content/plugins
 3. login the backend and enable module.
 
