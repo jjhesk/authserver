@@ -30,7 +30,8 @@ License: GPLv3
  * [JSON API](https://github.com/dphiffer/wp-json-api)
  * [JSON API Auth](https://github.com/jjhesk/json-api-auth-Wordpress)
  * [Email Login](https://github.com/wp-plugins/wp-email-login)
- * [Gravity Forms](http://www.gravityforms.com/)
+ * [Gravity Forms](http://www.gravityforms.com/) full package
+ * [WPML](http://wpml.org/zh-hans/) full package
 2. open and upload as a folder at the /app/wp-content/plugins
 3. login the backend and enable module.
 
