@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="0373ad65-bf47-48c9-8589-d5716080bc1f" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/logics/install_db.php" afterPath="$PROJECT_DIR$/core/logics/install_db.php" />
-    </list>
+    <list default="true" id="0373ad65-bf47-48c9-8589-d5716080bc1f" name="Default" comment="" />
     <ignored path="v-server-sdk-bank.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path=".idea/dataSources.local.xml" />
@@ -33,27 +31,12 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="install_db.php" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/core/logics/install_db.php">
+      <file leaf-file-name="personal.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/core/api/personal.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.2159091" vertical-offset="1029" max-vertical-offset="5497">
-              <caret line="53" column="48" selection-start-line="53" selection-start-column="48" selection-end-line="53" selection-end-column="48" />
-              <folding>
-                <marker date="1420445418695" expanded="true" signature="1838:1859" placeholder="DROP TABLE I..." />
-                <marker date="1420445418695" expanded="true" signature="2930:3319" placeholder="CREATE TABLE..IF..." />
-                <marker date="1420445418695" expanded="true" signature="3389:4577" placeholder="CREATE TABLE..IF..." />
-                <marker date="1420445418695" expanded="true" signature="4647:5118" placeholder="CREATE TABLE..IF..." />
-                <marker date="1420445418695" expanded="true" signature="5188:5489" placeholder="CREATE TABLE..IF..." />
-                <marker date="1420445418695" expanded="true" signature="5559:6241" placeholder="CREATE TABLE..IF..." />
-                <marker date="1420445418695" expanded="true" signature="6311:6739" placeholder="CREATE TABLE..IF..." />
-                <marker date="1420445418695" expanded="true" signature="6809:7276" placeholder="CREATE TABLE..IF..." />
-                <marker date="1420445418695" expanded="true" signature="7346:7373" placeholder="CREATE TABLE..." />
-                <marker date="1420445418695" expanded="true" signature="7346:8075" placeholder="CREATE TABLE..vapp_campaign_people..." />
-                <marker date="1420445418695" expanded="true" signature="7346:8090" placeholder="CREATE TABLE..." />
-                <marker date="1420445418695" expanded="true" signature="8160:8457" placeholder="CREATE TABLE..vapp_campaign_people..." />
-                <marker date="1420445418695" expanded="true" signature="8160:8457" placeholder="CREATE TABLE..." />
-                <marker date="1420445418695" expanded="true" signature="8160:8458" placeholder="CREATE TABLE..IF..." />
-              </folding>
+            <state vertical-scroll-proportion="0.54087347" vertical-offset="0" max-vertical-offset="7038">
+              <caret line="24" column="9" selection-start-line="9" selection-start-column="7" selection-end-line="24" selection-end-column="9" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -85,8 +68,8 @@
     </include_path>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-8" />
-    <option name="y" value="-8" />
+    <option name="x" value="-262" />
+    <option name="y" value="736" />
     <option name="width" value="1874" />
     <option name="height" value="1096" />
   </component>
@@ -113,7 +96,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -142,20 +124,6 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="thirdparty" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="v-server-sdk-bank" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="v-server-sdk-bank" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
               <option name="myItemId" value="core" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -174,17 +142,18 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="logics" />
+              <option name="myItemId" value="api" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../DROPBOX/vcoinapp/wp_vcoin_auth" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../json-api-auth-Wordpress" />
     <property name="FullScreen" value="false" />
   </component>
   <component name="RunManager">
@@ -202,15 +171,15 @@
       <BehatRunner />
       <method />
     </configuration>
-    <configuration default="true" type="PhpUnitRemoteRunConfigurationType" factoryName="PHPUnit on Server">
-      <method />
-    </configuration>
     <configuration default="true" type="js.build_tools.gulp" factoryName="Gulp.js">
       <node-options />
       <gulpfile />
       <tasks />
       <pass-parent-envs>true</pass-parent-envs>
       <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="PhpUnitRemoteRunConfigurationType" factoryName="PHPUnit on Server">
       <method />
     </configuration>
     <list size="0" />
@@ -229,7 +198,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1874" height="1096" extended-state="6" />
+    <frame x="-262" y="736" width="1874" height="1096" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -238,19 +207,19 @@
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3297953" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24972376" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33370167" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.15524861" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32943678" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.78214663" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
     </layout>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -277,6 +246,28 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/core/logics/install_db.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="5497">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <marker date="1420445418695" expanded="true" signature="-1:-1" placeholder="DROP TABLE I..." />
+            <marker date="1420445418695" expanded="true" signature="-1:-1" placeholder="CREATE TABLE..IF..." />
+            <marker date="1420445418695" expanded="true" signature="-1:-1" placeholder="CREATE TABLE..IF..." />
+            <marker date="1420445418695" expanded="true" signature="-1:-1" placeholder="CREATE TABLE..IF..." />
+            <marker date="1420445418695" expanded="true" signature="-1:-1" placeholder="CREATE TABLE..IF..." />
+            <marker date="1420445418695" expanded="true" signature="-1:-1" placeholder="CREATE TABLE..IF..." />
+            <marker date="1420445418695" expanded="true" signature="-1:-1" placeholder="CREATE TABLE..IF..." />
+            <marker date="1420445418695" expanded="true" signature="-1:-1" placeholder="CREATE TABLE..IF..." />
+            <marker date="1420445418695" expanded="true" signature="-1:-1" placeholder="CREATE TABLE..." />
+            <marker date="1420445418695" expanded="true" signature="-1:-1" placeholder="CREATE TABLE..vapp_campaign_people..." />
+            <marker date="1420445418695" expanded="true" signature="-1:-1" placeholder="CREATE TABLE..." />
+            <marker date="1420445418695" expanded="true" signature="-1:-1" placeholder="CREATE TABLE..vapp_campaign_people..." />
+            <marker date="1420445418695" expanded="true" signature="-1:-1" placeholder="CREATE TABLE..IF..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/core/cms/dashboard.php">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3979">
@@ -375,24 +366,91 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/core/logics/install_db.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.2159091" vertical-offset="1029" max-vertical-offset="5497">
+        <state vertical-scroll-proportion="0.2199074" vertical-offset="1029" max-vertical-offset="5497">
           <caret line="53" column="48" selection-start-line="53" selection-start-column="48" selection-end-line="53" selection-end-column="48" />
           <folding>
-            <marker date="1420445418695" expanded="true" signature="1838:1859" placeholder="DROP TABLE I..." />
-            <marker date="1420445418695" expanded="true" signature="2930:3319" placeholder="CREATE TABLE..IF..." />
-            <marker date="1420445418695" expanded="true" signature="3389:4577" placeholder="CREATE TABLE..IF..." />
-            <marker date="1420445418695" expanded="true" signature="4647:5118" placeholder="CREATE TABLE..IF..." />
-            <marker date="1420445418695" expanded="true" signature="5188:5489" placeholder="CREATE TABLE..IF..." />
-            <marker date="1420445418695" expanded="true" signature="5559:6241" placeholder="CREATE TABLE..IF..." />
-            <marker date="1420445418695" expanded="true" signature="6311:6739" placeholder="CREATE TABLE..IF..." />
-            <marker date="1420445418695" expanded="true" signature="6809:7276" placeholder="CREATE TABLE..IF..." />
-            <marker date="1420445418695" expanded="true" signature="7346:7373" placeholder="CREATE TABLE..." />
-            <marker date="1420445418695" expanded="true" signature="7346:8075" placeholder="CREATE TABLE..vapp_campaign_people..." />
-            <marker date="1420445418695" expanded="true" signature="7346:8090" placeholder="CREATE TABLE..." />
-            <marker date="1420445418695" expanded="true" signature="8160:8457" placeholder="CREATE TABLE..vapp_campaign_people..." />
-            <marker date="1420445418695" expanded="true" signature="8160:8457" placeholder="CREATE TABLE..." />
-            <marker date="1420445418695" expanded="true" signature="8160:8458" placeholder="CREATE TABLE..IF..." />
+            <marker date="1420445418695" expanded="true" signature="-1:-1" placeholder="DROP TABLE I..." />
+            <marker date="1420445418695" expanded="true" signature="-1:-1" placeholder="CREATE TABLE..IF..." />
+            <marker date="1420445418695" expanded="true" signature="-1:-1" placeholder="CREATE TABLE..IF..." />
+            <marker date="1420445418695" expanded="true" signature="-1:-1" placeholder="CREATE TABLE..IF..." />
+            <marker date="1420445418695" expanded="true" signature="-1:-1" placeholder="CREATE TABLE..IF..." />
+            <marker date="1420445418695" expanded="true" signature="-1:-1" placeholder="CREATE TABLE..IF..." />
+            <marker date="1420445418695" expanded="true" signature="-1:-1" placeholder="CREATE TABLE..IF..." />
+            <marker date="1420445418695" expanded="true" signature="-1:-1" placeholder="CREATE TABLE..IF..." />
+            <marker date="1420445418695" expanded="true" signature="-1:-1" placeholder="CREATE TABLE..." />
+            <marker date="1420445418695" expanded="true" signature="-1:-1" placeholder="CREATE TABLE..vapp_campaign_people..." />
+            <marker date="1420445418695" expanded="true" signature="-1:-1" placeholder="CREATE TABLE..." />
+            <marker date="1420445418695" expanded="true" signature="-1:-1" placeholder="CREATE TABLE..vapp_campaign_people..." />
+            <marker date="1420445418695" expanded="true" signature="-1:-1" placeholder="CREATE TABLE..IF..." />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/logics/changeUserDetail.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="5.4490743" vertical-offset="168" max-vertical-offset="5290">
+          <caret line="212" column="11" selection-start-line="212" selection-start-column="11" selection-end-line="212" selection-end-column="11" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/logics/Campaign.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.053240743" vertical-offset="0" max-vertical-offset="2507">
+          <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/logics/tokenBase.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.31944445" vertical-offset="0" max-vertical-offset="6256">
+          <caret line="12" column="61" selection-start-line="12" selection-start-column="61" selection-end-line="12" selection-end-column="61" />
+          <folding>
+            <marker date="1418697780000" expanded="true" signature="-1:-1" placeholder="SELECT * FRO.._table WHERE..." />
+            <marker date="1418697780000" expanded="true" signature="-1:-1" placeholder="SELECT * FRO.._table WHERE..." />
+            <marker date="1418697780000" expanded="true" signature="-1:-1" placeholder="SELECT t1.ex.._token_bank_tb AS..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/logics/TokenAuthentication.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.21296297" vertical-offset="0" max-vertical-offset="3473">
+          <caret line="8" column="7" selection-start-line="8" selection-start-column="7" selection-end-line="8" selection-end-column="7" />
+          <folding>
+            <marker date="1416467457000" expanded="true" signature="-1:-1" placeholder="SELECT t1.ex.._token_bank_tb AS..." />
+            <marker date="1416467457000" expanded="true" signature="-1:-1" placeholder="SELECT t1.ex.._token_bank_tb AS..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/api/authen.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.025755879" vertical-offset="0" max-vertical-offset="893">
+          <caret line="1" column="0" selection-start-line="1" selection-start-column="0" selection-end-line="20" selection-end-column="1" />
+          <folding>
+            <element signature="e#6#141#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/api/cms.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.6272727" vertical-offset="552" max-vertical-offset="12351">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <marker date="1418288971000" expanded="true" signature="-1:-1" placeholder="SELECT * FRO.._post_app_registration WHERE..." />
+            <marker date="1418288971000" expanded="true" signature="-1:-1" placeholder="SELECT * FRO.._post_app_registration WHERE..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/api/personal.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.54087347" vertical-offset="0" max-vertical-offset="7038">
+          <caret line="24" column="9" selection-start-line="9" selection-start-column="7" selection-end-line="24" selection-end-column="9" />
+          <folding />
         </state>
       </provider>
     </entry>
