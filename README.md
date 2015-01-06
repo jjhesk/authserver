@@ -23,7 +23,14 @@ License: GPLv3
 
 ##setup instruction
 1. download the package in zip
-2. download and install plugins from the list:  Titan Framework, WordPress Importer, Meta Box, JSON API, JSON API Auth, Email Login, Gravity Forms
+2. download and install plugins from the list:  
+ * [Titan Framework](https://github.com/gambitph/Titan-Framework)
+ * [WordPress Importer](https://github.com/wp-plugins/wordpress-importer)
+ * [Meta Box](https://github.com/rilwis/meta-box)
+ * [JSON API](https://github.com/dphiffer/wp-json-api)
+ * [JSON API Auth](https://github.com/jjhesk/json-api-auth-Wordpress)
+ * [Email Login](https://github.com/wp-plugins/wp-email-login)
+ * [Gravity Forms](http://www.gravityforms.com/)
 2. open and upload as a folder at the /app/wp-content/plugins
 3. login the backend and enable module.
 
