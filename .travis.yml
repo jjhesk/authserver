@@ -120,4 +120,3 @@ notifications:
 branches:
     except:
         - setup
-        - .idea/
