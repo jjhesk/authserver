@@ -39,5 +39,32 @@ License: GPLv3
 ##API Document
 https://docs.google.com/document/d/1ZJbHnUr7lj6lvds62Qcpu7FTZF-Oh61UGt6xLmT4st0/pub
 
+
+##Internal Extension Hook
+
+Developer can use this add-on their new modules
+```php
+add_action('after_vcoin_setup', 'my_module_function', 10);
+function my_module_function(){
+ /** my source code in here **/
+}
+```
+
+if you are writing a OO Base module can you do the method as below:
+
+```php
+add_action('after_vcoin_setup', array('myclass', 'my_module_function'), 10);
+class myclass{
+  public static function my_module_function(){
+   /** my source code in here **/
+  }
+}
+
+```
+
+##More to come!
+Sample codes are listed in here and they are getting more:
+ - [vcoin campaign](https://github.com/jjhesk/vcoin-extension-campaign)
+
 ##Thanks to previous packages
-- https://github.com/bobthecow/mustache.php
+ - https://github.com/bobthecow/mustache.php

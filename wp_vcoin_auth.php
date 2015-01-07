@@ -101,8 +101,8 @@ function child_create_objects()
     //add_filter("email_activation_label", "email_activation_custom_label", 10, 1);
     $m1 = $m2 = $m13 = $m3 = $m_6 = $m4 = $m5 = $m6 = $m7 = $m8 = $m9 = $m10 = $m11 = $m12 = $system_script_manager = NULL;
     gc_collect_cycles();
+    do_action('after_vcoin_setup');
 }
 add_action('wp_loaded', 'child_create_objects', 11);
-add_action('wp_loaded', 'after_vcoin_setup', 12);
 $destinations = NULL;
 ?>
