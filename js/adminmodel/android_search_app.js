@@ -6,7 +6,7 @@ var AndroidSearchAPI = {};
 jQuery(function ($) {
     AndroidSearchAPI = function (name_component, slick) {
         this.name_component = name_component;
-        this.key = "10334b44b22486861b4cc4a39be9991f";
+        this.key = "1ff64a0dd26cec59fd1e4551dc1daae0";
         this.app_name = $("#app_name");
         this.store_id = $("#store_id");
         this.icon = $("#icon_url");
@@ -18,6 +18,7 @@ jQuery(function ($) {
         this.android_slicker = slick;
         this.android_row_search_app = $("#android_row_search_app");
         this.android_search_app = $("#android_search_app");
+        this.packageID_search = $("#packageID_search");
         this.init();
     };
 
@@ -34,7 +35,6 @@ jQuery(function ($) {
             });
 
         },
-
         enable: function (bool) {
             var d = this;
             if (bool) {
@@ -44,15 +44,12 @@ jQuery(function ($) {
                 d.android_row_search_app.addClass("hidden");
             }
         },
-
         setOnChange: function (method) {
             this.android_search_app.on("change", method);
         },
-
         init_select_module: function () {
             var d = this;
             d.select2module = $("#" + d.name_component).select2({
-                fragmentPlatform: Handlebars.compile($("#t_android").html()),
                 placeholder: "Search for an app",
                 minimumInputLength: 2,
                 id: function (obj) {
@@ -60,7 +57,8 @@ jQuery(function ($) {
                 },
                 ajax: { // instead of writing the function to execute the request we use Select2's convenient helper
                     url: function () {
-                        return d.search_api + d.search_word;
+                        return d.packageID_search.is(':checked') ? d.app_info_api + d.search_word : d.search_api + d.search_word;
+                        //return d.search_api + d.search_word;
                     },
                     dataType: 'json',
                     data: function (query, page) {
@@ -72,6 +70,12 @@ jQuery(function ($) {
                     results: function (data, page) {
                         // parse the results into the format expected by Select2.
                         // since we are using custom formatting functions we do not need to alter remote JSON data
+                        if (data.error) return {results: []};
+                        if (d.packageID_search.is(':checked')) {
+                            var result_array = [];
+                            result_array.push(data);
+                            return {results: result_array};
+                        }
                         return {results: data}
                     }
                 },
@@ -99,30 +103,53 @@ jQuery(function ($) {
         fill_in_app_data: function (e) {
             var d = e.data.that;
             d.android_slicker.clear();
-            var loader_appname = new AJAXLoader(d.app_name, "normal", "app_reg");
-            var get_app_meta = new JAXAPIsupport(d.domain + "api/cms/get_app_info",
-                {url: d.app_info_api + e.choice.itemID + "&?key=" + d.key}, d, function (that, data) {
-                    that.icon.val(data.logo);
-                    that.app_name.val(data.appName);
-                    that.store_id.val((data.packageID).replace(/&/g, ""));
-                    that.description.val((data.description).replace(/"/g, "").replace(/\\n/g, " ").replace(/\\/g, ""));
-                    that.android_slicker.append(data.thumbnails);
-                });
-
-            get_app_meta.add_loader(loader_appname);
-            get_app_meta.init();
+            if (!d.packageID_search.is(':checked')) {
+                var loader_appname = new AJAXLoader(d.app_name, "normal", "app_reg");
+                var get_app_meta = new JAXAPIsupport(d.domain + "api/cms/get_app_info",
+                    {url: d.app_info_api + e.choice.itemID + "&?key=" + d.key}, d, function (that, data) {
+                        that.icon.val(data.logo);
+                        that.app_name.val(data.appName);
+                        that.store_id.val((data.packageID).replace(/&/g, ""));
+                        that.description.val((data.description).replace(/"/g, "").replace(/\\n/g, " ").replace(/\\/g, ""));
+                        that.android_slicker.append(data.thumbnails);
+                    });
+                get_app_meta.add_loader(loader_appname);
+                get_app_meta.init();
+            }
+            else {
+                d.icon.val(e.choice.logo);
+                d.app_name.val(e.choice.appName);
+                d.store_id.val((e.choice.packageID).replace(/&/g, ""));
+                d.description.val((e.choice.description).replace(/"/g, "").replace(/\\n/g, " ").replace(/\\/g, ""));
+                d.android_slicker.append(e.choice.thumbnails);
+            }
         },
 
         parseFormat: function (item) {
-            var d = this, markup = "<table class='result_table_listing'>", fragment = d.fragmentPlatform;
-            if (item.title !== undefined && item.itemID !== undefined)
-                markup += fragment(item);
+            var d = this, markup = "<table class='result_table_listing'>";
+
+            if ($("#packageID_search").is(':checked')) {
+                var condition = item.appName !== undefined && item.packageID !== undefined;
+                var list_item_template = Handlebars.compile($("#t_android_by_ID").html());
+            }
+            else {
+                var condition = item.title !== undefined && item.itemID !== undefined;
+                var list_item_template = Handlebars.compile($("#t_android_by_search").html());
+            }
+            if (condition)
+                markup += list_item_template(item);
             markup += "</table>";
             return markup;
         },
         parseFormatSelection: function (item) {
-            $("#android_search_app").val(item.itemID);
-            return item.itemID;
+            if ($("#packageID_search").is(':checked')) {
+                $("#android_search_app").val(item.packageID);
+                return item.packageID;
+            }
+            else {
+                $("#android_search_app").val(item.itemID);
+                return item.itemID;
+            }
         }
     };
 });

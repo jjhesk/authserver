@@ -135,7 +135,6 @@ jQuery(function ($) {
                         if (key == keyParam) {
                             if (!value) {
                                 $("input#" + keyParam + "-hide", d.$container).trigger("click.postboxes");
-                                d.control_meta_box(key, true);
                                 d.control_list[keyParam] = true;
                             }
                         }
@@ -150,7 +149,6 @@ jQuery(function ($) {
                         if (key == keyParam) {
                             if (value) {
                                 $("input#" + keyParam + "-hide", d.$container).trigger("click.postboxes");
-                                d.control_meta_box(key, false);
                                 d.control_list[keyParam] = false;
                             }
                         }
@@ -164,16 +162,12 @@ jQuery(function ($) {
                     $.each(d.control_list, function (key, value) {
                         if (value != boool) {
                             $("input#" + key + "-hide", d.$container).trigger("click.postboxes");
-                            d.control_meta_box(key, boool);
                             d.control_list[key] = boool;
                         }
                     });
                 } else {
                     console.log("method OFF allow boolean only");
                 }
-            },
-            control_meta_box: function (key, boool) {
-                if (boool)  $("#" + key).show(); else $("#" + key).hide();
             },
             batch: function (controls, boool) {
                 var d = this;

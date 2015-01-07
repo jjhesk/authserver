@@ -6,10 +6,18 @@
         </td>
     </tr>
 </script>
-<script id="t_android" type="text/x-handlebars-template">
+<script id="t_android_by_search" type="text/x-handlebars-template">
     <tr class="selection_row">
         <td>
             {{title}}<br>by {{developer}} <br><span class="small">{{itemID}}</span>
+        </td>
+    </tr>
+</script>
+<script id="t_android_by_ID" type="text/x-handlebars-template">
+    <tr class="selection_row">
+        <td><img style="width:40px; height: 40px" src="{{logo}}"/></td>
+        <td>
+            {{appName}}<br>by {{developer}} <br><span class="small">{{packageID}}</span>
         </td>
     </tr>
 </script>
@@ -18,7 +26,7 @@
 </script>
 <table class="form-table" cellspacing="10">
     <tr>
-        <th><?php _e('Platform', HKM_LANGUAGE_PACK); ?></th>
+        <th>Platform</th>
         <td><?php
             echo ui_handler::ui_select_creation(array(
                 "ios" => "iOS",
@@ -28,61 +36,72 @@
     </tr>
 
     <tr id="row_search_enable" class="hidden">
-        <th><?php _e('Search Enable', HKM_LANGUAGE_PACK); ?></th>
+        <th>Search Enable</th>
         <td>
             <input class="hidden_field_switcher" type="hidden" name="allow_search" value="1">
 
             <div class="container">
                 <label class="switch">
-                    <input type="checkbox" class="switch-input" checked="">
+                    <input type="checkbox" class="switch-input" id="enable_searching" checked="">
                     <span class="switch-label" data-on="On" data-off="Off"></span>
                     <span class="switch-handle"></span>
                 </label>
             </div>
             <span class="description">
-                <?php _e('Not live: The app has not been submitted or approved yet.', HKM_LANGUAGE_PACK); ?>
-                <?php _e('Live: The app has been approved, and is currently listed in the App Store.', HKM_LANGUAGE_PACK); ?>
+                Not live: The app has not been submitted or approved yet.
+                Live: The app has been approved, and is currently listed in the App Store.
             </span>
         </td>
     </tr>
 
     <tr id="ios_row_search_app" class="hidden">
-        <th><?php _e('Search App', HKM_LANGUAGE_PACK); ?></th>
+        <th>Search App</th>
         <td><input type="hidden" id="search_app" name="search_app"/></td>
     </tr>
     <tr id="android_row_search_app" class="hidden">
-        <th><?php _e('Search App', HKM_LANGUAGE_PACK); ?></th>
-        <td><input type="hidden" id="android_search_app" name="android_search_app"/></td>
+        <th>Search App</th>
+        <td><input type="hidden" id="android_search_app" name="android_search_app"/>
+        <br>
+            <input class="hidden_field_switcher" type="hidden" name="allow_package_id" value="1">
+            <div class="container" style="padding-top: 5px;">
+                <div class="desleft" style="float:left; padding-top:5px;">Use package ID to search app</div>
+                <label class="switch desright" style="float:right; padding-top: 3px;position: relative;top: 2px;left: -17px;">
+                    <input type="checkbox" class="switch-input" id="packageID_search">
+                    <span class="switch-label" data-on="On" data-off="Off"></span>
+                    <span class="switch-handle"></span>
+                </label>
+            </div>
+        </td>
     </tr>
 
     <tr>
-        <th><?php _e('Application Name', HKM_LANGUAGE_PACK); ?></th>
+        <th>Application Name</th>
         <td><input readonly type="text" id="app_name" name="app_name" required="true" class="regular-text"/></td>
     </tr>
     <tr>
-        <th><?php _e('Store ID', HKM_LANGUAGE_PACK); ?></th>
+        <th>Store ID</th>
         <td><input readonly name="store_id" id="store_id" type="text" required="true" class="regular-text"/></td>
     </tr>
     <tr>
-        <th><?php _e('Icon', HKM_LANGUAGE_PACK); ?></th>
+        <th>Icon</th>
         <td><input readonly name="icon_url" id="icon_url" type="text" required="true" class="regular-text"/></td>
     </tr>
     <tr>
-        <th><?php _e('Description', HKM_LANGUAGE_PACK); ?></th>
+        <th>Description</th>
         <td><textarea disabled id="desc_area" rows="4" cols="50" required="true"></textarea></td>
     </tr>
 
     <tr>
-        <th><?php _e('Screen Shots', HKM_LANGUAGE_PACK); ?></th>
+        <th>Screen Shots</th>
         <td>
             <div class="slickerslider"></div>
         </td>
     </tr>
     <tr>
-        <th><?php _e('Add Extra Image', HKM_LANGUAGE_PACK); ?></th>
+        <th>Add Extra Image</th>
         <td>
             <input type="text" class="regular-text" id="add_image_url"/>
-            <button class="button" id="add_image_url_button">Add Image Url</button><button class="button" id="remove_image_sh"><?php _e('Remove', HKM_LANGUAGE_PACK); ?></button>
+            <button class="button" id="add_image_url_button">Add Image Url</button><button class="button" id="remove_image_sh">Remove</button>
         </td>
     </tr>
     <?php
@@ -90,30 +109,30 @@
     $beta_coin = (int)$settings->getOption("app_coin_beta");
     ?>
     <tr>
-        <th><?php _e('Assign the total amount for this application', HKM_LANGUAGE_PACK); ?></th>
+        <th>Assign the total amount for this application</th>
         <td><input disabled name="add_vcoin" id="add_vcoin" type="number"/>
-            <span><?php _e('The available coins are', HKM_LANGUAGE_PACK); ?> <b id="vcoin_count"></b>
-                <b style="color:red; font-weight: bold;" id="extra_coin_msg"></b>. <?php _e('Please also notice that the first', HKM_LANGUAGE_PACK); ?>
-                <b style="color:red; font-weight: bold;" id="beta_thread_hold"><?= $beta_coin; ?></b> <?php _e('vcoin will be assigned into the Beta status testing.', HKM_LANGUAGE_PACK); ?></span>
+            <span>The available coins are <b id="vcoin_count"></b>
+                <b style="color:red; font-weight: bold;" id="extra_coin_msg"></b>. Please also notice that the first
+                <b style="color:red; font-weight: bold;" id="beta_thread_hold"><?= $beta_coin; ?></b> vcoin will be assigned into the Beta status testing.</span>
         </td>
     </tr>
     <tr>
-        <th><?php _e('Remove', HKM_LANGUAGE_PACK); ?>Give to each inital downloader with coin</th>
-        <td><input disabled name="cost" id="cost" type="number"/><span id="cost_msg"><?php _e('Cannot be bigger than the total amount of the coin.', HKM_LANGUAGE_PACK); ?></span>
+        <th>Give to each inital downloader with coin</th>
+        <td><input disabled name="cost" id="cost" type="number"/><span id="cost_msg">Cannot be bigger than the total amount of the coin.</span>
         </td>
     </tr>
     <tr>
-        <th><?php _e('Registration', HKM_LANGUAGE_PACK); ?></th>
+        <th>Registration</th>
         <td>
-            <input type="button" class="button button-primary" disabled id="registerthisapp" value="<?php _e('Add Registration', HKM_LANGUAGE_PACK); ?>">
+            <input type="button" class="button button-primary" disabled id="registerthisapp" value="Add Registration">
         </td>
     </tr>
     <tr>
-        <th><?php _e('APP KEY', HKM_LANGUAGE_PACK); ?></th>
+        <th>APP KEY</th>
         <td id="app_id"></td>
     </tr>
     <tr>
-        <th><?php _e('APP Secret', HKM_LANGUAGE_PACK); ?></th>
+        <th>APP Secret</th>
         <td id="secret"></td>
     </tr>
 </table>
