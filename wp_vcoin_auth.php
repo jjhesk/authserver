@@ -28,7 +28,6 @@ define('EXIMAGE', AUTH_SERVER_URI . '/extensions/art/');
 define('INNO_IMAGE_DIR', AUTH_SERVER_URI . '/images/');
 define("EXTENSIONS_PATH", AUTH_SERVER_PATH . DIRECTORY_SEPARATOR . 'thirdparty' . DIRECTORY_SEPARATOR);
 define("CORE_PATH", AUTH_SERVER_PATH . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR);
-define("JSONAPI_PATH", CORE_PATH . "api/");
 require_once EXTENSIONS_PATH . 'Mustache/Autoloader.php';
 
 define("INN_VIEW_VIDEO_ACTION", 1001);
@@ -84,7 +83,7 @@ function child_create_objects()
     TitanPanelSetup::setup();
     install_db::reg_hook(__FILE__);
     $system_script_manager = new system_frontend();
-    $m1 = new connect_json_api();
+    connect_json_api::init();
     $m2 = new GF_notification();
     $m3 = new gfUserRegistration();
     $m4 = new app_transaction_history();
@@ -103,6 +102,7 @@ function child_create_objects()
     gc_collect_cycles();
     do_action('after_vcoin_setup');
 }
+
 add_action('wp_loaded', 'child_create_objects', 11);
 $destinations = NULL;
 ?>

@@ -34,14 +34,24 @@ if (!class_exists('connect_json_api')) {
     {
         public function __construct()
         {
-            $this->init();
+            $this->start_api_interface();
+        }
+
+        public static function init()
+        {
+            new self();
+        }
+
+        public static function getpath()
+        {
+            return CORE_PATH . "api/";
         }
 
         private $list_functions;
 
-        private function init()
+        private function start_api_interface()
         {
-            global $json_module_init_path;
+           // global $json_module_init_path;
             if ($this->is_da_plugin_active()) {
                 $this->list_functions = array(
                     'personal',
@@ -54,28 +64,28 @@ if (!class_exists('connect_json_api')) {
                     'redemption'
                 );
                 add_filter('json_api_email_controller_path', function () {
-                    return JSONAPI_PATH . 'email.php';
+                    return connect_json_api::getpath() . 'email.php';
                 });
                 add_filter('json_api_systemlog_controller_path', function () {
-                    return JSONAPI_PATH . 'systemlog.php';
+                    return connect_json_api::getpath() . 'systemlog.php';
                 });
                 add_filter('json_api_vcoin_controller_path', function () {
-                    return JSONAPI_PATH . 'vcoin.php';
+                    return connect_json_api::getpath() . 'vcoin.php';
                 });
                 add_filter('json_api_cms_controller_path', function () {
-                    return JSONAPI_PATH . 'cms.php';
+                    return connect_json_api::getpath() . 'cms.php';
                 });
                 add_filter('json_api_personal_controller_path', function () {
-                    return JSONAPI_PATH . 'personal.php';
+                    return connect_json_api::getpath() . 'personal.php';
                 });
                 add_filter('json_api_mission_controller_path', function () {
-                    return JSONAPI_PATH . 'mission.php';
+                    return connect_json_api::getpath() . 'mission.php';
                 });
                 add_filter('json_api_redemption_controller_path', function () {
-                    return JSONAPI_PATH . 'redemption.php';
+                    return connect_json_api::getpath() . 'redemption.php';
                 });
                 add_filter('json_api_authen_controller_path', function () {
-                    return JSONAPI_PATH . 'authen.php';
+                    return connect_json_api::getpath() . 'authen.php';
                 });
                 add_filter('json_api_controllers', array($this, 'add_json_controllers'), 10, 1);
             } else {
