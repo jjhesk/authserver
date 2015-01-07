@@ -1,4 +1,4 @@
-Authentication server plugin platform  [![Build Status](https://travis-ci.org/jjhesk/v-server-sdk-bank.svg?branch=master)](https://travis-ci.org/jjhesk/v-server-sdk-bank)
+Authentication server plugin platform  [![Build Status](https://travis-ci.org/jjhesk/v-server-sdk-bank.svg?branch=master)](https://travis-ci.org/jjhesk/v-server-sdk-bank)[![Code Climate](https://codeclimate.com/github/jjhesk/v-server-sdk-bank/badges/gpa.svg)](https://codeclimate.com/github/jjhesk/v-server-sdk-bank)
 =====================================
 
 This is the large scale plugin moduel for coinapp server. As a part of authentication server to run on the vcoinapp. Authentication server will require cms server to communicate and deploy to the production server.
