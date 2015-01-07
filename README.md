@@ -12,7 +12,7 @@ Author URI:
 License: GPLv3  
 
 ##Feature highlights
-=====================================
+***
  - api authentications
  - application registrations
  - data bank for app key and app secret
@@ -21,7 +21,7 @@ License: GPLv3
  - user coin managements
 
 ##setup instruction
-=====================================
+***
 1. download the package in zip
 2. download and install plugins from the list:  
  * [Titan Framework](https://github.com/gambitph/Titan-Framework)
@@ -37,12 +37,12 @@ License: GPLv3
 3. login the backend and enable module.
 
 ##API Document
-=====================================
+***
 https://docs.google.com/document/d/1ZJbHnUr7lj6lvds62Qcpu7FTZF-Oh61UGt6xLmT4st0/pub
 
 
 ##Internal Extension Hook
-=====================================
+***
 Developer can use this add-on their new modules
 ```php
 add_action('after_vcoin_setup', 'my_module_function', 10);
@@ -64,10 +64,10 @@ class myclass{
 ```
 
 ##More to come!
-=====================================
+***
 Sample codes are listed in here and they are getting more:
  - [vcoin campaign](https://github.com/jjhesk/vcoin-extension-campaign)
 
 ##Thanks to previous packages
-=====================================
+***
  - https://github.com/bobthecow/mustache.php
