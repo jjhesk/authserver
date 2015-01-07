@@ -34,7 +34,6 @@ if (!class_exists('connect_json_api')) {
     {
         public function __construct()
         {
-
             $this->init();
         }
 

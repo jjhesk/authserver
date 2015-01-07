@@ -22,8 +22,7 @@ class install_db
             'merchants' => $wpdb->prefix . 'merchants',
             'app_login_token_banks' => $wpdb->prefix . 'app_login_token_banks',
             'post_app_registration' => $wpdb->prefix . 'post_app_registration',
-            'post_app_download' => $wpdb->prefix . 'post_app_download',
-            'campaign_people' => $wpdb->prefix . 'campaign_people'
+            'post_app_download' => $wpdb->prefix . 'post_app_download'
         );
     }
 
@@ -201,33 +200,7 @@ class install_db
 			) $charset_collate;"
         );
 
-        $this->db->query(
-            "CREATE TABLE IF NOT EXISTS {$this->api_tables['campaign_people']} (
-             ID bigint(20) NOT NULL AUTO_INCREMENT,
-             campagin_id bigint(20) NOT NULL,
-             user_id bigint(20) NOT NULL,
-             message text COLLATE utf8_unicode_ci NOT NULL,
-             backers bigint(20) NOT NULL DEFAULT '0',
-             flaged int(11) NOT NULL DEFAULT '-1',
-             reward_gained int(11) NOT NULL DEFAULT '-1',
-             reward_id int(11) NOT NULL DEFAULT '-1',
-             coupon_id int(11) NOT NULL DEFAULT '-1',
-             order int(11) NOT NULL,
-             time_start timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-             PRIMARY KEY (ID),
-             KEY ID (ID)
-            ) $charset_collate;"
-        );
 
-        $this->db->query(
-            "CREATE TABLE IF NOT EXISTS {$this->api_tables['campaign_relationship']} (
-             ID bigint(20) NOT NULL AUTO_INCREMENT,
-             backer_id bigint(20) NOT NULL,
-             user_id bigint(20) NOT NULL,
-             camp_id bigint(20) NOT NULL,
-             PRIMARY KEY (ID)
-            ) $charset_collate;"
-        );
 
     }
 
