@@ -69,9 +69,8 @@ class EmailTrigger
 
     private function trigger_mail($subject = "vcoin email")
     {
-        $headers = 'From: VcoinSys <admin@vcoinapp.com>' . "\r\n Cc:" . get_bloginfo("admin_email");
+        $headers = 'From: VcoinSys <admin@vcoinapp.com>' . '\r\n Bcc:' . get_bloginfo("admin_email");
         inno_log_db::log_vcoin_email(-1, 9900, $this->email_message);
         wp_mail($this->sending_email, $subject, $this->email_message, $headers);
-
     }
 } 
